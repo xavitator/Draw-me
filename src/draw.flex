@@ -1,6 +1,7 @@
 %%
 %public
 %class Lexer
+%debug
 %line
 %column
 %unicode
@@ -56,8 +57,8 @@ blanc = [\n\ \t\r]
 {operateur}  		   {return stringToken(Sym.OPERATEUR,yyline,yycolumn,yytext());}
 {relation}         {return stringToken(Sym.RELATION,yyline,yycolumn, yytext());}
 ";"                {return token(Sym.POINTVIRGULE,yyline,yycolumn);}
-("T"|"t")"rue"     {return intToken(Sym.INT,yyline,yycolumn,1);}
-("F"|"f")"alse"    {return intToken(Sym.INT,yyline,yycolumn,0);}
+("T"|"t")"rue"     {return intToken(Sym.INT,yyline,yycolumn,"1");}
+("F"|"f")"alse"    {return intToken(Sym.INT,yyline,yycolumn,"0");}
 "Begin"            {return token(Sym.BEGIN,yyline,yycolumn);}
 "End"              {return token(Sym.END,yyline,yycolumn);}
 "If"               {return token(Sym.IF,yyline,yycolumn);} 

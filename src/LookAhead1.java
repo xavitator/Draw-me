@@ -45,7 +45,7 @@ public class LookAhead1{
      */
     public void eat (Sym sym) throws Exception {
         if (!check(sym)) {
-            throw new Exception("Can't eat " + current);
+            throw new ParserException("Can't eat " + sym + ", i have " + current.symbol(), current);
         }
         if (debug) { System.out.println(current); }
         
@@ -78,7 +78,7 @@ public class LookAhead1{
         if (current instanceof IntToken){
             return ((IntToken)current).getValue();
         } else {
-            throw new Exception("\n Try to access to an int value");
+            throw new ParserException("\n Try to access to an int value", current);
         }
     }
 
@@ -87,7 +87,7 @@ public class LookAhead1{
         if (current instanceof ColorToken) {
             return ((ColorToken)current).getValue();
         } else {
-            throw new Exception("\n Try to access to a color value");                
+            throw new ParserException("\n Try to access to a color value", current);                
         }
     }
 
@@ -96,7 +96,7 @@ public class LookAhead1{
         if (current instanceof StringToken) {
             return ((StringToken)current).getValue();
         } else {
-            throw new Exception("\n Try to access to a string value");
+            throw new ParserException("\n Try to access to a string value", current);
         }
     }
     

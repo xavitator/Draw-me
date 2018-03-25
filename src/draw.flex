@@ -13,23 +13,6 @@
       super("Le caractere "+caract.replace("\\","\\\\")+" a la ligne "+line+" et a la colonne "+column+" n'est pas reconnu par la grammaire.");
     }
   }
-
-  private Token token(Sym type, int line, int column) {
-      return new Token(type,line,column);
-  }
-
-  private ColorToken colorToken(Sym type, int line, int column, String color){
-      return new ColorToken(type,line,column,color);
-  }
-
-  private IntToken intToken(Sym type, int line, int column, String value) {
-      return new IntToken(type,line,column,Integer.parseInt(value));
-  }      
-
-  private StringToken stringToken(Sym type, int line, int column, String value) {
-      return new StringToken(type,line,column,value);
-  }
-
 %}
 
 %yylexthrow{
@@ -52,29 +35,29 @@ blanc = [\n\ \t\r]
 
 %%
 {commentaire} 	   {}
-{couleur}  			   {return colorToken(Sym.COULEUR,yyline,yycolumn,yytext());}
-{nombre}  			   {return intToken(Sym.INT,yyline,yycolumn,yytext());}
-{operateur}  		   {return stringToken(Sym.OPERATEUR,yyline,yycolumn,yytext());}
-{relation}         {return stringToken(Sym.RELATION,yyline,yycolumn, yytext());}
-";"                {return token(Sym.POINTVIRGULE,yyline,yycolumn);}
-("T"|"t")"rue"     {return intToken(Sym.INT,yyline,yycolumn,"1");}
-("F"|"f")"alse"    {return intToken(Sym.INT,yyline,yycolumn,"0");}
-"Begin"            {return token(Sym.BEGIN,yyline,yycolumn);}
-"End"              {return token(Sym.END,yyline,yycolumn);}
-"If"               {return token(Sym.IF,yyline,yycolumn);} 
-"Else"             {return token(Sym.ELSE,yyline,yycolumn);}
-"Elseif"           {return token(Sym.ELSEIF,yyline,yycolumn);} 
-"Then"             {return token(Sym.THEN,yyline,yycolumn);}
-"("                {return token(Sym.LPAR,yyline,yycolumn);}
-")"                {return token(Sym.RPAR,yyline,yycolumn);}
-"DrawCircle"       {return token(Sym.DRAWCIRCLE,yyline,yycolumn);}
-"FillCircle"       {return token(Sym.FILLCIRCLE,yyline,yycolumn);}
-"DrawRect"         {return token(Sym.DRAWRECT,yyline,yycolumn);}
-"FillRect"         {return token(Sym.FILLRECT,yyline,yycolumn);}
-"="                {return token(Sym.ASSIGNATION,yyline,yycolumn);}
-"Const"            {return token(Sym.CONST,yyline,yycolumn);}
-"Var"              {return token(Sym.VAR,yyline,yycolumn);}
-{identificateur}   {return stringToken(Sym.STRING,yyline,yycolumn, yytext());}
-{string}  			   {return stringToken(Sym.STRING,yyline,yycolumn,yytext().replace("\"",""));}
+{couleur}  			   {return new ColorToken(Sym.COULEUR,yyline,yycolumn,yytext());}
+{nombre}  			   {return new IntToken(Sym.INT,yyline,yycolumn,yytext());}
+{operateur}  		   {return new StringToken(Sym.OPERATEUR,yyline,yycolumn,yytext());}
+{relation}         {return new StringToken(Sym.RELATION,yyline,yycolumn, yytext());}
+";"                {return new Token(Sym.POINTVIRGULE,yyline,yycolumn);}
+[Tt]"rue"     {return new IntToken(Sym.INT,yyline,yycolumn,"1");}
+[Ff]"alse"    {return new IntToken(Sym.INT,yyline,yycolumn,"0");}
+"Begin"            {return new Token(Sym.BEGIN,yyline,yycolumn);}
+"End"              {return new Token(Sym.END,yyline,yycolumn);}
+"If"               {return new Token(Sym.IF,yyline,yycolumn);} 
+"Else"             {return new Token(Sym.ELSE,yyline,yycolumn);}
+"Elseif"           {return new Token(Sym.ELSEIF,yyline,yycolumn);} 
+"Then"             {return new Token(Sym.THEN,yyline,yycolumn);}
+"("                {return new Token(Sym.LPAR,yyline,yycolumn);}
+")"                {return new Token(Sym.RPAR,yyline,yycolumn);}
+"DrawCircle"       {return new Token(Sym.DRAWCIRCLE,yyline,yycolumn);}
+"FillCircle"       {return new Token(Sym.FILLCIRCLE,yyline,yycolumn);}
+"DrawRect"         {return new Token(Sym.DRAWRECT,yyline,yycolumn);}
+"FillRect"         {return new Token(Sym.FILLRECT,yyline,yycolumn);}
+"="                {return new Token(Sym.ASSIGNATION,yyline,yycolumn);}
+"Const"            {return new Token(Sym.CONST,yyline,yycolumn);}
+"Var"              {return new Token(Sym.VAR,yyline,yycolumn);}
+{identificateur}   {return new StringToken(Sym.STRING,yyline,yycolumn, yytext());}
+{string}  			   {return new StringToken(Sym.STRING,yyline,yycolumn,yytext().replace("\"",""));}
 {blanc}*  			   {}
 [^]                {throw new LexerException(yyline,yycolumn, yytext());}

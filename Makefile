@@ -19,9 +19,10 @@ create_lexer:
 	jflex $(SOURCE)/draw.flex
 
 # Compilation java
-compile: create_lexer
+compile: # create_lexer
 	@echo "Compilation des fichiers java"
-	javac -sourcepath $(SOURCE) -d $(BIN)
+	mkdir $(BIN)
+	javac -sourcepath $(SOURCE) -d $(BIN) $(SOURCE)/*.java
 
 # Clear files
 clear:

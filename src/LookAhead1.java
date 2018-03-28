@@ -99,5 +99,10 @@ public class LookAhead1{
             throw new ParserException("\n Try to access to a string value", current);
         }
     }
+
+    /** Renvoie s'il existe encore des Token */
+    public boolean isEmpty(){
+        return this.current == null;
+    }
     
 }

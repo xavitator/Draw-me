@@ -28,9 +28,9 @@ hex = [0-9A-F]
 nombre = [0-9]+ 
 couleur = "#"{hex}{hex}{hex}{hex}{hex}{hex}
 operateur = "+" | "-" | "/" | "*"
-relation = ">" | "<" | "==" | "<=" | ">=" | "&&" | "||"
+relation = ">" | "<" | "==" | "<=" | ">=" | "!=" |"&&" | "||"
 identificateur = [a-z][a-zA-Z_]*
-string = "\""[a-zA-Z]+"\""
+string = "\""[^\"]+[^\\]"\""
 blanc = [\n\ \t\r]
 
 %%

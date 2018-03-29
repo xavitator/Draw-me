@@ -16,13 +16,12 @@
  * 			| Const identificateur = expr 
  * 			| Var identificateur = expr
  * 			| If expr Then instruction Autre
- * Autre → Elseif expr Then instruction Autre
- * 		| Else instruction
- * 		| 𝜀
- * expr → Nombre | identificateur | ( expr operateur expr )
+ * Autre → Else instruction
+ * 			| 𝜀
+ * expr → Nombre | identificateur | ( expr operateur expr ) | True | False
  * operateur → Op | relation
  * op → + | - | / | *
- * relation → > | < | <= | >= | == | && | ||
+ * relation → > | < | <= | >= | == | != | && | ||
  */
 public class Parser{
 
@@ -41,7 +40,7 @@ public class Parser{
 
     }
 
-    public AST blocInstruction(){
+    public List<AST> blocInstruction(){
 
     }
 

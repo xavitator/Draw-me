@@ -17,5 +17,12 @@ public class Assign extends AST {
 		this.exp1 = exp1;
 	}
 	
+	public void verifyAll() throws Exception{
+		//on vérifie l'assignation des variables
+	}
+
+	public void exec(Graphics2D g2d){
+		//on éxecute l'assignation
+	}
 	
 }

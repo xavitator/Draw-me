@@ -19,6 +19,16 @@ public class AST {
     	next = new LinkedList<>();
     }
 
+    public void verifyAll() throws Exception{
+    	for (AST suivant : next) {
+    		suivant.verifyAll();
+    	}
+    }
 
+    public void exec(Graphics2D g2d){
+    	for (AST suivant : next) {
+    		suivant.exec(g2d);
+    	}
+    }
 
 }

@@ -3,6 +3,9 @@
  * @author DURAND-MARAIS
  */
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * Gammaire :
  * 
@@ -37,35 +40,35 @@ public class Parser{
     }
 
     public AST programme(){
-
+        return null;
     }
 
     public List<AST> blocInstruction(){
-
+        return null;
     }
 
     public AST instruction(){
-
+        return null;
     }
 
     public AST autre(){
-
+        return null;
     }
 
     public AST expression(){
-
+        return null;
     }
 
     public AST operateur(){
-
+        return null;
     }
 
     public AST op(){
-
+        return null;
     }
 
     public AST relation(){
-    	
+    	return null;
     }
 
 

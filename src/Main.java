@@ -53,6 +53,7 @@ class MyCanvas extends JComponent {
       // LookAhead1 look = new LookAhead1(lexer);
       // Parser parser = new Parser(look);
       // AST ast = parser.progNonTerm();
+      // ast.verifyAll();
       // ast.exec(g2d);
       
     }

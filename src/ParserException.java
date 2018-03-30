@@ -1,5 +1,10 @@
 import java.io.*;
 
+/**
+ * Classe correspondant à une Exception personnalisée
+ * @author DURAND-MARAIS
+ */
+
 public class ParserException extends Exception{
 	
 	

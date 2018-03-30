@@ -1,5 +1,7 @@
+import java.awt.*;
+
 /**
- * Classe des Expressions
+ * Classe correspondant à la fonction fillOval de Graphics
  * @author DURAND-MARAIS
  */
 
@@ -9,6 +11,16 @@ public class FillCircle extends AST {
 	Expression exp3;
 	Color color;
 	
+	/**
+	 * on construit un AST correspondant à la fonction fillOval
+	 * @param  line   ligne de l'expression dans le fichier
+	 * @param  column colonne de l'expression dans le fichier
+	 * @param  exp1   premier argument de la fonction en int
+	 * @param  exp2   deuxième argument de la fonction en int
+	 * @param  exp3   troisème argument de la fonction en int
+	 * @param  color  quatrième argument de la fonction en color
+	 * @return        
+	 */
 	public FillCircle(int line, int column, Expression exp1, Expression exp2, Expression exp3, Color color){
 		super(line, column);
 		this.exp1 = exp1;
@@ -17,10 +29,15 @@ public class FillCircle extends AST {
 		this.color = color;
 	}
 
+	/** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
 	public void verifyAll() throws Exception{
+		exp1.verifyType();
+		exp2.verifyType();
+		exp3.verifyType();
 		if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
 	}
 
+	/** fonction d'exécution de fillOval */
 	public void exec(Graphics2D g2d){
 		try{
 			int a = Integer.parseInt(exp1.getValue());

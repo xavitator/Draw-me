@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * Classe des Expressions
  * @author DURAND-MARAIS

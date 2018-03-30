@@ -13,9 +13,9 @@ public class IntToken extends Token {
      ***************/
 
     /** Constructeur par défaut */
-    public IntToken(Sym sym, int line, int column, int value) {
+    public IntToken(Sym sym, int line, int column, String value) {
         super(sym,line,column);
-        this.value = value;
+        this.value = Integer.parseInt(value);
     }
 
 

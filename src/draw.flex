@@ -40,8 +40,8 @@ blanc = [\n\ \t\r]
 {operateur}		   {return new StringToken(Sym.OPERATEUR,yyline,yycolumn,yytext());}
 {relation}         	{return new StringToken(Sym.RELATION,yyline,yycolumn, yytext());}
 ";"                	{return new Token(Sym.POINTVIRGULE,yyline,yycolumn);}
-[Tt]"rue"     		{return new IntToken(Sym.INT,yyline,yycolumn,"1");}
-[Ff]"alse"    		{return new IntToken(Sym.INT,yyline,yycolumn,"0");}
+[Tt]"rue"     		{return new BooleanToken(Sym.INT,yyline,yycolumn,yytext());}
+[Ff]"alse"    		{return new BooleanToken(Sym.INT,yyline,yycolumn,yytext());}
 "Begin"         	{return new Token(Sym.BEGIN,yyline,yycolumn);}
 "End"           	{return new Token(Sym.END,yyline,yycolumn);}
 "If"            	{return new Token(Sym.IF,yyline,yycolumn);} 

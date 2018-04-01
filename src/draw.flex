@@ -1,7 +1,6 @@
 %%
 %public
 %class Lexer
-%debug
 %line
 %column
 %unicode
@@ -59,5 +58,6 @@ blanc = [\n\ \t\r]
 "Var"           	{return new Token(Sym.VAR,yyline,yycolumn);}
 {identificateur}	{return new StringToken(Sym.STRING,yyline,yycolumn, yytext());}
 {string}			{return new StringToken(Sym.STRING,yyline,yycolumn,yytext().replace("\"",""));}
-{blanc}*  			{}
+{blanc}+|","  			{}
+<<EOF>>                 {return new Token(Sym.EOF,yyline,yycolumn);}
 [^]                {throw new LexerException(yyline,yycolumn, yytext());}

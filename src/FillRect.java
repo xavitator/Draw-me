@@ -44,16 +44,21 @@ public class FillRect extends AST {
 	/** fonction d'exécution de fillRect */
 	public void exec(Graphics2D g2d){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
-			int c = Integer.parseInt(exp3.getValue());
-			int d = Integer.parseInt(exp4.getValue());
-			g2d.fillOval(a, b, c, d);
-			g2d.setColor(color);
-		}
+			int x = Integer.parseInt(exp1.getValue());
+			int y = Integer.parseInt(exp2.getValue());
+			int w = Integer.parseInt(exp3.getValue());
+			int h = Integer.parseInt(exp4.getValue());
+                        g2d.setColor(color);
+                        g2d.fillRect(x,y,w,h);
+                        debug(x,y,w,h);
+                }
 		catch(NumberFormatException e){
 			System.out.println("Erreur de typage à la ligne "+line+" et à la colonne "+column);
 		}
 	}
-	
+
+    public void debug(int x, int y, int w, int h) {
+        System.out.println("FillRect => x:" +x+ " y: " +y+ " w: " + w + " h: " + h);
+    }
+    
 }

@@ -40,16 +40,20 @@ public class FillCircle extends AST {
 	/** fonction d'exécution de fillOval */
 	public void exec(Graphics2D g2d){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
-			int c = Integer.parseInt(exp3.getValue());
-			g2d.fillOval(a, b, c, c);
-			g2d.setColor(color);
+			int x = Integer.parseInt(exp1.getValue());
+			int y = Integer.parseInt(exp2.getValue());
+			int r = Integer.parseInt(exp3.getValue()); 
+                        g2d.setColor(color);
+                        g2d.fillOval(x-r, y-r, r*2, r*2); // décalage centre + diametre
+                        debug(x,y,r);
 		}
 		catch(NumberFormatException e){
 			System.out.println("Erreur de typage à la ligne "+line+" et à la colonne "+column);
 		}
 	}
 
-	
+    public void debug(int x, int y, int r) {
+        System.out.println("FillCircle => x: " + x + " y: " +y+ " r: " +r );
+    }
+    
 }

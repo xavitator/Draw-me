@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class AST {
 
-	protected List<AST> next;
+	protected LinkedList<AST> next;
 	protected int line;
 	protected int column;
     
@@ -43,7 +43,7 @@ public class AST {
      * @return         true si l'opération d'ajout s'est bien passée, false sinon
      */
     public boolean addNext(AST suivant){
-        return next.add(suivant);
+         next.add(suivant);
+         return next.contains(suivant);
     }
-
 }

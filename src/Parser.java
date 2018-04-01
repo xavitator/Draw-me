@@ -4,7 +4,9 @@
  */
 
 import java.io.IOException;
-import java.util.List;
+import java.lang.Exception;
+import java.awt.Color;
+
 
 /**
  * Gammaire :
@@ -39,43 +41,107 @@ public class Parser{
 		reader = r;
     }
 
-    public AST programme(){
-        return null;
+    /** Axiome 
+    * programme -> suite_instruction
+    */
+    public AST progNonTerm() throws Exception {
+        AST tmp =  suite_instruction(new AST(0,0));
+        reader.eat(Sym.EOF);
+        return tmp;
     }
 
-    public List<AST> blocInstruction(){
-        return null;
+    /**
+     * Instruction 
+     */
+    public AST instruction() throws Exception {
+        if (reader.check(Sym.BEGIN)) {
+        /* instruction -> Begin suite_instruction End*/
+            reader.eat(Sym.BEGIN);
+            AST tmp = new AST(0,0);
+            tmp = this.suite_instruction(tmp);
+            reader.eat(Sym.END);
+            return tmp; 
+        } else if (reader.check(Sym.DRAWCIRCLE)){
+            /* instruction -> DrawCircle ( exp, exp, couleur) */
+            reader.eat(Sym.DRAWCIRCLE);
+            reader.eat(Sym.LPAR);
+            Expression x = this.non_term_exp();
+            Expression y = this.non_term_exp();
+            Expression z = this.non_term_exp();
+            Color col = reader.getColorValue();
+            reader.eat(Sym.COULEUR);
+            reader.eat(Sym.RPAR);
+            return new DrawCircle(0,0,x,y,z,col);
+        } else if (reader.check(Sym.DRAWRECT)) {
+            /* instruction -> DrawRect(exp,exp,exp,couleur) */
+            reader.eat(Sym.DRAWRECT);
+            reader.eat(Sym.LPAR);
+            Expression x = this.non_term_exp();
+            Expression y = this.non_term_exp();
+            Expression w = this.non_term_exp();
+            Expression h = this.non_term_exp();
+            Color col = reader.getColorValue();
+            reader.eat(Sym.COULEUR);
+            reader.eat(Sym.RPAR);
+            return new DrawRect(0,0,x,y,w,h,col);
+        } else if (reader.check(Sym.FILLCIRCLE)) {
+            /* instruction -> FillCircle(exp,exp,exp)*/
+            reader.eat(Sym.FILLCIRCLE);
+            reader.eat(Sym.LPAR);
+            Expression x = this.non_term_exp();
+            Expression y = this.non_term_exp();
+            Expression z = this.non_term_exp();
+            Color col = reader.getColorValue();
+            reader.eat(Sym.COULEUR);
+            reader.eat(Sym.RPAR);
+            return new FillCircle(0,0,x,y,z,col);
+        } else if (reader.check(Sym.FILLRECT)) {
+            /* instruction -> FillRect (exp,exp,exp,exp, couleur) */
+            reader.eat(Sym.FILLRECT);
+            reader.eat(Sym.LPAR);
+            Expression x = this.non_term_exp();
+            Expression y = this.non_term_exp();
+            Expression w = this.non_term_exp();
+            Expression h = this.non_term_exp();
+            Color col = reader.getColorValue();
+            reader.eat(Sym.COULEUR);
+            reader.eat(Sym.RPAR);
+            return new FillRect(0,0,x,y,w,h,col);
+        } else {
+            // Futur levée d'Exception
+            System.out.println("Erreur dans instruction !!!");
+            System.exit(-1);
+            return null;
+        }
     }
 
-    public AST instruction(){
-        return null;
+    public AST suite_instruction (AST current) throws Exception {
+        if(reader.check(Sym.END) || reader.check(Sym.EOF)){
+            /* suite_instruction -> Epsilon*/
+            return current;
+        } else {
+            /* suite_instruction -> instruction ; suite_instruction*/
+            current.addNext(this.instruction());
+            reader.eat(Sym.POINTVIRGULE);
+            return this.suite_instruction(current);
+        }
     }
 
-    public AST autre(){
-        return null;
+    public Expression non_term_exp() throws Exception {
+        if (reader.check(Sym.INT)) {
+            /* exp -> nombre */
+            Expression toReturn = new Value(0,0,reader.getIntValue());
+            reader.eat(Sym.INT);
+            return toReturn;
+        } else {
+            /* exp -> ( exp operateur exp ) */
+            reader.eat(Sym.LPAR);
+            Expression left = non_term_exp();
+            String operateur = reader.getStringValue();
+            reader.eat(Sym.OPERATEUR);
+            Expression right = non_term_exp();
+            reader.eat(Sym.RPAR);
+            return new Operation(0,0,left,right,operateur);
+        }
     }
-
-    public AST expression(){
-        return null;
-    }
-
-    public AST operateur(){
-        return null;
-    }
-
-    public AST op(){
-        return null;
-    }
-
-    public AST relation(){
-    	return null;
-    }
-
-
-    /** renvoie si on a atteint la fin du fichier */
-    public boolean reachEnd(){
-		return reader.isEmpty();
-    }
-
-    
 }

@@ -2,6 +2,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.lang.Exception;
 
 public class Main {
 
@@ -47,15 +48,19 @@ class MyCanvas extends JComponent {
       //
       // Par exemple :
       //
-  	  // File input = new File(filename);
-      // Reader reader = new FileReader(input);
-      // Lexer lexer = new Lexer(reader);
-      // LookAhead1 look = new LookAhead1(lexer);
-      // Parser parser = new Parser(look);
-      // AST ast = parser.progNonTerm();
-      // ast.verifyAll();
-      // ast.exec(g2d);
-      
+      try {
+       File input = new File(filename);
+       Reader reader = new FileReader(input);
+       Lexer lexer = new Lexer(reader);
+       LookAhead1 look = new LookAhead1(lexer);
+       Parser parser = new Parser(look);
+       AST ast = parser.progNonTerm();
+       ast.verifyAll();
+       ast.exec(g2d);
+      } catch (Exception e) {
+          System.out.println("Sorry there is an exception !");
+          System.out.println("Message -> " + e.getMessage());
+      }
     }
   }
 

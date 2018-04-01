@@ -5,30 +5,31 @@
 
 
 # Variables
-BIN = bin
-SOURCE = src
-file = dessin
+file = simple 
 
 # Show information
 all:
-	@echo "Pour dessiner votre fichier : make run file=\"<filename>\". Par défaut le fichier s'appelle dessin"
+	@echo -e "Pour dessiner votre fichier : make run file=\"<filename>\".\nCe fichier doit être dans le répertoire test.\nPar défaut le fichier testé est simple"
 
 # Create Lexer
 create_lexer:
 	@echo "Création du Lexer"
-	jflex $(SOURCE)/draw.flex
+	@jflex src/draw.flex
 
 # Compilation java
 compile: # create_lexer
 	@echo "Compilation des fichiers java"
-	mkdir $(BIN)
-	javac -sourcepath $(SOURCE) -d $(BIN) $(SOURCE)/*.java
+	@mkdir -p bin
+	@javac -sourcepath src -d bin src/*.java
 
 # Clear files
 clear:
 	@echo "Suppression du fichier contenant les .class"
-	@rm -Rf $(BIN)
+	@rm -Rf bin
+
+$(file):
+	@echo "Lecture de test/"$(file)
 
 # Lancer la compilation
-run:
-	java -cp $(BIN) Main $(file)
+run: $(file)
+	@java -cp bin Main test/$(file)

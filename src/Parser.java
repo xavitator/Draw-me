@@ -30,7 +30,7 @@ import java.awt.Color;
  */
 public class Parser{
 
-	protected LookAhead1 reader;
+    protected LookAhead1 reader;
     
     /****************
      * Constructeur *
@@ -38,26 +38,28 @@ public class Parser{
 
     /** Constructeur par défaut */
     public Parser(LookAhead1 r) throws IOException {
-		reader = r;
+        reader = r;
     }
 
     /** Axiome 
-    * programme -> suite_instruction
-    */
+     * programme -> suite_instruction
+     */
     public AST progNonTerm() throws Exception {
-        AST tmp =  suite_instruction(new AST(0,0));
+        // Création de l'AST d'origine
+        AST tmp =  suite_instruction(new AST(reader.line(),reader.column()));
         reader.eat(Sym.EOF);
         return tmp;
     }
 
     /**
      * Instruction 
+     * @return l'AST représentant l'instruction 
      */
     public AST instruction() throws Exception {
         if (reader.check(Sym.BEGIN)) {
-        /* instruction -> Begin suite_instruction End*/
+            /* instruction -> Begin suite_instruction End*/
             reader.eat(Sym.BEGIN);
-            AST tmp = new AST(0,0);
+            AST tmp = new AST(reader.line(),reader.column());
             tmp = this.suite_instruction(tmp);
             reader.eat(Sym.END);
             return tmp; 
@@ -71,7 +73,7 @@ public class Parser{
             Color col = reader.getColorValue();
             reader.eat(Sym.COULEUR);
             reader.eat(Sym.RPAR);
-            return new DrawCircle(0,0,x,y,z,col);
+            return new DrawCircle(reader.line(),reader.column(),x,y,z,col);
         } else if (reader.check(Sym.DRAWRECT)) {
             /* instruction -> DrawRect(exp,exp,exp,couleur) */
             reader.eat(Sym.DRAWRECT);
@@ -83,7 +85,7 @@ public class Parser{
             Color col = reader.getColorValue();
             reader.eat(Sym.COULEUR);
             reader.eat(Sym.RPAR);
-            return new DrawRect(0,0,x,y,w,h,col);
+            return new DrawRect(reader.line(),reader.column(),x,y,w,h,col);
         } else if (reader.check(Sym.FILLCIRCLE)) {
             /* instruction -> FillCircle(exp,exp,exp)*/
             reader.eat(Sym.FILLCIRCLE);
@@ -94,7 +96,7 @@ public class Parser{
             Color col = reader.getColorValue();
             reader.eat(Sym.COULEUR);
             reader.eat(Sym.RPAR);
-            return new FillCircle(0,0,x,y,z,col);
+            return new FillCircle(reader.line(),reader.line(),x,y,z,col);
         } else if (reader.check(Sym.FILLRECT)) {
             /* instruction -> FillRect (exp,exp,exp,exp, couleur) */
             reader.eat(Sym.FILLRECT);
@@ -106,7 +108,7 @@ public class Parser{
             Color col = reader.getColorValue();
             reader.eat(Sym.COULEUR);
             reader.eat(Sym.RPAR);
-            return new FillRect(0,0,x,y,w,h,col);
+            return new FillRect(reader.line(),reader.column(),x,y,w,h,col);
         } else if (reader.check(Sym.CONST)) {
             /* instruction -> Const identificateur = exp */
             reader.eat(Sym.CONST);
@@ -114,7 +116,7 @@ public class Parser{
             reader.eat(Sym.IDENT);
             reader.eat(Sym.ASSIGNATION);
             Expression exp = this.non_term_exp();
-            return new Assign(0,0,true,name,exp);
+            return new Assign(reader.line(),reader.column(),true,name,exp);
         }  else {
             // Futur levée d'Exception
             System.out.println("Erreur dans instruction !!!");
@@ -123,6 +125,11 @@ public class Parser{
         }
     }
 
+    /**
+     * Axiome et partie suite d'instruction de la grammaire 
+     * @param current l'AST représentant la file d'exécution
+     * @return l'AST courant
+     */
     public AST suite_instruction (AST current) throws Exception {
         if(reader.check(Sym.END) || reader.check(Sym.EOF)){
             /* suite_instruction -> Epsilon*/
@@ -135,17 +142,21 @@ public class Parser{
         }
     }
 
+    /**
+     * Partie des expressions de la grammaire 
+     * @return l'expression de la grammaire 
+     */
     public Expression non_term_exp() throws Exception {
         if (reader.check(Sym.INT)) {
             /* exp -> nombre */
-            Expression toReturn = new Value(0,0,reader.getIntValue());
+            Expression toReturn = new Value(reader.line(),reader.column(),reader.getIntValue());
             reader.eat(Sym.INT);
             return toReturn;
         } else if (reader.check(Sym.IDENT)) {
             /* exp -> identificateur */
             String ident = reader.getStringValue();
             reader.eat(Sym.IDENT);
-            return new Identificateur(0,0,ident);
+            return new Identificateur(reader.line(), reader.column(),ident);
         } else {
             /* exp -> ( exp operateur exp ) */
             reader.eat(Sym.LPAR);
@@ -154,7 +165,7 @@ public class Parser{
             reader.eat(Sym.OPERATEUR);
             Expression right = non_term_exp();
             reader.eat(Sym.RPAR);
-            return new Operation(0,0,left,right,operateur);
+            return new Operation(reader.line(),reader.column(),left,right,operateur);
         }
     }
 }

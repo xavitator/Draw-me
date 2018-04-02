@@ -9,8 +9,7 @@ public class LookAhead1{
 
     private Token current;
     private Lexer lex;
-    private boolean debug;
-
+ 
     
     /****************
      * Constructeur *
@@ -20,7 +19,6 @@ public class LookAhead1{
     public LookAhead1(Lexer l) throws Exception {
         this.lex = l;
         this.current = lex.yylex();
-        this.debug = false;
     }
 
 
@@ -45,30 +43,15 @@ public class LookAhead1{
      */
     public void eat (Sym sym) throws Exception {
         if (!check(sym)) {
-            throw new ParserException("Can't eat " + sym + ", i have " + current.symbol(), current.line(), current.column());
+            throw new ParserException("Erreur de grammaire symbole voulu" + sym + ", symbole actuel" + current.symbol(), current.line(), current.column());
         }
-        if (debug) { System.out.println(current); }
+        if (debugMode()) { System.out.println(current); }
         
         this.current = lex.yylex();
     }
 
 
     
-    /**********
-     * Setter *
-     **********/
-
-    /** Activer ou désactiver le mode débug */
-    public void setDebugOn() {
-        this.debug = true;
-    }
-
-    public void setDebugOff() {
-        this.debug = false;
-    }
-
-    
-
     /***********
      * Getters *
      ***********/
@@ -100,9 +83,15 @@ public class LookAhead1{
         }
     }
 
-    /** Renvoie s'il existe encore des Token */
-    public boolean isEmpty(){
-        return this.current == null;
+    /** Retourne la ligne du token */
+    public int line(){ return current.line();}
+    /** Retourne la colonne du token */
+    public int column(){return current.column();}
+
+
+    /** Debug */
+    public boolean debugMode() {
+        return false; // True pour afficher les tokens
     }
     
 }

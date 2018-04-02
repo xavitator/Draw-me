@@ -19,50 +19,57 @@ public class Main {
 
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                initAndShow(args[0]);
-            }
-        });
+                public void run() {
+                    initAndShow(args[0]);
+                }
+            });
     }
 }
 
 @SuppressWarnings("serial")
 class MyCanvas extends JComponent {
 
-  String filename;
+    String filename;
 
-  public MyCanvas(String fname) {
-    filename = fname;
-  }
-
-  @Override
-  public void paintComponent(Graphics g) {
-    if (g instanceof Graphics2D)
-    {
-      Graphics2D g2d = (Graphics2D)g;
-
-      // A compléter.
-      // Appelez ici votre analyseur et interpréteur, en leur fournissant
-      // l'objet g2d de type Graphics2D. Ils pourront ainsi appeler les fonctions
-      // g2d.drawCircle, g2d.setColor, etc...
-      //
-      // Par exemple :
-      //
-      try {
-       File input = new File(filename);
-       Reader reader = new FileReader(input);
-       Lexer lexer = new Lexer(reader);
-       LookAhead1 look = new LookAhead1(lexer);
-       Parser parser = new Parser(look);
-       AST ast = parser.progNonTerm();
-       //ast.verifyAll();
-       ValueEnv registre = new ValueEnv();
-       ast.exec(g2d,registre);
-      } catch (Exception e) {
-          System.out.println("Sorry there is an exception !");
-          System.out.println("Message -> " + e.getMessage());
-      }
+    public MyCanvas(String fname) {
+        filename = fname;
     }
-  }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        if (g instanceof Graphics2D)
+            {
+                Graphics2D g2d = (Graphics2D)g;
+
+                // A compléter.
+                // Appelez ici votre analyseur et interpréteur, en leur fournissant
+                // l'objet g2d de type Graphics2D. Ils pourront ainsi appeler les fonctions
+                // g2d.drawCircle, g2d.setColor, etc...
+                //
+                // Par exemple :
+                AST ast = null;
+                if(new AST(0,0).debugMode()) {System.out.println("\n=== Mode debug ===");}
+
+                try {
+                    File input = new File(filename);
+                    Reader reader = new FileReader(input);
+                    Lexer lexer = new Lexer(reader);
+                    LookAhead1 look = new LookAhead1(lexer);
+                    Parser parser = new Parser(look);
+                    ast = parser.progNonTerm(); // Axiome 
+                    //ast.verifyAll();
+                } catch (Exception e) {
+                    System.out.println("** Erreur de compilation **\n" + e.getMessage()+"\n");
+                    System.exit(-1);
+                }
+                try {
+                    ValueEnv registre = new ValueEnv();
+                    ast.exec(g2d,registre);
+                } catch (Exception e) {
+                    System.out.println("** Erreur d'exécution **\n" + e.getMessage()+"\n");
+                    System.exit(-1);
+                }
+            }
+    }
 
 }

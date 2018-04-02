@@ -1,2 +1,6 @@
 Const rayon = 100;
+Begin
 DrawCircle(120,120,rayon,#00FF00);
+Const ra = (rayon*2);
+End;
+FillCircle((500-ra),(100+ra),ra,#0000FF);

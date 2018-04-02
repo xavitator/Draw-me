@@ -24,9 +24,10 @@ public abstract class Expression {
 
 	/**
 	 * Récupère la valeur de l'expression
+         * @param val registre contenant les variables
 	 * @return valeur de l'expression sous forme de String
 	 */
-	abstract String getValue();
+	abstract String getValue(ValueEnv val);
 
 	/**
 	 * On vérifie le type des éléments que doit récupérer l'expression
@@ -65,7 +66,7 @@ class Value extends Expression{
 	 * Récupère la valeur de l'expression
 	 * @return valeur de l'expression sous forme de String
 	 */
-	public String getValue(){
+	public String getValue(ValueEnv val){
 		return value;
 	}
 
@@ -94,9 +95,9 @@ class Identificateur extends Expression{
 	}
 
 	/** retourne la valeur de l'identificateur dans les variables d'environnement */
-	public String getValue(){
+	public String getValue(ValueEnv val){
 		// on retourne la value correspondant à l'identificateur
-		return null;
+            return Integer.toString(val.get(this.nom));
 	}
 
 	/** vérifie la portée de la variable */
@@ -126,29 +127,29 @@ class Operation extends Expression{
 	}
 
 	/** on récupère la valeur de l'opération, ce que renvoie l'opération */
-	public String getValue(){
+	public String getValue(ValueEnv val){
 		switch(operateur){
-			case "+": return sum();
-			case "-": return soustract();
-			case "/": return divise();
-			case "*": return prod();
-			case ">": return compare();
-			case "<": return compare();
-			case "<=": return compare();
-			case ">=": return compare();
-			case "==": return equal();
-			case "!=": return negate();
-			case "&&": return and();
-			case "||": return or();
+			case "+": return sum(val);
+			case "-": return soustract(val);
+			case "/": return divise(val);
+			case "*": return prod(val);
+			case ">": return compare(val);
+			case "<": return compare(val);
+			case "<=": return compare(val);
+			case ">=": return compare(val);
+			case "==": return equal(val);
+			case "!=": return negate(val);
+			case "&&": return and(val);
+			case "||": return or(val);
 			default: return null;
 		}
 	}
 
 	/** retourne la valeur de la somme des deux expressions (en forme d'int)*/
-	public String sum(){
+	public String sum(ValueEnv val){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
+			int a = Integer.parseInt(exp1.getValue(val));
+			int b = Integer.parseInt(exp2.getValue(val));
 			return String.valueOf(a+b);
 		}
 		catch(NumberFormatException exception){
@@ -158,10 +159,10 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de la soustraction des deux expressions (en forme d'int)*/
-	public String soustract(){
+	public String soustract(ValueEnv val){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
+                    int a = Integer.parseInt(exp1.getValue(val));
+			int b = Integer.parseInt(exp2.getValue(val));
 			return String.valueOf(a-b);
 		}
 		catch(NumberFormatException exception){
@@ -171,10 +172,10 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de la division des deux expressions (en forme d'int)*/
-	public String divise(){
+	public String divise(ValueEnv val){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
+			int a = Integer.parseInt(exp1.getValue(val));
+			int b = Integer.parseInt(exp2.getValue(val));
 			return String.valueOf(a/b);
 		}
 		catch(NumberFormatException exception){
@@ -184,10 +185,10 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de le produit des deux expressions (en forme d'int)*/
-	public String prod(){
+	public String prod(ValueEnv val){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
+			int a = Integer.parseInt(exp1.getValue(val));
+			int b = Integer.parseInt(exp2.getValue(val));
 			return String.valueOf(a*b);
 		}
 		catch(NumberFormatException exception){
@@ -197,10 +198,10 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de la comparaison des deux expressions en fonction de l'opération de comparaison (en forme de boolean)*/
-	public String compare(){
+	public String compare(ValueEnv val){
 		try{
-			int a = Integer.parseInt(exp1.getValue());
-			int b = Integer.parseInt(exp2.getValue());
+			int a = Integer.parseInt(exp1.getValue(val));
+			int b = Integer.parseInt(exp2.getValue(val));
 			switch(operateur){
 				case ">": return String.valueOf(a>b);
 				case "<":  return String.valueOf(a<b);
@@ -215,9 +216,9 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de l'égalité des deux expressions (en forme de boolean)*/
-	public String equal(){
-		String e1 = exp1.getValue();
-		String e2 = exp2.getValue();
+	public String equal(ValueEnv val){
+		String e1 = exp1.getValue(val);
+		String e2 = exp2.getValue(val);
 		if(e1.matches("[Tt]rue | [Ff]alse") && e2.matches("[Tt]rue | [Ff]alse")){
 			return String.valueOf(e1.toLowerCase().equals(e2.toLowerCase()));
 		}
@@ -235,9 +236,9 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de la différence des deux expressions (en forme de boolean)*/
-	public String negate(){
-		String e1 = exp1.getValue();
-		String e2 = exp2.getValue();
+    public String negate(ValueEnv val){
+        String e1 = exp1.getValue(val);
+        String e2 = exp2.getValue(val);
 		if(e1.matches("[Tt]rue | [Ff]alse") && e2.matches("[Tt]rue | [Ff]alse")){
 			return String.valueOf(! e1.toLowerCase().equals(e2.toLowerCase()));
 		}
@@ -255,16 +256,16 @@ class Operation extends Expression{
 	}
 
 	/** retourne la valeur de l'opération '&&'(en java) des deux expressions (en forme de boolean)*/
-	public String and(){
-		String e1 = exp1.getValue();
-		String e2 = exp2.getValue();
+	public String and(ValueEnv val){
+		String e1 = exp1.getValue(val);
+		String e2 = exp2.getValue(val);
 		return String.valueOf(e1.toLowerCase().equals("true") && e2.toLowerCase().equals("true"));
 	}
 
 	/** retourne la valeur de l'opération '||'(en java) des deux expressions (en forme de boolean)*/
-	public String or(){
-		String e1 = exp1.getValue();
-		String e2 = exp2.getValue();
+    public String or(ValueEnv val){
+		String e1 = exp1.getValue(val);
+		String e2 = exp2.getValue(val);
 		return String.valueOf(e1.toLowerCase().equals("true") || e2.toLowerCase().equals("true"));
 	}
 

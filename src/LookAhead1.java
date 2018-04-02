@@ -35,7 +35,7 @@ public class LookAhead1{
      * @param sym le symbole à tester
      * @return true si le symbole correspond
      */
-    public boolean check (Sym sym) throws Exception {
+    public boolean check (Sym sym) {
         return current.symbol() == sym;
     }
 

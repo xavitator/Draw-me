@@ -55,8 +55,9 @@ class MyCanvas extends JComponent {
        LookAhead1 look = new LookAhead1(lexer);
        Parser parser = new Parser(look);
        AST ast = parser.progNonTerm();
-       ast.verifyAll();
-       ast.exec(g2d);
+       //ast.verifyAll();
+       ValueEnv registre = new ValueEnv();
+       ast.exec(g2d,registre);
       } catch (Exception e) {
           System.out.println("Sorry there is an exception !");
           System.out.println("Message -> " + e.getMessage());

@@ -45,12 +45,12 @@ public class DrawRect extends AST {
 	}
 
 	/** fonction d'exécution de drawRect */
-	public void exec(Graphics2D g2d){
+    public void exec(Graphics2D g2d, ValueEnv val){
 		try{
-			int x = Integer.parseInt(exp1.getValue());
-			int y = Integer.parseInt(exp2.getValue());
-			int w = Integer.parseInt(exp3.getValue());
-			int h = Integer.parseInt(exp4.getValue());
+			int x = Integer.parseInt(exp1.getValue(val));
+			int y = Integer.parseInt(exp2.getValue(val));
+			int w = Integer.parseInt(exp3.getValue(val));
+			int h = Integer.parseInt(exp4.getValue(val));
                         g2d.setColor(color);
 			g2d.drawRect(x, y, w, h);
                         debug(x,y,w,h);

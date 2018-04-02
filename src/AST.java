@@ -31,9 +31,9 @@ public class AST {
     }
 
 	/** fonction d'exécution des AST suivants */
-    public void exec(Graphics2D g2d){
+    public void exec(Graphics2D g2d,ValueEnv val){
     	for (AST suivant : next) {
-    		suivant.exec(g2d);
+            suivant.exec(g2d,val);
     	}
     }
 

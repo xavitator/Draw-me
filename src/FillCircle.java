@@ -38,11 +38,11 @@ public class FillCircle extends AST {
 	}
 
 	/** fonction d'exécution de fillOval */
-	public void exec(Graphics2D g2d){
+    public void exec(Graphics2D g2d, ValueEnv val){
 		try{
-			int x = Integer.parseInt(exp1.getValue());
-			int y = Integer.parseInt(exp2.getValue());
-			int r = Integer.parseInt(exp3.getValue()); 
+			int x = Integer.parseInt(exp1.getValue(val));
+			int y = Integer.parseInt(exp2.getValue(val));
+			int r = Integer.parseInt(exp3.getValue(val)); 
                         g2d.setColor(color);
                         g2d.fillOval(x-r, y-r, r*2, r*2); // décalage centre + diametre
                         debug(x,y,r);

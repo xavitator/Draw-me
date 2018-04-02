@@ -28,15 +28,15 @@ public class Condition extends AST {
 	}
 
 	/** fonction d'exécution du If */
-	public void exec(Graphics2D g2d){
-		String value = condition.getValue();
+    public void exec(Graphics2D g2d, ValueEnv val){ // A revoir simplement prend en paramètre deux instructions !
+		String value = condition.getValue(val);
 		boolean b = false;
 		if(isInteger(value)) b = Integer.parseInt(value) != 0;
 		else b = value.matches("[Tt]rue");
-		if(b) next.get(0).exec(g2d);
+		if(b) next.get(0).exec(g2d,val);
 		else{
 			if(next.size() >= 2){
-				next.get(1).exec(g2d);
+                            next.get(1).exec(g2d,val);
 			}
 		}
 	}

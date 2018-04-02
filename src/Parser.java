@@ -107,7 +107,15 @@ public class Parser{
             reader.eat(Sym.COULEUR);
             reader.eat(Sym.RPAR);
             return new FillRect(0,0,x,y,w,h,col);
-        } else {
+        } else if (reader.check(Sym.CONST)) {
+            /* instruction -> Const identificateur = exp */
+            reader.eat(Sym.CONST);
+            String name = reader.getStringValue();
+            reader.eat(Sym.IDENT);
+            reader.eat(Sym.ASSIGNATION);
+            Expression exp = this.non_term_exp();
+            return new Assign(0,0,true,name,exp);
+        }  else {
             // Futur levée d'Exception
             System.out.println("Erreur dans instruction !!!");
             System.exit(-1);
@@ -133,6 +141,11 @@ public class Parser{
             Expression toReturn = new Value(0,0,reader.getIntValue());
             reader.eat(Sym.INT);
             return toReturn;
+        } else if (reader.check(Sym.IDENT)) {
+            /* exp -> identificateur */
+            String ident = reader.getStringValue();
+            reader.eat(Sym.IDENT);
+            return new Identificateur(0,0,ident);
         } else {
             /* exp -> ( exp operateur exp ) */
             reader.eat(Sym.LPAR);

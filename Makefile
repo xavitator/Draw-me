@@ -30,7 +30,7 @@ clear:
 	@rm -Rf bin
 
 $(file):
-	@echo "Lecture de test/"$(file)
+	@echo -e "============================\n\n    Interpréteur     \n fichier> test/"$(file)"\n\n============================\n"
 
 # Lancer la compilation
 run: $(file)

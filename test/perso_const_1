@@ -1,0 +1,2 @@
+Const rayon = 100;
+DrawCircle(120,120,rayon,#00FF00);

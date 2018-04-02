@@ -14,10 +14,12 @@ all:
 # Create Lexer
 create_lexer:
 	@echo "Création du Lexer"
-	@jflex src/draw.flex
+	@jflex src/draw.flex 1> /dev/null
+	@rm src/Lexer.java~
+
 
 # Compilation java
-compile: # create_lexer
+compile: create_lexer
 	@echo "Compilation des fichiers java"
 	@mkdir -p bin
 	@javac -sourcepath src -d bin src/*.java

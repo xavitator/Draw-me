@@ -43,7 +43,7 @@ public class LookAhead1{
      */
     public void eat (Sym sym) throws Exception {
         if (!check(sym)) {
-            throw new ParserException("Erreur de grammaire symbole voulu" + sym + ", symbole actuel" + current.symbol(), current.line(), current.column());
+            throw new ParserException("Erreur de grammaire symbole voulu <" + sym + ">, symbole actuel <" + current.symbol()+">", current.line(), current.column());
         }
         if (debugMode()) { System.out.println(current); }
         

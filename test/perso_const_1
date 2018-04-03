@@ -1,6 +1,4 @@
-Const rayon = 100;
-Begin
+Var rayon = 10;
+Var ra = (2*rayon);
 DrawCircle(120,120,rayon,#00FF00);
-Const ra = (rayon*2);
-End;
 FillCircle((500-ra),(100+ra),ra,#0000FF);

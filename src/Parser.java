@@ -20,7 +20,8 @@ import java.awt.Color;
  * 			| FillRect ( expr , expr , expr , expr , couleur )
  * 			| Const identificateur = expr 
  * 			| Var identificateur = expr
- * 			| If expr Then instruction Autre
+ * 			| identificateur = expression
+ *                      | If expr Then instruction Autre
  * Autre → Else instruction
  * 			| 𝜀
  * expr → Nombre | identificateur | ( expr operateur expr ) | True | False
@@ -56,73 +57,104 @@ public class Parser{
      * @return l'AST représentant l'instruction 
      */
     public AST instruction() throws Exception {
-        if (reader.check(Sym.BEGIN)) {
-            /* instruction -> Begin suite_instruction End*/
-            reader.eat(Sym.BEGIN);
-            AST tmp = new AST(reader.line(),reader.column());
-            tmp = this.suite_instruction(tmp);
-            reader.eat(Sym.END);
-            return tmp; 
-        } else if (reader.check(Sym.DRAWCIRCLE)){
-            /* instruction -> DrawCircle ( exp, exp, couleur) */
-            reader.eat(Sym.DRAWCIRCLE);
-            reader.eat(Sym.LPAR);
-            Expression x = this.non_term_exp();
-            Expression y = this.non_term_exp();
-            Expression z = this.non_term_exp();
-            Color col = reader.getColorValue();
-            reader.eat(Sym.COULEUR);
-            reader.eat(Sym.RPAR);
-            return new DrawCircle(reader.line(),reader.column(),x,y,z,col);
-        } else if (reader.check(Sym.DRAWRECT)) {
-            /* instruction -> DrawRect(exp,exp,exp,couleur) */
-            reader.eat(Sym.DRAWRECT);
-            reader.eat(Sym.LPAR);
-            Expression x = this.non_term_exp();
-            Expression y = this.non_term_exp();
-            Expression w = this.non_term_exp();
-            Expression h = this.non_term_exp();
-            Color col = reader.getColorValue();
-            reader.eat(Sym.COULEUR);
-            reader.eat(Sym.RPAR);
-            return new DrawRect(reader.line(),reader.column(),x,y,w,h,col);
-        } else if (reader.check(Sym.FILLCIRCLE)) {
-            /* instruction -> FillCircle(exp,exp,exp)*/
-            reader.eat(Sym.FILLCIRCLE);
-            reader.eat(Sym.LPAR);
-            Expression x = this.non_term_exp();
-            Expression y = this.non_term_exp();
-            Expression z = this.non_term_exp();
-            Color col = reader.getColorValue();
-            reader.eat(Sym.COULEUR);
-            reader.eat(Sym.RPAR);
-            return new FillCircle(reader.line(),reader.line(),x,y,z,col);
-        } else if (reader.check(Sym.FILLRECT)) {
-            /* instruction -> FillRect (exp,exp,exp,exp, couleur) */
-            reader.eat(Sym.FILLRECT);
-            reader.eat(Sym.LPAR);
-            Expression x = this.non_term_exp();
-            Expression y = this.non_term_exp();
-            Expression w = this.non_term_exp();
-            Expression h = this.non_term_exp();
-            Color col = reader.getColorValue();
-            reader.eat(Sym.COULEUR);
-            reader.eat(Sym.RPAR);
-            return new FillRect(reader.line(),reader.column(),x,y,w,h,col);
-        } else if (reader.check(Sym.CONST)) {
-            /* instruction -> Const identificateur = exp */
-            reader.eat(Sym.CONST);
-            String name = reader.getStringValue();
-            reader.eat(Sym.IDENT);
-            reader.eat(Sym.ASSIGNATION);
-            Expression exp = this.non_term_exp();
-            return new Assign(reader.line(),reader.column(),true,name,exp);
-        }  else {
-            // Futur levée d'Exception
-            System.out.println("Erreur dans instruction !!!");
-            System.exit(-1);
-            return null;
+        int line = reader.line();
+        int column = reader.column();
+        if (reader.check(Sym.BEGIN))
+            {
+                /* instruction -> Begin suite_instruction End*/
+                reader.eat(Sym.BEGIN);
+                AST tmp = new AST(line,column);
+                tmp = this.suite_instruction(tmp);
+                reader.eat(Sym.END);
+                return tmp; 
+            }
+        else if (reader.check(Sym.DRAWCIRCLE))
+            {
+                /* instruction -> DrawCircle ( exp, exp, couleur) */
+                reader.eat(Sym.DRAWCIRCLE);
+                reader.eat(Sym.LPAR);
+                Expression x = this.non_term_exp();
+                Expression y = this.non_term_exp();
+                Expression z = this.non_term_exp();
+                Color col = reader.getColorValue();
+                reader.eat(Sym.COULEUR);
+                reader.eat(Sym.RPAR);
+                return new DrawCircle(line,column,x,y,z,col);
+            }
+        else if (reader.check(Sym.DRAWRECT))
+            {
+                /* instruction -> DrawRect(exp,exp,exp,couleur) */
+                reader.eat(Sym.DRAWRECT);
+                reader.eat(Sym.LPAR);
+                Expression x = this.non_term_exp();
+                Expression y = this.non_term_exp();
+                Expression w = this.non_term_exp();
+                Expression h = this.non_term_exp();
+                Color col = reader.getColorValue();
+                reader.eat(Sym.COULEUR);
+                reader.eat(Sym.RPAR);
+                return new DrawRect(line,column,x,y,w,h,col);
+            }
+        else if (reader.check(Sym.FILLCIRCLE))
+            {
+                /* instruction -> FillCircle(exp,exp,exp)*/
+                reader.eat(Sym.FILLCIRCLE);
+                reader.eat(Sym.LPAR);
+                Expression x = this.non_term_exp();
+                Expression y = this.non_term_exp();
+                Expression z = this.non_term_exp();
+                Color col = reader.getColorValue();
+                reader.eat(Sym.COULEUR);
+                reader.eat(Sym.RPAR);
+                return new FillCircle(line, column, x, y, z, col);
+            }
+        else if (reader.check(Sym.FILLRECT))
+            {
+                /* instruction -> FillRect (exp,exp,exp,exp, couleur) */
+                reader.eat(Sym.FILLRECT);
+                reader.eat(Sym.LPAR);
+                Expression x = this.non_term_exp();
+                Expression y = this.non_term_exp();
+                Expression w = this.non_term_exp();
+                Expression h = this.non_term_exp();
+                Color col = reader.getColorValue();
+                reader.eat(Sym.COULEUR);
+                reader.eat(Sym.RPAR);
+                return new FillRect(line, column ,x,y,w,h,col);
         }
+        else if (reader.check(Sym.CONST))
+            {
+                /* instruction -> Const identificateur = exp */
+                reader.eat(Sym.CONST);
+                String name = reader.getStringValue();
+                reader.eat(Sym.IDENT);
+                reader.eat(Sym.ASSIGNATION);
+                Expression exp = this.non_term_exp();
+                return new Assign(line,column,true,name,exp);
+            }
+        else if (reader.check(Sym.VAR))
+            {
+                /* Var identificateur = exp */
+                reader.eat(Sym.VAR);
+                String name = reader.getStringValue();
+                reader.eat(Sym.IDENT);
+                reader.eat(Sym.ASSIGNATION);
+                Expression exp = this.non_term_exp();
+                return new Assign(line, column, false, name, exp);
+            }
+        else if(reader.check(Sym.IDENT))
+            {
+                /* identificateur = exp */
+                String name = reader.getStringValue();
+                reader.eat(Sym.IDENT);
+                reader.eat(Sym.ASSIGNATION);
+                Expression exp = this.non_term_exp();
+                return new Change(line, column, name, exp);
+            }
+        else
+            {
+                throw new ParserException("Motif non reconnu", reader.line(),reader.column());
+            }
     }
 
     /**

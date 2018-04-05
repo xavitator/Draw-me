@@ -69,7 +69,7 @@ public class DrawRect extends AST {
 
     /** Debug */
     public void debug(int x, int y, int w, int h){
-        System.out.println("ast.DrawRect => x: " + x +" y: " + y + " w: " + w + " h: " + h);
+        System.out.println("DrawRect => x: " + x +" y: " + y + " w: " + w + " h: " + h);
     }
 
 }

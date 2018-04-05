@@ -1,6 +1,7 @@
 package lexer;
 
 import parser.*;
+import parser.Sym;
 import parser.token.*;
 
 %%

@@ -45,6 +45,6 @@ public class Change extends AST {
 
     /** Debug */
     public void debug(ValueEnv val) throws Exception {
-        System.out.println("ast.Change => Nom: " + nom + " Valeur:"+exp1.getValue(val));
+        System.out.println("Change => Nom: " + nom + " Valeur:"+exp1.getValue(val));
     }
 }	

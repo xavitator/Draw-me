@@ -58,7 +58,7 @@ public class FillCircle extends AST {
 
     /** Debug */
     public void debug(int x, int y, int r) {
-        System.out.println("ast.FillCircle => x: " + x + " y: " +y+ " r: " +r );
+        System.out.println("FillCircle => x: " + x + " y: " +y+ " r: " +r );
     }
     
 }

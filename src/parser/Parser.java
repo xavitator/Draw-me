@@ -1,4 +1,5 @@
-package parser; /**
+package parser;
+/**
  * Classe qui se charge de parser les fichiers
  * @author DURAND-MARAIS
  */
@@ -21,10 +22,10 @@ import java.awt.Color;
  * programme → blocInstruction
  * blocInstruction → Instruction ; blocInstruction | 𝜀
  * instruction → Begin blocInstruction End 
- * 			| ast.DrawCircle ( expr , expr , expr , couleur )
- * 			| ast.FillCircle ( expr , expr , expr , couleur)
- * 			| ast.DrawRect ( expr , expr , expr , expr , couleur )
- * 			| ast.FillRect ( expr , expr , expr , expr , couleur )
+ * 			| DrawCircle ( expr , expr , expr , couleur )
+ * 			| FillCircle ( expr , expr , expr , couleur)
+ * 			| DrawRect ( expr , expr , expr , expr , couleur )
+ * 			| FillRect ( expr , expr , expr , expr , couleur )
  * 			| Const identificateur = expr 
  * 			| Var identificateur = expr
  * 			| identificateur = expression
@@ -157,6 +158,20 @@ public class Parser{
                 reader.eat(Sym.ASSIGNATION);
                 Expression exp = this.non_term_exp();
                 return new Change(line, column, name, exp);
+            }
+        else if (reader.check(Sym.IF))
+            {
+                reader.eat(Sym.IF);
+                Expression exp = this.non_term_exp();
+                reader.eat(Sym.THEN);
+                AST ifAST = this.instruction();
+                AST elseAST = new AST(line,column);
+                if (reader.check(Sym.ELSE))
+                    {
+                        reader.eat(Sym.ELSE);
+                        elseAST = instruction();
+                    }
+                return new Condition(line,column,exp, ifAST, elseAST);
             }
         else
             {

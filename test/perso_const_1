@@ -1,4 +1,10 @@
 Var rayon = 10;
 Var ra = (2*rayon);
+If 1 Then
+Begin
 DrawCircle(120,120,rayon,#00FF00);
 FillCircle((500-ra),(100+ra),ra,#0000FF);
+End
+Else
+Begin
+End;

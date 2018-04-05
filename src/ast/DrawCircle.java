@@ -62,6 +62,6 @@ public class DrawCircle extends AST {
 
     /** Debug */
     public void debug(int x,int y,int r) {
-        System.out.println("ast.DrawCircle => x:" +x+ " y: " +y+ " r: " +r);
+        System.out.println("DrawCircle => x:" +x+ " y: " +y+ " r: " +r);
     }
 }

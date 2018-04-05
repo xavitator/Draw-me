@@ -62,7 +62,7 @@ public class FillRect extends AST {
 
     /** Debug */
     public void debug(int x, int y, int w, int h) {
-        System.out.println("ast.FillRect => x:" +x+ " y: " +y+ " w: " + w + " h: " + h);
+        System.out.println("FillRect => x:" +x+ " y: " +y+ " w: " + w + " h: " + h);
     }
     
 }

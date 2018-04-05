@@ -1,3 +1,7 @@
+package parser.token;
+
+import parser.Sym;
+
 /**
  * Classe de génération de token
  * @author DURAND-MARAIS

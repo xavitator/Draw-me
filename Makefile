@@ -14,8 +14,8 @@ all:
 # Create Lexer
 create_lexer:
 	@echo "Création du Lexer"
-	@jflex src/draw.flex 1> /dev/null
-	@rm src/Lexer.java~
+	@jflex src/lexer/draw.flex 1> /dev/null
+	@rm src/lexer/Lexer.java~
 
 
 # Compilation java

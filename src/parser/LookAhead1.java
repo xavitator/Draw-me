@@ -1,4 +1,12 @@
-import java.io.*;
+package parser;
+
+import exception.ParserException;
+import lexer.Lexer;
+import parser.token.ColorToken;
+import parser.token.IntToken;
+import parser.token.StringToken;
+import parser.token.Token;
+
 import java.awt.Color;
 
 /**

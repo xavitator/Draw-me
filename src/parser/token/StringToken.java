@@ -1,24 +1,25 @@
-import java.awt.Color;
+package parser.token;
 
+import parser.Sym;
 
 /**
- * Classe de gestion des tokens de couleur
+ * Classe de gestion des tokens de chaine de caractères
  * @author DURAND-MARAIS
  */
-public class ColorToken extends Token {
+public class StringToken extends Token {
 
-    private Color value;
+    private String value;
 
     
     
-    /****************
+    /*****************
      * Constructeur *
      ****************/
 
     /** Constructeur par défaut */
-    public ColorToken(Sym sym, int line, int column, String hex){
+    public StringToken (Sym sym, int line, int column, String value) {
         super(sym, line, column);
-        this.value = Color.decode(hex);
+        this.value = value;
     }
 
 
@@ -28,13 +29,14 @@ public class ColorToken extends Token {
      **********/
 
     /** Renvoie la valeur du token */
-    public Color getValue() {
+    public String getValue() {
         return this.value;
     }
 
     @Override
     public String toString() {
         return super.toString() + ", Value : " + this.value;
+            
     }
-
+        
 }

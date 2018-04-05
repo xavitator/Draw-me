@@ -1,7 +1,14 @@
-/**
+package parser; /**
  * Classe qui se charge de parser les fichiers
  * @author DURAND-MARAIS
  */
+
+import ast.*;
+import exception.ParserException;
+import expression.Expression;
+import expression.Identificateur;
+import expression.Operation;
+import expression.Value;
 
 import java.io.IOException;
 import java.lang.Exception;
@@ -14,10 +21,10 @@ import java.awt.Color;
  * programme → blocInstruction
  * blocInstruction → Instruction ; blocInstruction | 𝜀
  * instruction → Begin blocInstruction End 
- * 			| DrawCircle ( expr , expr , expr , couleur ) 
- * 			| FillCircle ( expr , expr , expr , couleur) 
- * 			| DrawRect ( expr , expr , expr , expr , couleur ) 
- * 			| FillRect ( expr , expr , expr , expr , couleur )
+ * 			| ast.DrawCircle ( expr , expr , expr , couleur )
+ * 			| ast.FillCircle ( expr , expr , expr , couleur)
+ * 			| ast.DrawRect ( expr , expr , expr , expr , couleur )
+ * 			| ast.FillRect ( expr , expr , expr , expr , couleur )
  * 			| Const identificateur = expr 
  * 			| Var identificateur = expr
  * 			| identificateur = expression
@@ -46,7 +53,7 @@ public class Parser{
      * programme -> suite_instruction
      */
     public AST progNonTerm() throws Exception {
-        // Création de l'AST d'origine
+        // Création de l'ast.AST d'origine
         AST tmp =  suite_instruction(new AST(reader.line(),reader.column()));
         reader.eat(Sym.EOF);
         return tmp;
@@ -54,7 +61,7 @@ public class Parser{
 
     /**
      * Instruction 
-     * @return l'AST représentant l'instruction 
+     * @return l'ast.AST représentant l'instruction
      */
     public AST instruction() throws Exception {
         int line = reader.line();
@@ -70,7 +77,7 @@ public class Parser{
             }
         else if (reader.check(Sym.DRAWCIRCLE))
             {
-                /* instruction -> DrawCircle ( exp, exp, couleur) */
+                /* instruction -> ast.DrawCircle ( exp, exp, couleur) */
                 reader.eat(Sym.DRAWCIRCLE);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -83,7 +90,7 @@ public class Parser{
             }
         else if (reader.check(Sym.DRAWRECT))
             {
-                /* instruction -> DrawRect(exp,exp,exp,couleur) */
+                /* instruction -> ast.DrawRect(exp,exp,exp,couleur) */
                 reader.eat(Sym.DRAWRECT);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -97,7 +104,7 @@ public class Parser{
             }
         else if (reader.check(Sym.FILLCIRCLE))
             {
-                /* instruction -> FillCircle(exp,exp,exp)*/
+                /* instruction -> ast.FillCircle(exp,exp,exp)*/
                 reader.eat(Sym.FILLCIRCLE);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -110,7 +117,7 @@ public class Parser{
             }
         else if (reader.check(Sym.FILLRECT))
             {
-                /* instruction -> FillRect (exp,exp,exp,exp, couleur) */
+                /* instruction -> ast.FillRect (exp,exp,exp,exp, couleur) */
                 reader.eat(Sym.FILLRECT);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -159,8 +166,8 @@ public class Parser{
 
     /**
      * Axiome et partie suite d'instruction de la grammaire 
-     * @param current l'AST représentant la file d'exécution
-     * @return l'AST courant
+     * @param current l'ast.AST représentant la file d'exécution
+     * @return l'ast.AST courant
      */
     public AST suite_instruction (AST current) throws Exception {
         if(reader.check(Sym.END) || reader.check(Sym.EOF)){

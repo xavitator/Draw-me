@@ -1,5 +1,10 @@
+package ast;
+
 import java.awt.*;
 import java.lang.Exception;
+
+import exception.ParserException;
+import expression.Expression;
 
 /**
  * Classe des Expressions

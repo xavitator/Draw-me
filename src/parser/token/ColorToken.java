@@ -1,21 +1,28 @@
+package parser.token;
+
+import parser.Sym;
+
+import java.awt.Color;
+
+
 /**
- * Classe de gestion des tokens de boolean
+ * Classe de gestion des tokens de couleur
  * @author DURAND-MARAIS
  */
-public class BooleanToken extends Token {
+public class ColorToken extends Token {
 
-    private boolean value;
+    private Color value;
 
     
     
-    /*****************
+    /****************
      * Constructeur *
      ****************/
 
     /** Constructeur par défaut */
-    public BooleanToken (Sym sym, int line, int column, String value) {
+    public ColorToken(Sym sym, int line, int column, String hex){
         super(sym, line, column);
-        this.value = value.matches("[Tt]rue");
+        this.value = Color.decode(hex);
     }
 
 
@@ -25,14 +32,13 @@ public class BooleanToken extends Token {
      **********/
 
     /** Renvoie la valeur du token */
-    public boolean getValue() {
+    public Color getValue() {
         return this.value;
     }
 
     @Override
     public String toString() {
         return super.toString() + ", Value : " + this.value;
-            
     }
-        
+
 }

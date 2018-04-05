@@ -1,10 +1,14 @@
+package parser.token;
+
+import parser.Sym;
+
 /**
- * Classe de gestion des tokens de chaine de caractères
+ * Classe de gestion des tokens de boolean
  * @author DURAND-MARAIS
  */
-public class StringToken extends Token {
+public class BooleanToken extends Token {
 
-    private String value;
+    private boolean value;
 
     
     
@@ -13,9 +17,9 @@ public class StringToken extends Token {
      ****************/
 
     /** Constructeur par défaut */
-    public StringToken (Sym sym, int line, int column, String value) {
+    public BooleanToken (Sym sym, int line, int column, String value) {
         super(sym, line, column);
-        this.value = value;
+        this.value = value.matches("[Tt]rue");
     }
 
 
@@ -25,7 +29,7 @@ public class StringToken extends Token {
      **********/
 
     /** Renvoie la valeur du token */
-    public String getValue() {
+    public boolean getValue() {
         return this.value;
     }
 

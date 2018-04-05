@@ -1,3 +1,8 @@
+package ast;
+
+import exception.ParserException;
+import expression.Expression;
+
 import java.awt.*;
 import java.lang.Exception;
 
@@ -14,7 +19,7 @@ public class DrawCircle extends AST {
     Color color;
 	
     /**
-     * on construit un AST correspondant à la fonction drawOval
+     * on construit un ast.AST correspondant à la fonction drawOval
      * @param  line   ligne de l'expression dans le fichier
      * @param  column colonne de l'expression dans le fichier
      * @param  exp1   premier argument de la fonction en int
@@ -57,6 +62,6 @@ public class DrawCircle extends AST {
 
     /** Debug */
     public void debug(int x,int y,int r) {
-        System.out.println("DrawCircle => x:" +x+ " y: " +y+ " r: " +r);
+        System.out.println("ast.DrawCircle => x:" +x+ " y: " +y+ " r: " +r);
     }
 }

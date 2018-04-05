@@ -1,3 +1,8 @@
+package lexer;
+
+import parser.*;
+import parser.token.*;
+
 %%
 %public
 %class Lexer

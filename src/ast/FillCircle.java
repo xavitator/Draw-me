@@ -1,61 +1,55 @@
+package ast;
+
 import java.awt.*;
 import java.lang.Exception;
-
+import exception.ParserException;
+import expression.Expression;
 /**
- * Classe correspondant à la fonction drawRect de Graphics
+ * Classe correspondant à la fonction fillOval de Graphics
  * @author DURAND-MARAIS
  */
 
-public class DrawRect extends AST {
+public class FillCircle extends AST {
     Expression exp1;
     Expression exp2;
     Expression exp3;
-    Expression exp4;
     Color color;
 	
     /**
-     * on construit un AST correspondant à la fonction drawRect
+     * on construit un ast.AST correspondant à la fonction fillOval
      * @param  line   ligne de l'expression dans le fichier
      * @param  column colonne de l'expression dans le fichier
      * @param  exp1   premier argument de la fonction en int
      * @param  exp2   deuxième argument de la fonction en int
      * @param  exp3   troisème argument de la fonction en int
-     * @param  exp4	  quatrième argument de la fonction en int
-     * @param  color  cinquième argument de la fonction en color
+     * @param  color  quatrième argument de la fonction en color
      * @return        
      */
-    public DrawRect(int line, int column, Expression exp1, Expression exp2, Expression exp3, Expression exp4, Color color){
+    public FillCircle(int line, int column, Expression exp1, Expression exp2, Expression exp3, Color color){
         super(line, column);
         this.exp1 = exp1;
         this.exp2 = exp2;
         this.exp3 = exp3;
-        this.exp4 = exp4;
         this.color = color;
     }
-	
+
     /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
     public void verifyAll() throws Exception{
         exp1.verifyType();
         exp2.verifyType();
         exp3.verifyType();
-        exp4.verifyType();
-        if(exp1.getType() != Type.INT 
-           || exp2.getType() != Type.INT 
-           || exp3.getType() != Type.INT 
-           || exp4.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
+        if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
     }
 
-    @Override
-    public void exec(Graphics2D g2d, ValueEnv val) throws Exception {
+    /** fonction d'exécution de fillOval */
+    public void exec(Graphics2D g2d, ValueEnv val) throws Exception{
         try{
             int x = Integer.parseInt(exp1.getValue(val));
             int y = Integer.parseInt(exp2.getValue(val));
-            int w = Integer.parseInt(exp3.getValue(val));
-            int h = Integer.parseInt(exp4.getValue(val));
+            int r = Integer.parseInt(exp3.getValue(val)); 
             g2d.setColor(color);
-            g2d.drawRect(x, y, w, h);
-            
-            if(debugMode()) {debug(x,y,w,h);} //debug
+            g2d.fillOval(x-r, y-r, r*2, r*2); // décalage centre + diametre
+            if(debugMode()){debug(x,y,r);} //debug
         }
         catch(NumberFormatException e){
             System.out.println("Erreur de typage à la ligne "+line+" et à la colonne "+column);
@@ -63,8 +57,8 @@ public class DrawRect extends AST {
     }
 
     /** Debug */
-    public void debug(int x, int y, int w, int h){
-        System.out.println("DrawRect => x: " + x +" y: " + y + " w: " + w + " h: " + h);
+    public void debug(int x, int y, int r) {
+        System.out.println("ast.FillCircle => x: " + x + " y: " +y+ " r: " +r );
     }
-
+    
 }

@@ -1,3 +1,8 @@
+package ast;
+
+import exception.ParserException;
+import expression.Expression;
+
 import java.awt.*;
 import java.lang.Exception;
 
@@ -10,7 +15,7 @@ public class Condition extends AST {
     Expression condition;
 
     /**
-     * constructeur d'un AST correspondant à un If
+     * constructeur d'un ast.AST correspondant à un If
      * @param  line      ligne de l'expression dans le fichier
      * @param  column    colonne de l'expression dans le fichier
      * @param  condition condition du If
@@ -20,7 +25,7 @@ public class Condition extends AST {
         this.condition = condition;
     }
 	
-    /** on vérifie le type de la condition et de chacun des AST suivants */
+    /** on vérifie le type de la condition et de chacun des ast.AST suivants */
     public void verifyAll() throws Exception{
         condition.verifyType();
         Type type = condition.getType();
@@ -52,6 +57,6 @@ public class Condition extends AST {
 
     /** Debug */
     public void debug(ValueEnv val, boolean b) {
-        System.out.println("Condition => valeur: "+b);
+        System.out.println("ast.Condition => valeur: "+b);
     }
 }

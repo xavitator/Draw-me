@@ -1,6 +1,10 @@
+package ast;
+
+import exception.ParserException;
+import expression.Expression;
+
 import java.lang.Exception;
 import java.awt.*;
-import java.lang.Exception;
 
 /**
  * Classe des Expressions
@@ -14,8 +18,8 @@ public class Change extends AST {
      * Constructeur
      * @param line la ligne du token
      * @param column la colonne du token
-     * @param isConstante si c'est une constante
      * @param nom le nom de la variable
+     * @param exp1 nouvelle valeur de la variable 'nom'
      */
     public Change(int line, int column, String nom, Expression exp1){
         super(line, column);
@@ -41,6 +45,6 @@ public class Change extends AST {
 
     /** Debug */
     public void debug(ValueEnv val) throws Exception {
-        System.out.println("Change => Nom: " + nom + " Valeur:"+exp1.getValue(val));
+        System.out.println("ast.Change => Nom: " + nom + " Valeur:"+exp1.getValue(val));
     }
 }	

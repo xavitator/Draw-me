@@ -1,3 +1,7 @@
+package parser.token;
+
+import parser.Sym;
+
 /**
  * Classe de gestion des tokens de type integer
  * @author DURAND-MARAIS

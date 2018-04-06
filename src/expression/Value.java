@@ -13,44 +13,37 @@ public class Value extends Expression{
 
     /** construit une expression avec une valeur en int */
     public Value(int line, int column,int value){
-        super(line,column);
+        super(line,column, Type.INT);
         this.value = String.valueOf(value);
     }
 
     /** construit une expression avec une valeur en boolean */
     public Value(int line, int column, boolean value){
-        super(line,column);
+        super(line,column, Type.BOOLEAN);
         this.value = String.valueOf(value);
     }
 
-    /**
-     * On récupère le ast.Type de l'expression :
-     * - INT si c'est une suite uniquement de chiffre
-     * - BOOLEAN si c'est 'true' ou 'false'
-     * @return ast.Type de l'expression
-     */
-    public Type getType(){
-        if(value.matches("^\\p{Digit}+$")) return Type.INT;
-        if(value.matches("[Tt]rue | [Ff]alse")) return Type.BOOLEAN;
-        return null;
-    }
-
-    /**
-     * Récupère la valeur de l'expression
-     * @return valeur de l'expression sous forme de String
-     */
-    public String getValue(ValueEnv val) throws Exception {
-        if(debugMode()){debug();}
-        return value;
+    public void setType(ValueEnv env) throws Exception{
+        // rien à faire
     }
 
     /**
      * On vérifie le type des éléments que doit récupérer l'expression
      */
-    public void verifyType() throws Exception{
+    public void verifyType(ValueEnv env) throws Exception{
         if( ! value.matches("^\\p{Digit}+$") && ! value.matches("[Tt]rue | [Ff]alse")){
             throw new ParserException("Il y a une problème de typage.", line, column);
         }
+    }
+
+    public int evalInt(ValueEnv env) throws Exception{
+        if(this.getType() != Type.INT) throw new Exception();
+        else return Integer.parseInt(value);
+    }
+
+    public boolean evalBool(ValueEnv env) throws Exception{
+        if(this.getType() != Type.BOOLEAN) throw new Exception();
+        else return Boolean.parseBoolean(value);
     }
 
     /** Debug */

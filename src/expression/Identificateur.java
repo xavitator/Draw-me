@@ -9,32 +9,33 @@ import exception.ParserException;
  * @author DURAND-MARAIS
  */
 public class Identificateur extends Expression{
-    String nom;
+    private String nom;
 
-    /** on construit une expression.Expression pour un identificateur (Var et Const) */
+    /** on construit une Expression pour un identificateur (Var et Const) */
     public Identificateur(int line, int column, String value){
-        super(line,column);
+        super(line,column, Type.VOID);
         this.nom = value;
     }
 
-    /** renvoie le type de l'identificateur */
-    public Type getType(){
-        return null;
-    }
-
-    /** retourne la valeur de l'identificateur dans les variables d'environnement */
-    public String getValue(ValueEnv val) throws Exception {
-        // on retourne la value correspondant à l'identificateur
-        if(debugMode()){debug();}
-        if(val.containsKey(this.nom)) {
-            return Integer.toString(val.get(this.nom));
-        }
-        throw new ParserException("Cette valeur n'a jamais été déclarée. Nom:" + this.nom,line,column);
+    public void setType(ValueEnv env) throws Exception{
+        super.type = env.getType(nom);
     }
 
     /** vérifie la portée de la variable */
-    public void verifyType() throws Exception{
-        // on vérifie la portée de la variable ainsi que son type
+    public void verifyType(ValueEnv env) throws Exception{
+        if(! env.contains(nom)){
+            throw new Exception();
+        }
+    }
+
+    public int evalInt(ValueEnv env) throws Exception{
+        if(this.getType() != Type.INT) throw new Exception();
+        else return env.get(nom).evalInt(env);
+    }
+
+    public boolean evalBool(ValueEnv env) throws Exception{
+        if(this.getType() != Type.BOOLEAN) throw new Exception();
+        else return env.get(nom).evalBool(env);
     }
 
     /** Debug */

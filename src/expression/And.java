@@ -10,7 +10,7 @@ import java.lang.Exception;
  * Classe pour l'opérateur && : And
  * @author DURAND-MARAIS
  */
-public abstract class And {
+public class And extends Expression{
     private Expression exp1;
     private Expression exp2;
 
@@ -29,7 +29,6 @@ public abstract class And {
 
     /**
      * On change le type de l'expression
-     * @param type nouveau type de l'expression
      */
     public void setType(ValueEnv env) throws Exception{
         this.type = Type.BOOLEAN;
@@ -39,10 +38,10 @@ public abstract class And {
      * On vérifie le type des éléments que doit récupérer l'expression
      */
     public void verifyType(ValueEnv env) throws Exception{
-        exp1.setType();
-        exp2.setType();
-        exp1.verifyType();
-        exp2.verifyType();
+        exp1.verifyType(env);
+        exp2.verifyType(env);
+        exp1.setType(env);
+        exp2.setType(env);
         if(exp1.getType() != Type.BOOLEAN || exp2.getType() != Type.BOOLEAN){
             throw new Exception();
         }

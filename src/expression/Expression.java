@@ -37,7 +37,6 @@ public abstract class Expression {
 
     /**
      * On change le type de l'expression
-     * @param type nouveau type de l'expression
      */
     public abstract void setType(ValueEnv env) throws Exception;
 

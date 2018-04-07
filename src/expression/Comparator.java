@@ -10,7 +10,7 @@ import java.lang.Exception;
  * Classe des comparateurs
  * @author DURAND-MARAIS
  */
-public class Comparator {
+public class Comparator extends Expression{
     private Expression exp1;
     private Expression exp2;
     private String comparator;
@@ -33,7 +33,6 @@ public class Comparator {
 
     /**
      * On change le type de l'expression
-     * @param type nouveau type de l'expression
      */
     public void setType(ValueEnv env) throws Exception{
         this.type = Type.BOOLEAN;
@@ -43,10 +42,10 @@ public class Comparator {
      * On vérifie le type des éléments que doit récupérer l'expression
      */
     public void verifyType(ValueEnv env) throws Exception{
-        exp1.setType();
-        exp2.setType();
-        exp1.verifyType();
-        exp2.verifyType();
+        exp1.verifyType(env);
+        exp2.verifyType(env);
+        exp1.setType(env);
+        exp2.setType(env);
         if( ! ( (exp1.getType() == Type.INT && exp2.getType() == Type.INT) 
             || (exp1.getType() == Type.BOOLEAN && exp2.getType() == Type.BOOLEAN) )){
             throw new Exception();
@@ -56,18 +55,21 @@ public class Comparator {
     public boolean evalBool(ValueEnv env) throws Exception{
         boolean isInt = exp1.getType() != Type.INT;
         switch(comparator){
-            case "==": if (isInt) {
-                return exp1.evalBool(env) == exp2.evalBool(env);
-            }
-            else{
-                return exp1.evalInt(env) == exp2.evalInt(env);
-            }
-            case "!=": if (isInt) {
-                return exp1.evalBool(env) != exp2.evalBool(env);
-            }
-            else{
-                return exp1.evalInt(env) != exp2.evalInt(env);
-            }
+            case "==":
+                if (isInt) {
+                    return exp1.evalBool(env) == exp2.evalBool(env);
+                }
+                else{
+                    return exp1.evalInt(env) == exp2.evalInt(env);
+                }
+            case "!=":
+                if (isInt) {
+                    return exp1.evalBool(env) != exp2.evalBool(env);
+                }
+                else{
+                    return exp1.evalInt(env) != exp2.evalInt(env);
+                }
+            default: throw new Exception();
         }
     }
 

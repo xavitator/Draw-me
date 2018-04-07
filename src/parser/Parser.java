@@ -8,8 +8,6 @@ import ast.*;
 import exception.ParserException;
 import expression.Expression;
 import expression.Identificateur;
-import expression.Operation;
-import expression.Value;
 
 import java.io.IOException;
 import java.lang.Exception;
@@ -203,7 +201,7 @@ public class Parser{
     public Expression non_term_exp() throws Exception {
         if (reader.check(Sym.INT)) {
             /* exp -> nombre */
-            Expression toReturn = new Value(reader.line(),reader.column(),reader.getIntValue());
+            Expression toReturn = null; //new Value(reader.line(),reader.column(),reader.getIntValue());
             reader.eat(Sym.INT);
             return toReturn;
         } else if (reader.check(Sym.IDENT)) {
@@ -219,7 +217,7 @@ public class Parser{
             reader.eat(Sym.OPERATEUR);
             Expression right = non_term_exp();
             reader.eat(Sym.RPAR);
-            return new Operation(reader.line(),reader.column(),left,right,operateur);
+            return null; //new Operation(reader.line(),reader.column(),left,right,operateur);
         }
     }
 }

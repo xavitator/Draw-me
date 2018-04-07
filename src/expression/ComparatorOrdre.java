@@ -10,7 +10,7 @@ import java.lang.Exception;
  * Classe des comparateurs d'ordre
  * @author DURAND-MARAIS
  */
-public class ComparatorOdre {
+public class ComparatorOrdre extends Expression{
     private Expression exp1;
     private Expression exp2;
     private String comparator;
@@ -24,7 +24,7 @@ public class ComparatorOdre {
      * @param exp2 Deuxième expression du comparateur
      * @param comparator string correspondant à l'opérateur de comparaison
      */
-    public ComparatorOdre(int line, int column, Expression exp1, Expression exp2, String comparator){
+    public ComparatorOrdre(int line, int column, Expression exp1, Expression exp2, String comparator){
         super(line,column,Type.BOOLEAN);
         this.exp1 = exp1;
         this.exp2 = exp2;
@@ -33,7 +33,6 @@ public class ComparatorOdre {
 
     /**
      * On change le type de l'expression
-     * @param type nouveau type de l'expression
      */
     public void setType(ValueEnv env) throws Exception{
         this.type = Type.BOOLEAN;
@@ -43,10 +42,10 @@ public class ComparatorOdre {
      * On vérifie le type des éléments que doit récupérer l'expression
      */
     public void verifyType(ValueEnv env) throws Exception{
-        exp1.setType();
-        exp2.setType();
-        exp1.verifyType();
-        exp2.verifyType();
+        exp1.verifyType(env);
+        exp2.verifyType(env);
+        exp1.setType(env);
+        exp2.setType(env);
         if(exp1.getType() != Type.INT || exp2.getType() != Type.INT){
             throw new Exception();
         }

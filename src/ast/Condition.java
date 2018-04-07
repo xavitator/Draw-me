@@ -32,32 +32,30 @@ public class Condition extends AST {
     }
 	
     /** on vérifie le type de la condition et de chacun des ast.AST suivants */
-    public void verifyAll() throws Exception{
-        condition.verifyType();
+    public void verifyAll(ValueEnv env) throws Exception{
+        condition.verifyType(env);
+        condition.setType(env);
         Type type = condition.getType();
         if(type != Type.BOOLEAN && type != Type.INT) throw new ParserException("Il y a un problème de typage.",line,column);
-        inst1.verifyAll();
-        inst2.verifyAll();
+        inst1.verifyAll(env);
+        inst2.verifyAll(env);
+        super.verifyAll(env);
     }
 
     /** fonction d'exécution de l'objet Condition */
     public void exec(Graphics2D g2d, ValueEnv val) throws Exception { // A revoir simplement prend en paramètre deux instructions !
-        String value = condition.getValue(val);
-        boolean b = false;
-        if(isInteger(value)) b = Integer.parseInt(value) != 0;
-        else b = value.matches("[Tt]rue");
-                
-        if(debugMode()) {debug(val,b);} //debug
-
-        if(b) inst1.exec(g2d,val);
-        else{
-            inst2.exec(g2d,val);
+        boolean cond = false;
+        if(condition.getType() == Type.BOOLEAN){
+            cond = condition.evalBool(val);
         }
-    }
+        else{
+            cond = condition.evalInt(val) != 0;
+        }
+        if(debugMode()) {debug(val,cond);} //debug
 
-    /** on vérifie si le string donné en paramètre est composé uniquement de chiffres */
-    private boolean isInteger(String str){
-        return str.matches("^\\p{Digit}+$");
+        if(cond) inst1.exec(g2d,val);
+        else inst2.exec(g2d,val);
+        super.exec(g2d,val);
     }
 
     /** Debug */

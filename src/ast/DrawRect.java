@@ -39,32 +39,34 @@ public class DrawRect extends AST {
     }
 	
     /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
-    public void verifyAll() throws Exception{
-        exp1.verifyType();
-        exp2.verifyType();
-        exp3.verifyType();
-        exp4.verifyType();
+    public void verifyAll(ValueEnv env) throws Exception{
+        exp1.verifyType(env);
+        exp2.verifyType(env);
+        exp3.verifyType(env);
+        exp4.verifyType(env);
+        exp1.setType(env);
+        exp2.setType(env);
+        exp3.setType(env);
+        exp4.setType(env);
         if(exp1.getType() != Type.INT 
            || exp2.getType() != Type.INT 
            || exp3.getType() != Type.INT 
            || exp4.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
+        super.verifyAll(env);
     }
 
     @Override
-    public void exec(Graphics2D g2d, ValueEnv val) throws Exception {
-        try{
-            int x = Integer.parseInt(exp1.getValue(val));
-            int y = Integer.parseInt(exp2.getValue(val));
-            int w = Integer.parseInt(exp3.getValue(val));
-            int h = Integer.parseInt(exp4.getValue(val));
-            g2d.setColor(color);
-            g2d.drawRect(x, y, w, h);
-            
-            if(debugMode()) {debug(x,y,w,h);} //debug
-        }
-        catch(NumberFormatException e){
-            System.out.println("Erreur de typage à la ligne "+line+" et à la colonne "+column);
-        }
+    public void exec(Graphics2D g2d, ValueEnv val) throws Exception { 
+        int x = exp1.evalInt(val);
+        int y = exp2.evalInt(val);
+        int w = exp3.evalInt(val);
+        int h = exp4.evalInt(val);
+        g2d.setColor(color);
+        g2d.drawRect(x, y, w, h);
+        
+        if(debugMode()) {debug(x,y,w,h);} //debug
+        
+        super.exec(g2d,val);
     }
 
     /** Debug */

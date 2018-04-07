@@ -29,29 +29,27 @@ public class Assign extends AST {
         this.exp1 = exp1;
     }
 
-    @Override
-    public void verifyAll() throws Exception{
-        //on vérifie l'assignation des variables
+    public void verifyAll(ValueEnv env)throws Exception{
+        if(! env.contains(nom)) throw new Exception();
+        super.verifyAll(env);
     }
 
     @Override
     public void exec(Graphics2D g2d,ValueEnv val) throws Exception {
         //on exécute l'assignation
         if(debugMode()) { debug(val); }
-        if (val.containsKey(nom)) {
-            if(isConstante) {
-                throw new ParserException("Vous essayez de changer une constante. " + "Nom: "+nom,line,column);
-            } else {
-                throw new ParserException("La variable " + nom + " a déjà été initialisée", this.line, this.column);
-            }
-        } else {
-            val.put(nom,Integer.parseInt(exp1.getValue(val)));
-        }
+        // on ajoute dans 'val' le nom, puis l'expression et enfin si c'est une constante
+        // l'exception de si elle existe est géré dans ValueEnv
+        val.put(nom,exp1, isConstante);
+        super.exec(g2d, val);
     }
 
     /** Debug */
     public void debug(ValueEnv val) throws Exception {
-        System.out.println("Assignation => Nom: " + nom + " Valeur:"+exp1.getValue(val));
+        String value = "";
+        if(exp1.getType() == Type.BOOLEAN) value = String.valueOf(exp1.evalBool(val));
+        else value = String.valueOf(exp1.evalInt(val));
+        System.out.println("Assignation => Nom: " + nom + " Valeur:"+value);
     }
 	
 }

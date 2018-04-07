@@ -26,10 +26,12 @@ public class AST {
     }
 
     /** on vérifie le type de chacun des ast.AST suivants */
-    public void verifyAll() throws Exception{
+    public void verifyAll(ValueEnv env) throws Exception{
+        env.add();
     	for (AST suivant : next) {
-            suivant.verifyAll();
+            suivant.verifyAll(env);
     	}
+        env.pollLast();
     }
 
     /** 
@@ -38,9 +40,11 @@ public class AST {
      * @param val registre de variables
      */
     public void exec(Graphics2D g2d,ValueEnv val) throws Exception {
+        val.add();
     	for (AST suivant : next) {
             suivant.exec(g2d,val);
     	}
+        val.pollLast();
     }
 
     /**

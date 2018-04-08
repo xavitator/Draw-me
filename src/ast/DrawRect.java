@@ -52,7 +52,6 @@ public class DrawRect extends AST {
            || exp2.getType() != Type.INT 
            || exp3.getType() != Type.INT 
            || exp4.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
-        super.verifyAll(env);
     }
 
     @Override
@@ -66,7 +65,6 @@ public class DrawRect extends AST {
         
         if(debugMode()) {debug(x,y,w,h);} //debug
         
-        super.exec(g2d,val);
     }
 
     /** Debug */

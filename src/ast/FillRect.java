@@ -47,7 +47,6 @@ public class FillRect extends AST {
         exp4.setType(env);
 
         if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT || exp4.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
-        super.verifyAll(env);
     }
 
     /** fonction d'exécution de fillRect */
@@ -59,7 +58,6 @@ public class FillRect extends AST {
         g2d.setColor(color);
         g2d.fillRect(x,y,w,h);
         if(debugMode()) {debug(x,y,w,h);}
-        super.exec(g2d,val);
     }
 
     /** Debug */

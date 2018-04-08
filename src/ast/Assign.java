@@ -32,7 +32,6 @@ public class Assign extends AST {
     public void verifyAll(ValueEnv env)throws Exception{
         env.put(nom,exp1, isConstante);
         System.out.println(env.contains(nom));
-        super.verifyAll(env);
     }
 
     @Override
@@ -42,7 +41,6 @@ public class Assign extends AST {
         // on ajoute dans 'val' le nom, puis l'expression et enfin si c'est une constante
         // l'exception de si elle existe est géré dans ValueEnv
         val.put(nom,exp1, isConstante);
-        super.exec(g2d, val);
     }
 
     /** Debug */

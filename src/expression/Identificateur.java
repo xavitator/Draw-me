@@ -30,13 +30,11 @@ public class Identificateur extends Expression{
     }
 
     public int evalInt(ValueEnv env) throws Exception{
-        if(this.getType() != Type.INT) throw new Exception();
-        else return env.get(nom).evalInt(env);
+        return env.get(nom).evalInt(env);
     }
 
     public boolean evalBool(ValueEnv env) throws Exception{
-        if(this.getType() != Type.BOOLEAN) throw new Exception();
-        else return env.get(nom).evalBool(env);
+        return env.get(nom).evalBool(env);
     }
 
     /** Debug */

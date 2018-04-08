@@ -39,7 +39,6 @@ public class Condition extends AST {
         if(type != Type.BOOLEAN && type != Type.INT) throw new ParserException("Il y a un problème de typage.",line,column);
         inst1.verifyAll(env);
         inst2.verifyAll(env);
-        super.verifyAll(env);
     }
 
     /** fonction d'exécution de l'objet Condition */
@@ -55,7 +54,6 @@ public class Condition extends AST {
 
         if(cond) inst1.exec(g2d,val);
         else inst2.exec(g2d,val);
-        super.exec(g2d,val);
     }
 
     /** Debug */

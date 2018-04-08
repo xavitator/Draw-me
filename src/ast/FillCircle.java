@@ -42,7 +42,6 @@ public class FillCircle extends AST {
         exp2.setType(env);
         exp3.setType(env);
         if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
-        super.verifyAll(env);
     }
 
     /** fonction d'exécution de fillOval */
@@ -53,7 +52,6 @@ public class FillCircle extends AST {
         g2d.setColor(color);
         g2d.fillOval(x-r, y-r, r*2, r*2); // décalage centre + diametre
         if(debugMode()){debug(x,y,r);} //debug
-        super.exec(g2d,val);
     }
 
     /** Debug */

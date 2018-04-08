@@ -29,11 +29,13 @@ public class ValueEnv {
 
 	// contains(nom) 				boolean pour savoir si le nom existe
 	public boolean contains(String nom){
+        System.out.println("contains \n" +this.toString());
             for (int i=taille-1 ; i>=0 ; i--) {
                 System.out.println(i);
-                Expression res = variables.get(i).get(nom);
+                /*Expression res = variables.get(i).get(nom);
                 res = constantes.get(i).get(nom); 
-                if (res != null) { return true; }
+                if (res != null) { return true; }*/
+                if(variables.get(i).containsKey(nom) || constantes.get(i).containsKey(nom)) return true;
             }
             return false;
 	}
@@ -74,6 +76,7 @@ public class ValueEnv {
             } else {
                 throw new Exception("La variable " + nom + " a déjà été initialisée!");
             }
+            System.out.println("put"+ exp.toString() +"\n" +this.toString());
         }
 
 	// add() 			ajoute le hasmap dans les deux linkedlist
@@ -89,4 +92,17 @@ public class ValueEnv {
             constantes.pop();
             this.taille--;
 	}
+
+    public String toString(){
+        String res = "";
+        for (int i = 0; i < taille; i++) {
+            res += "Variable "+i+" "+ variables.get(i).size() +"\n";
+            res += variables.get(i).values().toString() + "\n";
+        }
+        for (int i = 0; i < taille; i++) {
+            res += "Constante "+i+" "+ constantes.get(i).size() +"\n";
+            res += constantes.get(i).values().toString() + "\n";
+        }
+        return res +"\n\n";
+    }
 }

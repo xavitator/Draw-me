@@ -38,7 +38,7 @@ public class Change extends AST {
         else{
             throw new Exception();
         }
-        super.verifyAll(env);
+
     }
 
     @Override
@@ -47,7 +47,6 @@ public class Change extends AST {
         if(debugMode()) { debug(val); }
         // on set la valeur de 'nom' si elle n'est pas une constante
         val.set(nom,exp1);
-        super.exec(g2d,val);
     }
 
     /** Debug */

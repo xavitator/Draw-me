@@ -88,8 +88,8 @@ public class ValueEnv {
 
 	// pollLast() 					renvoie et supprime le dernier hasmap des deux listes
 	public void pollLast() throws Exception{
-            variables.pop();
-            constantes.pop();
+            variables.removeLast();
+            constantes.removeLast();
             this.taille--;
 	}
 

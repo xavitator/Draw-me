@@ -38,10 +38,12 @@ public class And extends Expression{
      * On vérifie le type des éléments que doit récupérer l'expression
      */
     public void verifyType(ValueEnv env) throws Exception{
-        exp1.verifyType(env);
-        exp2.verifyType(env);
         exp1.setType(env);
         exp2.setType(env);
+
+        exp1.verifyType(env);
+        exp2.verifyType(env);
+
         if(exp1.getType() != Type.BOOLEAN || exp2.getType() != Type.BOOLEAN){
             throw new Exception();
         }

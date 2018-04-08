@@ -57,4 +57,8 @@ public abstract class Expression {
     public boolean debugMode(){
         return true; // A changer pour quitter le mode débug
     }
+
+    public String toString(){
+        return "Expression : ligne="+line+", colonne="+column;
+    }
 }

@@ -30,7 +30,7 @@ public class Assign extends AST {
     }
 
     public void verifyAll(ValueEnv env)throws Exception{
-        if(! env.contains(nom)) throw new Exception();
+        if(! env.contains(nom)) {throw new Exception(); }
         super.verifyAll(env);
     }
 
@@ -47,8 +47,9 @@ public class Assign extends AST {
     /** Debug */
     public void debug(ValueEnv val) throws Exception {
         String value = "";
-        if(exp1.getType() == Type.BOOLEAN) value = String.valueOf(exp1.evalBool(val));
-        else value = String.valueOf(exp1.evalInt(val));
+        System.out.println("exp =>" + exp1);
+        // if(exp1.getType() == Type.BOOLEAN) value = String.valueOf(exp1.evalBool(val));
+        //else value = String.valueOf(exp1.evalInt(val));
         System.out.println("Assignation => Nom: " + nom + " Valeur:"+value);
     }
 	

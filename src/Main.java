@@ -54,7 +54,7 @@ class MyCanvas extends JComponent {
                 // Par exemple :
                 AST ast = null;
                 if(new AST(0,0).debugMode()) {System.out.println("\n=== Mode debug ===");}
-
+                ValueEnv registre = new ValueEnv();
                 try {
                     File input = new File(filename);
                     Reader reader = new FileReader(input);
@@ -62,13 +62,14 @@ class MyCanvas extends JComponent {
                     LookAhead1 look = new LookAhead1(lexer);
                     Parser parser = new Parser(look);
                     ast = parser.progNonTerm(); // Axiome 
-                    //ast.verifyAll();
+
                 } catch (Exception e) {
                     System.out.println("** Erreur de compilation **\n" + e.getMessage()+"\n");
                     System.exit(-1);
                 }
                 try {
-                    ValueEnv registre = new ValueEnv();
+                    ast.verifyAll(registre);
+                    System.out.println("Vérification des types finie");
                     ast.exec(g2d,registre);
                 } catch (Exception e) {
                     System.out.println("** Erreur d'exécution **\n" + e.getMessage()+"\n");

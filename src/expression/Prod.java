@@ -51,6 +51,7 @@ public class Prod extends Expression {
         return exp1.evalInt(env) * exp2.evalInt(env);
     }
 
+
     /** Pour le mode debug */
     public boolean debugMode(){
         return true; // A changer pour quitter le mode débug

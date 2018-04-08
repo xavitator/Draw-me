@@ -6,6 +6,16 @@ package parser;
 
 import ast.*;
 import exception.ParserException;
+import expression.And;
+import expression.Or;
+import expression.Bool;
+import expression.Div;
+import expression.Diff;
+import expression.Int;
+import expression.Sum;
+import expression.Prod;
+import expression.ComparatorOrdre;
+import expression.Comparator; 
 import expression.Expression;
 import expression.Identificateur;
 
@@ -30,10 +40,13 @@ import java.awt.Color;
  *                      | If expr Then instruction Autre
  * Autre → Else instruction
  * 			| 𝜀
- * expr → Nombre | identificateur | ( expr operateur expr ) | True | False
- * operateur → Op | relation
+ * expr → Nombre | identificateur | Boolean | ( expr exprSuite)
+ * exprSuite -> operateur expr
+ * Bool -> [Tt]rue | [Ff]alse
+ * operateur → Op | ordre | eq | && | ||
  * op → + | - | / | *
- * relation → > | < | <= | >= | == | != | && | ||
+ * ordre → > | < | <= | >= |
+ * eq -> == | !=
  */
 public class Parser{
 
@@ -194,30 +207,101 @@ public class Parser{
         }
     }
 
+
     /**
      * Partie des expressions de la grammaire 
      * @return l'expression de la grammaire 
      */
     public Expression non_term_exp() throws Exception {
-        if (reader.check(Sym.INT)) {
-            /* exp -> nombre */
-            Expression toReturn = null; //new Value(reader.line(),reader.column(),reader.getIntValue());
-            reader.eat(Sym.INT);
-            return toReturn;
-        } else if (reader.check(Sym.IDENT)) {
-            /* exp -> identificateur */
-            String ident = reader.getStringValue();
-            reader.eat(Sym.IDENT);
-            return new Identificateur(reader.line(), reader.column(),ident);
-        } else {
-            /* exp -> ( exp operateur exp ) */
-            reader.eat(Sym.LPAR);
-            Expression left = non_term_exp();
-            String operateur = reader.getStringValue();
-            reader.eat(Sym.OPERATEUR);
-            Expression right = non_term_exp();
-            reader.eat(Sym.RPAR);
-            return null; //new Operation(reader.line(),reader.column(),left,right,operateur);
+        int line = reader.line();
+        int column = reader.column();
+
+         /* exp -> nombre */
+        if (reader.check(Sym.INT))
+            {
+                int value = reader.getIntValue();
+                reader.eat(Sym.INT);
+                return new Int(line,column,value);
+            }
+        /* exp -> identificateur */
+        else if (reader.check(Sym.IDENT))
+            {
+                String ident = reader.getStringValue();
+                reader.eat(Sym.IDENT);
+                return new Identificateur(line, column,ident);
+            }
+        /* exp -> bool */
+        else if (reader.check(Sym.BOOLEAN)){
+            boolean val = reader.getBooleanValue();
+            reader.eat(Sym.BOOLEAN);
+            return new Bool(line,column,val);
         }
+        /* exp -> ( exp expSuit ) */
+        else if (reader.check(Sym.LPAR))
+            {
+                reader.eat(Sym.LPAR);
+                Expression left = non_term_exp();
+                Expression res = this.non_term_expSuite(left);
+                reader.eat(Sym.RPAR);
+                return res;
+            }
+        throw new ParserException("Le symbole n'est pas reconnu !", line,column);
+    }
+
+    public Expression non_term_expSuite(Expression beg) throws Exception {
+        int line = reader.line();
+        int column = reader.column();
+
+        /* exprSuite -> + expr*/
+        if (reader.check(Sym.PLUS))
+            {
+                reader.eat(Sym.PLUS);
+                return new Sum(line,column,beg,this.non_term_exp());
+            }
+          /* exprSuite -> - expr*/
+        else if (reader.check(Sym.MINUS))
+            {
+                reader.eat(Sym.MINUS);
+                return new Diff(line,column,beg,this.non_term_exp());
+            }
+          /* exprSuite -> * expr */
+        else if (reader.check(Sym.TIMES))
+            {
+                 reader.eat(Sym.TIMES);
+                 return new Prod(line,column,beg,this.non_term_exp());
+            }
+        /* exprSuite -> / expr*/
+        else if (reader.check(Sym.DIV))
+            {
+                reader.eat(Sym.DIV);
+                return new Div(line,column,beg,this.non_term_exp());
+            }
+        /* exprSuite -> < | > | <= | >= expr*/
+        else if (reader.check(Sym.COMPARATOR))
+            {
+                String symbol = reader.getStringValue();
+                reader.eat(Sym.COMPARATOR);
+                return new ComparatorOrdre(line,column,beg,this.non_term_exp(),symbol);
+            }
+        /* exprSuite -> ==|!= expr*/
+        else if (reader.check(Sym.EQ))
+            {
+                String symbol = reader.getStringValue();
+                reader.eat(Sym.EQ);
+                return new Comparator(line,column,beg,this.non_term_exp(),symbol);
+            }
+        /* exprSuite -> || expr*/
+        else if (reader.check(Sym.OR))
+            {
+                 reader.eat(Sym.OR);
+                 return new Or(line,column,beg,this.non_term_exp());
+            }
+        /* exprSuite -> && expr*/
+        else if (reader.check(Sym.AND))
+            {
+                 reader.eat(Sym.AND);
+                 return new And(line,column,beg,this.non_term_exp());
+            }
+        throw new ParserException("Erreur de symbole",line,column);
     }
 }

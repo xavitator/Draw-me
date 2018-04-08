@@ -32,8 +32,8 @@ commentaire = ("/*"[^]"*/") | ("//"[^\n\r]*)
 hex = [0-9A-F]
 nombre = [0-9]+ 
 couleur = "#"{hex}{hex}{hex}{hex}{hex}{hex}
-operateur = "+" | "-" | "/" | "*"
-relation = ">" | "<" | "==" | "<=" | ">=" | "!=" |"&&" | "||"
+ordre = ">" | "<" | "<=" | ">="  
+equal = "==" | "!="
 identificateur = [a-z][a-zA-Z_]*
 string = "\""[^\"]+[^\\]"\""
 blanc = [\n\ \t\r]
@@ -42,8 +42,14 @@ blanc = [\n\ \t\r]
 {commentaire}              {}
 {couleur}  		   {return new ColorToken(Sym.COULEUR,yyline,yycolumn,yytext());}
 {nombre}  		   {return new IntToken(Sym.INT,yyline,yycolumn,yytext());}
-{operateur}		   {return new StringToken(Sym.OPERATEUR,yyline,yycolumn,yytext());}
-{relation}         	   {return new StringToken(Sym.RELATION,yyline,yycolumn, yytext());}
+"+"                        {return new Token(Sym.PLUS,yyline,yycolumn);}
+"-"                        {return new Token(Sym.MINUS,yyline,yycolumn);}
+"*"                        {return new Token(Sym.TIMES,yyline,yycolumn);}
+"/"                        {return new Token(Sym.PLUS,yyline,yycolumn);}
+"&&"                       {return new Token(Sym.PLUS,yyline,yycolumn);}
+"or"                       {return new Token(Sym.PLUS,yyline,yycolumn);}
+{ordre}         	   {return new StringToken(Sym.COMPARATOR,yyline,yycolumn, yytext());}
+{equal}         	   {return new StringToken(Sym.EQ,yyline,yycolumn, yytext());}
 ";"                	   {return new Token(Sym.POINTVIRGULE,yyline,yycolumn);}
 [Tt]"rue"     		   {return new BooleanToken(Sym.BOOLEAN,yyline,yycolumn,yytext());}
 [Ff]"alse"    		   {return new BooleanToken(Sym.BOOLEAN,yyline,yycolumn,yytext());}

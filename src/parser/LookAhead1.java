@@ -5,6 +5,7 @@ import lexer.Lexer;
 import parser.token.ColorToken;
 import parser.token.IntToken;
 import parser.token.StringToken;
+import parser.token.BooleanToken;
 import parser.token.Token;
 
 import java.awt.Color;
@@ -91,6 +92,14 @@ public class LookAhead1{
         }
     }
 
+    /** Renvoie la valeur boolean du token */
+    public boolean getBooleanValue() throws Exception {
+        if (current instanceof BooleanToken) {
+            return ((BooleanToken)current).getValue();
+        }
+        throw new ParserException("\n Try to access to a boolean value", current.line(), current.column());
+    }
+    
     /** Retourne la ligne du token */
     public int line(){ return current.line();}
     /** Retourne la colonne du token */

@@ -24,6 +24,7 @@ public class Identificateur extends Expression{
     /** vérifie la portée de la variable */
     public void verifyType(ValueEnv env) throws Exception{
         if(! env.contains(nom)){
+            System.out.println("Here");
             throw new Exception();
         }
     }

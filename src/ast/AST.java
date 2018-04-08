@@ -41,9 +41,9 @@ public class AST {
      */
     public void exec(Graphics2D g2d,ValueEnv val) throws Exception {
         val.add();
-    	for (AST suivant : next) {
+        for (AST suivant : next) {
             suivant.exec(g2d,val);
-    	}
+        }
         val.pollLast();
     }
 

@@ -1,14 +1,15 @@
 package creator;
 
 import java.awt.*;
+import creator.ColorOfPixel;
 
 public class RectangleColor{
-    Rectangle rectangle;
-    ColorOfPixel color;
+    private Rectangle rectangle;
+    private ColorOfPixel color;
 
-    public RectangleColor(int x, int y, int height, int width, ColorOfPixel color) {
+    public RectangleColor(Point point, int height, int width, ColorOfPixel color) {
         this.color = color;
-        rectangle = new Rectangle(x,y,height,width);
+        rectangle = new Rectangle((int) point.getY(),(int) point.getX(),height,width);
     }
 
     @Override

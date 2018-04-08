@@ -4,55 +4,111 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 
 public class CreateImage {
-	BufferedImage image;
-	ColorOfPixel[][] pixels;
-	boolean[][] visitedPixel;
-	LinkedList<RectangleColor> list = new LinkedList<>();
-	LinkedList<Point> next = new LinkedList<>();
+	private BufferedImage image;
+	private boolean[][] visitedPixel;
+	private LinkedList<RectangleColor> list = new LinkedList<>();
+	private LinkedList<Point> next = new LinkedList<>();
+	private int width;
+	private int height;
 	
 	public CreateImage(String path){
 		try {
-			image = ImageIO.read(new File(path));
-			//pixels = new ColorOfPixel[image.getHeight()][image.getWidth()];
-			visitedPixel = new boolean[image.getHeight()][image.getWidth()];
+			File file = new File(path);
+			System.out.println(file.getAbsolutePath());
+			image = ImageIO.read(file);
+			height = image.getHeight();
+			width = image.getWidth();
+			visitedPixel = new boolean[height][width];
 			next.add(new Point());
 		}
 		catch (IOException e){
 			System.out.println("Le chemin de l'image n'existe pas.");
 			e.printStackTrace();
+			System.exit(-1);
 		}
 	}
 
-	private void fillPixels(){
-		next.removeIf((Point point) -> visitedPixel[(int) point.getY()][(int) point.getX()]);
-		Point first = next.getFirst();
+	public void createText(){
+		int i = 0;
+		boolean b = true;
+		while (i <= 500*200 && b){
+			System.out.println(i);
+			b = fillPixels();
+			//next.removeIf((Point point) -> visitedPixel[(int) point.getX()][(int) point.getY()]);
+			//System.out.println(next.size());
+			i++;
+		}
+	}
+
+	private Point getPoint(){
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if(! visitedPixel[i][j]) return new Point(i,j);
+			}
+		}
+		return null;
+	}
+
+	private boolean fillPixels(){
+		Point first = getPoint();
+		if(first == null) return false;
+		ColorOfPixel color = new ColorOfPixel((int) first.getX(), (int) first.getY(), image);
+		visitedPixel[(int) first.getX()][(int) first.getY()] = true;
 		boolean horizontal = true;
 		boolean vertical = true;
-		int transX = 0;
-		int transY = 0;
-		while (horizontal && vertical){
-			for (int i = 0; i < transY; i++) {
-
+		int transX = 1;
+		int transY = 1;
+		while (horizontal || vertical){
+			if(horizontal) {
+				horizontal = goodLine(color, new Point((int) first.getX()+transX, (int) first.getY()), transY - 1, true);
+				if (horizontal) transX++;
+			}
+			if(vertical) {
+				vertical = goodLine(color, new Point((int) first.getX(), (int) first.getY() + transY), transX - 1, false);
+				if (vertical) transY++;
 			}
 		}
-	}
-
-	private boolean goodLine(ColorOfPixel color, Point point, int distance){
-		for (int i = 0; i <= distance; i++) {
-			if(! color.equals(new ColorOfPixel((int) point.getX(), (int) point.getY()+i, image))){
-				return false;
-			}
-		}
-		changeBoolean(point,distance);
+		list.add(new RectangleColor(first,transX,transY,color));
 		return true;
 	}
 
-	private void changeBoolean(Point point, int distance){
+	private boolean goodLine(ColorOfPixel color, Point point, int distance, boolean horizontal){
+		for (int i = 0; i <= distance; i++) {
+			if(horizontal) {
+				if(! compare((int) point.getX(), (int) point.getY()+i,color)){
+					//next.add(new Point((int) point.getX()+i, (int) point.getY()));
+					return false;
+				}
+			}
+			else{
+				if(! compare((int) point.getX() + i , (int) point.getY(),color)){
+					//next.add(new Point((int) point.getX(), (int) point.getY()+i));
+					return false;
+				}
+			}
+		}
+		changeBoolean(point,distance, horizontal);
+		return true;
+	}
 
+	private void changeBoolean(Point point, int distance, boolean horizontal){
+		for (int i = 0; i <= distance; i++) {
+			if(horizontal) {
+				int x = (int) point.getX();
+				int y = (int) point.getY() + i;
+				if(inTableau(x,y))visitedPixel[x][y] = true;
+			}
+			else{
+				int x = (int) point.getX() + i;
+				int y = (int) point.getY();
+				if(inTableau(x,y))visitedPixel[x][y] = true;
+			}
+		}
 	}
 
 	/*private void findZone(){
@@ -83,25 +139,52 @@ public class CreateImage {
 	}*/
 
 	private boolean compare(int x, int y, ColorOfPixel color){
-		ColorOfPixel pixel1 = new ColorOfPixel(x,y,image);
-		return inTableau(x,y) && color.equals(pixel1);
+		if(inTableau(x,y)){
+			ColorOfPixel pixel1 = new ColorOfPixel(x,y,image);
+			return color.equals(pixel1);
+		}
+		else return false;
 	}
 
 	private boolean inTableau(int x, int y){
-		return (y >= 0 && y < pixels.length && x < pixels[0].length && x >= 0);
+		return (y >= 0 && y < width && x < height && x >= 0);
 	}
 
 	@Override
 	public String toString() {
 		String res = "";
+		int a = 0;
+		int max = 200;
 		for (RectangleColor rect : list){
+			if(a == 0) res += "Begin";
 			res += rect.toString()+"\n";
+			a++;
+			if(a == max){
+				res += "End;";
+				a = 0;
+			}
 		}
+		if(a != 1) res += "End;";
 		return res;
 	}
 
 	public static void main(String[] args){
-		
+		if(args.length >= 1){
+			CreateImage image = new CreateImage(args[0]);
+			image.createText();
+			String res = image.toString();
+			try{
+				File ff=new File("resultat");
+				ff.createNewFile();
+				FileWriter ffw=new FileWriter(ff);
+				ffw.write(res);  // écrire une ligne dans le fichier resultat.txt
+				ffw.close(); // fermer le fichier à la fin des traitements
+			} catch (Exception e) {System.out.println("problème dans l'écriture dans le fichier");}
+		}
+		else {
+			System.out.println("Rentrer un chemin vers une image svp.");
+			System.exit(-1);
+		}
 	}
 	
 }

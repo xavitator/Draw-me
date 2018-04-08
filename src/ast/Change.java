@@ -31,12 +31,12 @@ public class Change extends AST {
     public void verifyAll(ValueEnv env) throws Exception{
         if(env.contains(nom)){
             exp1.setType(env);
-            if(env.getType(nom) != exp1.getType()){
-                throw new Exception();
+            if(env.getType(nom, line, column) != exp1.getType()){
+                throw new ParserException("Le type attendu dans le changement de valeur de l'identificateur "+nom+" ne correspond pas, on s'attend à avoir un type "+env.getType(nom, line, column),line,column);
             }
         }
         else{
-            throw new Exception();
+            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,column);
         }
 
     }

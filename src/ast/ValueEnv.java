@@ -1,6 +1,8 @@
 package ast;
 
+import exception.ParserException;
 import expression.Expression;
+import parser.Parser;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,21 +19,20 @@ public class ValueEnv {
     }
     
 	// getType() --> il faut penser à faire un setType(env) de l'expression avant de getType()
-	public Type getType(String nom) throws Exception{
+	public Type getType(String nom, int line, int colonne) throws Exception{
             for (int i = taille-1 ; i >= 0 ; i--) {
                 Expression resAltern = variables.get(i).get(nom);
                 if (resAltern != null) { resAltern.setType(this); return resAltern.getType(); }
                 resAltern = constantes.get(i).get(nom);
                 if (resAltern != null) { resAltern.setType(this); return resAltern.getType(); }
             }
-            throw new Exception("L'identificateur  " + nom +" n'existe pas.");
+            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,colonne);
 	}
 
 	// contains(nom) 				boolean pour savoir si le nom existe
 	public boolean contains(String nom){
-        System.out.println("contains \n" +this.toString());
             for (int i=taille-1 ; i>=0 ; i--) {
-                System.out.println(i);
+                //System.out.println(i);
                 /*Expression res = variables.get(i).get(nom);
                 res = constantes.get(i).get(nom); 
                 if (res != null) { return true; }*/
@@ -41,14 +42,14 @@ public class ValueEnv {
 	}
 
 	// get(nom) 					recuperer l'expression associée à 'nom'  
-	public Expression get(String nom) throws Exception{
+	public Expression get(String nom, int line, int colonne) throws Exception{
             for (int i = taille-1 ; i >= 0 ; i--) {
                 Expression res = variables.get(i).get(nom);
                 if (res != null) { return res; }
                 res = constantes.get(i).get(nom);
                 if (res != null) { return res; }
             }
-            throw new Exception("La valeur que vous cherchez n'existe pas");
+            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,colonne);
 	}
 
 	// set(nom, exp1) 				change la valeur de 'nom' si possible (type et constante)  
@@ -56,13 +57,13 @@ public class ValueEnv {
             for(int i = taille -1; i >= 0 ; i--) {
                 Expression res = variables.get(i).get(nom);
                 if(res != null) {
-                    if(res.getType() == exp.getType()) { variables.get(i).put(nom,exp); }
-                    else { throw new Exception("Le type de "+ nom + "est incompatible avec le type de la nouvelle valeur"); }
+                    if(res.getType() == exp.getType()) { variables.get(i).put(nom,exp); return;}
+                    else { throw new ParserException("Le type de l'expression est "+exp.getType()+" or on s'attend à avoir pour l'identificateur "+nom+" un type "+ res.getType() +" n'existe pas, il n'a pas été déclaré",exp.getLine(),exp.getColumn()); }
                 }
                 res = constantes.get(i).get(nom);
-                if (res != null) { throw new Exception("Vous essayez de changer la valeur d'une constante"); }
+                if (res != null) { throw new ParserException("Vous essayez de changer la valeur d'une constante",exp.getLine(),exp.getColumn()); }
             }
-            throw new Exception("La valeur "+nom+"n'a jamais été initialisée");
+            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été initialisé",exp.getLine(),exp.getColumn());
                 
 	}
 
@@ -74,9 +75,8 @@ public class ValueEnv {
                 }
                 else { variables.getLast().put(nom,exp); }
             } else {
-                throw new Exception("La variable " + nom + " a déjà été initialisée!");
+                throw new ParserException("L'identificateur " + nom + " a déjà été initialisé", exp.getLine(), exp.getColumn());
             }
-            System.out.println("put"+ exp.toString() +"\n" +this.toString());
         }
 
 	// add() 			ajoute le hasmap dans les deux linkedlist

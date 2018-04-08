@@ -38,13 +38,16 @@ public class DrawCircle extends AST {
 	
     /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
     public void verifyAll(ValueEnv env) throws Exception{
-        exp1.verifyType(env);
-        exp2.verifyType(env);
-        exp3.verifyType(env);
         exp1.setType(env);
         exp2.setType(env);
         exp3.setType(env);
-        if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
+
+        exp1.verifyType(env);
+        exp2.verifyType(env);
+        exp3.verifyType(env);
+
+        if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT)
+            throw new ParserException("On a un problème de typage", line, column);
 
     }
 
@@ -58,6 +61,7 @@ public class DrawCircle extends AST {
                     
         if(debugMode()) { debug(x,y,r); } //debug
 
+        super.exec(g2d,val);
     }
 
     /** Debug */

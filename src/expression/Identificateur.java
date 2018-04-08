@@ -18,23 +18,23 @@ public class Identificateur extends Expression{
     }
 
     public void setType(ValueEnv env) throws Exception{
-        super.type = env.getType(nom);
+        super.type = env.getType(nom, line, column);
     }
 
     /** vérifie la portée de la variable */
     public void verifyType(ValueEnv env) throws Exception{
         if(! env.contains(nom)){
-            System.out.println("Here");
-            throw new ParserException("erreur", line,column);
+            //System.out.println("Here");
+            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,column);
         }
     }
 
     public int evalInt(ValueEnv env) throws Exception{
-        return env.get(nom).evalInt(env);
+        return env.get(nom, line, column).evalInt(env);
     }
 
     public boolean evalBool(ValueEnv env) throws Exception{
-        return env.get(nom).evalBool(env);
+        return env.get(nom, line, column).evalBool(env);
     }
 
     /** Debug */

@@ -45,7 +45,7 @@ public class And extends Expression{
         exp2.verifyType(env);
 
         if(exp1.getType() != Type.BOOLEAN || exp2.getType() != Type.BOOLEAN){
-            throw new Exception();
+            throw new ParserException("Il y a une problème de typage dans les arguments de l'opérateur And (&&)",line,column);
         }
     }
 

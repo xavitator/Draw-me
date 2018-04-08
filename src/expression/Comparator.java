@@ -50,7 +50,7 @@ public class Comparator extends Expression{
 
         if( ! ( (exp1.getType() == Type.INT && exp2.getType() == Type.INT) 
             || (exp1.getType() == Type.BOOLEAN && exp2.getType() == Type.BOOLEAN) )){
-            throw new Exception();
+            throw new ParserException("Il y a une problème de typage dans les arguments de l'opérateur "+comparator,line,column);
         }
     }
 
@@ -71,7 +71,7 @@ public class Comparator extends Expression{
                 else{
                     return exp1.evalInt(env) != exp2.evalInt(env);
                 }
-            default: throw new Exception();
+            default: throw new ParserException("L'opérateur "+comparator+" n'existe pas, ou n'est pas géré",line,column);
         }
     }
 

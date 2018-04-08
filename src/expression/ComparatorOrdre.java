@@ -49,7 +49,7 @@ public class ComparatorOrdre extends Expression{
         exp2.verifyType(env);
 
         if(exp1.getType() != Type.INT || exp2.getType() != Type.INT){
-            throw new Exception();
+            throw new ParserException("Il y a une problème de typage dans les arguments de l'opérateur de comparaison "+comparator,line,column);
         }
     }
 
@@ -59,7 +59,7 @@ public class ComparatorOrdre extends Expression{
             case "<": return exp1.evalInt(env) < exp2.evalInt(env);
             case "<=": return exp1.evalInt(env) <= exp2.evalInt(env);
             case ">=": return exp1.evalInt(env) >= exp2.evalInt(env);
-            default: throw new Exception();
+            default: throw new ParserException("L'opérateur "+comparator+" n'existe pas, ou n'est pas géré",line,column);
         }
     }
 

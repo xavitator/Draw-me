@@ -59,7 +59,7 @@ public class AST {
 
     /** Permet d'activer ou non le mode debug */
     public boolean debugMode(){
-        return true; // Pour la phase de débug !
+        return false; // Pour la phase de débug !
     }
 
     

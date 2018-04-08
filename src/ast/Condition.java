@@ -33,8 +33,8 @@ public class Condition extends AST {
 	
     /** on vérifie le type de la condition et de chacun des ast.AST suivants */
     public void verifyAll(ValueEnv env) throws Exception{
-        condition.verifyType(env);
         condition.setType(env);
+        condition.verifyType(env);
         Type type = condition.getType();
         if(type != Type.BOOLEAN && type != Type.INT) throw new ParserException("Il y a un problème de typage.",line,column);
         inst1.verifyAll(env);

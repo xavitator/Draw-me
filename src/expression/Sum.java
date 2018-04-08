@@ -45,7 +45,7 @@ public class Sum extends Expression{
         exp2.verifyType(env);
 
         if(exp1.getType() != Type.INT || exp2.getType() != Type.INT){
-            throw new Exception();
+            throw new ParserException("Il y a une problème de typage dans les arguments de la somme",line,column);
         }
     }
 

@@ -53,6 +53,14 @@ public abstract class Expression {
         throw new Exception();
     }
 
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
     /** Pour le mode debug */
     public boolean debugMode(){
         return true; // A changer pour quitter le mode débug

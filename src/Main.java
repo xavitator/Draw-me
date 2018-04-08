@@ -73,6 +73,7 @@ class MyCanvas extends JComponent {
                     ast.exec(g2d,registre);
                 } catch (Exception e) {
                     System.out.println("** Erreur d'exécution **\n" + e.getMessage()+"\n");
+                    e.printStackTrace();
                     System.exit(-1);
                 }
             }

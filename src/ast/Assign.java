@@ -30,7 +30,8 @@ public class Assign extends AST {
     }
 
     public void verifyAll(ValueEnv env)throws Exception{
-        if(! env.contains(nom)) {throw new Exception(); }
+        env.put(nom,exp1, isConstante);
+        System.out.println(env.contains(nom));
         super.verifyAll(env);
     }
 

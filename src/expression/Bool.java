@@ -21,6 +21,10 @@ public class Bool extends Expression{
         this.type = Type.BOOLEAN;
     }
 
+    public Expression getExpression(ValueEnv env) throws Exception{
+        return this;
+    }
+
     /**
      * On vérifie le type des éléments que doit récupérer l'expression
      */

@@ -31,6 +31,10 @@ public class ComparatorOrdre extends Expression{
         this.comparator = comparator;
     }	
 
+    public Expression getExpression(ValueEnv env) throws Exception{
+        return new ComparatorOrdre(line,column,exp1.getExpression(env), exp2.getExpression(env),comparator);
+    }
+
     /**
      * On change le type de l'expression
      */

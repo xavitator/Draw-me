@@ -17,6 +17,10 @@ public class Int extends Expression{
         this.value = value;
     }
 
+    public Expression getExpression(ValueEnv env) throws Exception{
+        return this;
+    }
+
     public void setType(ValueEnv env) throws Exception{
         this.type = Type.INT;
     }

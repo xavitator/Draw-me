@@ -30,6 +30,8 @@ public class Assign extends AST {
     }
 
     public void verifyAll(ValueEnv env)throws Exception{
+        exp1.setType(env);
+        exp1.verifyType(env);
         env.put(nom,exp1, isConstante);
         //System.out.println(env.contains(nom));
     }

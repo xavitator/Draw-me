@@ -35,6 +35,8 @@ public abstract class Expression {
         return this.type;
     }
 
+    public abstract Expression getExpression(ValueEnv env) throws Exception;
+
     /**
      * On change le type de l'expression
      */

@@ -31,6 +31,7 @@ public class Change extends AST {
     public void verifyAll(ValueEnv env) throws Exception{
         if(env.contains(nom)){
             exp1.setType(env);
+            exp1.verifyType(env);
             if(env.getType(nom, line, column) != exp1.getType()){
                 throw new ParserException("Le type attendu dans le changement de valeur de l'identificateur "+nom+" ne correspond pas, on s'attend à avoir un type "+env.getType(nom, line, column),line,column);
             }

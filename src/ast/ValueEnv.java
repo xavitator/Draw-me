@@ -57,8 +57,8 @@ public class ValueEnv {
             for(int i = taille -1; i >= 0 ; i--) {
                 Expression res = variables.get(i).get(nom);
                 if(res != null) {
-                    if(res.getType() == exp.getType()) { variables.get(i).put(nom,exp); return;}
-                    else { throw new ParserException("Le type de l'expression est "+exp.getType()+" or on s'attend à avoir pour l'identificateur "+nom+" un type "+ res.getType() +" n'existe pas, il n'a pas été déclaré",exp.getLine(),exp.getColumn()); }
+                    if(res.getType() == exp.getType()) { variables.get(i).put(nom,exp.getExpression(this)); return;}
+                    else { throw new ParserException("Le type de l'expression est "+exp.getExpression(this).getType()+" or on s'attend à avoir pour l'identificateur "+nom+" un type "+ res.getType() +" n'existe pas, il n'a pas été déclaré",exp.getLine(),exp.getColumn()); }
                 }
                 res = constantes.get(i).get(nom);
                 if (res != null) { throw new ParserException("Vous essayez de changer la valeur d'une constante",exp.getLine(),exp.getColumn()); }
@@ -71,9 +71,9 @@ public class ValueEnv {
 	public void put(String nom, Expression exp, boolean isConstante) throws Exception{
             if(!variables.getLast().containsKey(nom) && !constantes.getLast().containsKey(nom)) {
                 if(isConstante){
-                    constantes.getLast().put(nom,exp);
+                    constantes.getLast().put(nom,exp.getExpression(this));
                 }
-                else { variables.getLast().put(nom,exp); }
+                else { variables.getLast().put(nom,exp.getExpression(this)); }
             } else {
                 throw new ParserException("L'identificateur " + nom + " a déjà été initialisé", exp.getLine(), exp.getColumn());
             }

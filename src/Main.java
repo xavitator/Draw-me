@@ -69,11 +69,20 @@ class MyCanvas extends JComponent {
                 }
                 try {
                     ast.verifyAll(registre);
-                    System.out.println("Vérification des types finie");
+
+                    System.out.println("============================\n\n Vérification des types finie\n\n============================\n");
+                }
+                catch(Exception e){
+                    System.out.println("** Erreur de type **\n" + e.getMessage()+"\n");
+                    System.exit(-1);
+                }
+                try{
                     ast.exec(g2d,registre);
+                    System.out.println("============================\n\nFin de l'exécution\n\n============================\n");
+
+                    System.out.println("Fin de l'exécution");
                 } catch (Exception e) {
                     System.out.println("** Erreur d'exécution **\n" + e.getMessage()+"\n");
-                    e.printStackTrace();
                     System.exit(-1);
                 }
             }

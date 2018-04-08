@@ -17,6 +17,10 @@ public class Identificateur extends Expression{
         this.nom = value;
     }
 
+    public Expression getExpression(ValueEnv env) throws Exception{
+        return env.get(nom,line,column).getExpression(env);
+    }
+
     public void setType(ValueEnv env) throws Exception{
         super.type = env.getType(nom, line, column);
     }

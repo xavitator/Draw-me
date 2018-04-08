@@ -27,6 +27,11 @@ public class And extends Expression{
         this.exp2 = exp2;
     }   
 
+    public Expression getExpression(ValueEnv env) throws Exception{
+        return new And(line,column,exp1.getExpression(env), exp2.getExpression(env));
+    }
+
+
     /**
      * On change le type de l'expression
      */

@@ -25,7 +25,11 @@ public class Div extends Expression {
         super(line, column, Type.INT);
         this.exp1 = exp1;
         this.exp2 = exp2;
-    }   
+    } 
+
+    public Expression getExpression(ValueEnv env) throws Exception{
+        return new Div(line,column,exp1.getExpression(env), exp2.getExpression(env));
+    }  
 
     /**
      * On change le type de l'expression

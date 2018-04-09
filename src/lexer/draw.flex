@@ -55,6 +55,8 @@ blanc = [\n\ \t\r]
 [Ff]"alse"    		   {return new BooleanToken(Sym.BOOLEAN,yyline,yycolumn,yytext());}
 "Begin"         	   {return new Token(Sym.BEGIN,yyline,yycolumn);}
 "End"           	   {return new Token(Sym.END,yyline,yycolumn);}
+"While"              {return new Token(Sym.WHILE,yyline,yycolumn);}
+"Do"                 {return new Token(Sym.DO,yyline,yycolumn);}
 "If"            	   {return new Token(Sym.IF,yyline,yycolumn);} 
 "Else"          	   {return new Token(Sym.ELSE,yyline,yycolumn);}
 "Then"          	   {return new Token(Sym.THEN,yyline,yycolumn);}

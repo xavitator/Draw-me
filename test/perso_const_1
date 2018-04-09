@@ -1,10 +1,6 @@
-Var rayon = 10;
-Var ra = (2*rayon);
-If 1 Then
+Var x = 100;
+While (x >= 0) Do
 Begin
-DrawCircle(120,120,rayon,#00FF00);
-FillCircle((500-ra),(100+ra),ra,#0000FF);
-End
-Else
-Begin
+x = (x-20);
+DrawCircle(200,200,x,#FF0000);
 End;

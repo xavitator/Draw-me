@@ -37,7 +37,8 @@ import java.awt.Color;
  * 			| Const identificateur = expr 
  * 			| Var identificateur = expr
  * 			| identificateur = expression
- *                      | If expr Then instruction Autre
+ *          | If expr Then instruction Autre
+ *          | While condition Do instruction
  * Autre → Else instruction
  * 			| 𝜀
  * expr → Nombre | identificateur | Boolean | ( expr exprSuite)
@@ -184,6 +185,15 @@ public class Parser{
                     }
                 return new Condition(line,column,exp, ifAST, elseAST);
             }
+        else if (reader.check(Sym.WHILE)) 
+            {
+            /* inst -> while exp do inst */
+            reader.eat(Sym.WHILE);
+            Expression exp = this.non_term_exp();
+            reader.eat(Sym.DO);
+            AST inst = this.instruction();
+            return new While(line,column,exp,inst);
+            }   
         else
             {
                 throw new ParserException("Motif non reconnu", reader.line(),reader.column());

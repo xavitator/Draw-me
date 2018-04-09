@@ -5,7 +5,7 @@
 
 
 # Variables
-file = simple 
+file = simple2 
 
 # Show information
 all:

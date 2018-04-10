@@ -14,6 +14,6 @@ public class RectangleColor{
 
     @Override
     public String toString() {
-        return "FillRect("+(int) rectangle.getY()+ "," +(int) rectangle.getX()+","+(int) rectangle.getWidth()+","+(int) rectangle.getHeight()+","+color.toString()+");";
+        return "FillRect("+(int) rectangle.getX()+ "," +(int) rectangle.getY()+","+(int) rectangle.getHeight()+","+(int) rectangle.getWidth()+","+color.toString()+");";
     }
 }

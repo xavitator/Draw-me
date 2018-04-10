@@ -79,7 +79,7 @@ public class CreateImage {
 
 	private boolean goodLineHorizontal(ColorOfPixel color, Point depart, int distance){
 		for(int i = 0; i <= distance; i++){
-			if( ! compare((int) depart.getX(), (int) depart.getY()+i, image)) return false;
+			if( ! compare((int) depart.getX(), (int) depart.getY()+i, color)) return false;
 		}
 		changeBoolean(depart, distance, true);
 		return true;
@@ -87,7 +87,7 @@ public class CreateImage {
 
 	private boolean goodLineVertical(ColorOfPixel color, Point depart, int distance){
 		for(int i = 0; i <= distance; i++){
-			if( ! compare((int) depart.getX()+i, (int) depart.getY(), image)) return false;
+			if( ! compare((int) depart.getX()+i, (int) depart.getY(), color)) return false;
 		}
 		changeBoolean(depart, distance, false);
 		return true;

@@ -10,7 +10,7 @@ public class ColorOfPixel{
 
 
     public ColorOfPixel(int x, int y, BufferedImage image) {
-        int color = image.getRGB(y,x);
+        int color = image.getRGB(x,y);
         hascode = color;
         blue = color & 0xff;
         green = (color & 0xff00) >> 8;

@@ -11,8 +11,8 @@ import java.util.LinkedList;
 public class CreateImage {
 	private BufferedImage image;
 	private boolean[][] visitedPixel;
-	private LinkedList<RectangleColor> list = new LinkedList<>();
-	private LinkedList<Point> next = new LinkedList<>();
+	private String resultat = "";
+	private int indent = 0;
 	private int width;
 	private int height;
 	
@@ -24,7 +24,6 @@ public class CreateImage {
 			height = image.getHeight();
 			width = image.getWidth();
 			visitedPixel = new boolean[height][width];
-			//next.add(new Point());
 		}
 		catch (IOException e){
 			System.out.println("Le chemin de l'image n'existe pas.");
@@ -39,8 +38,6 @@ public class CreateImage {
 		while (i <= 500*200 && b){
 			System.out.println(i);
 			b = fillPixels();
-			//next.removeIf((Point point) -> visitedPixel[(int) point.getX()][(int) point.getY()]);
-			//System.out.println(next.size());
 			i++;
 		}
 	}
@@ -73,7 +70,7 @@ public class CreateImage {
 				if (vertical) transY++;
 			}
 		}
-		list.add(new RectangleColor(first,transX,transY,color));
+		ajoutResultat("FillRect("+(int) first.getX()+ "," +(int) first.getY()+","+transX+","+transY+","+color.toString()+");" + "\n");
 		return true;
 	}
 
@@ -108,33 +105,6 @@ public class CreateImage {
 		}
 	}
 
-	/*private void findZone(){
-		ColorOfPixel color = pixels[0][0];
-		Zone zone = new Zone(color);
-		zones.add(zone);
-		boolean[] tab = new boolean[4];
-		tab[0] = false;
-		tab[1] = false;
-		tab[2] = compare(0,0,1,0);
-		tab[3] = compare(0,0,0,1);
-		zone.add(new Frontiere(new Point(),tab));
-		visitedPixel[0][0] = true;
-		boolean[] suite = {false,true, true,true};
-		boolean[] suitebis = {true,false, true,true};
-		if(tab[2]) this.testIsIn(1,0,suitebis,zone);
-		else {
-			Zone zone1 = new Zone(pixels[0][1]);
-			zones.add(zone1);
-			this.testIsIn(1,0,suitebis,zone1);
-		}
-		if(tab[3]) this.testIsIn(0,1,suite,zone);
-		else {
-			Zone zone1 = new Zone(pixels[0][1]);
-			zones.add(zone1);
-			this.testIsIn(1,0,suitebis,zone1);
-		}
-	}*/
-
 	private boolean compare(int x, int y, ColorOfPixel color){
 		if(inTableau(x,y)){
 			ColorOfPixel pixel1 = new ColorOfPixel(x,y,image);
@@ -147,22 +117,19 @@ public class CreateImage {
 		return (y >= 0 && y < width && x < height && x >= 0);
 	}
 
+	private void ajoutResultat (String ajout){
+		int max = 200;
+		if(indent == 0) resultat += "Begin";
+		resultat += ajout+"\n";
+		indent++;
+		if(indent == max){
+			resultat += "End;";
+			indent = 0;
+		}
+	}
 	@Override
 	public String toString() {
-		String res = "";
-		int a = 0;
-		int max = 200;
-		for (RectangleColor rect : list){
-			if(a == 0) res += "Begin";
-			res += rect.toString()+"\n";
-			a++;
-			if(a == max){
-				res += "End;";
-				a = 0;
-			}
-		}
-		if(a != 1) res += "End;";
-		return res;
+		return resultat;
 	}
 
 	public static void main(String[] args){

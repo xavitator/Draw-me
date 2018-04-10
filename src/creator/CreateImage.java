@@ -24,7 +24,7 @@ public class CreateImage {
 			height = image.getHeight();
 			width = image.getWidth();
 			visitedPixel = new boolean[height][width];
-			next.add(new Point());
+			//next.add(new Point());
 		}
 		catch (IOException e){
 			System.out.println("Le chemin de l'image n'existe pas.");
@@ -65,11 +65,11 @@ public class CreateImage {
 		int transY = 1;
 		while (horizontal || vertical){
 			if(horizontal) {
-				horizontal = goodLine(color, new Point((int) first.getX()+transX, (int) first.getY()), transY - 1, true);
+				horizontal = goodLineHorizontal(color, new Point((int) first.getX()+transX, (int) first.getY()), transY - 1);
 				if (horizontal) transX++;
 			}
 			if(vertical) {
-				vertical = goodLine(color, new Point((int) first.getX(), (int) first.getY() + transY), transX - 1, false);
+				vertical = goodLineVertical(color, new Point((int) first.getX(), (int) first.getY() + transY), transX - 1);
 				if (vertical) transY++;
 			}
 		}
@@ -77,22 +77,19 @@ public class CreateImage {
 		return true;
 	}
 
-	private boolean goodLine(ColorOfPixel color, Point point, int distance, boolean horizontal){
-		for (int i = 0; i <= distance; i++) {
-			if(horizontal) {
-				if(! compare((int) point.getX(), (int) point.getY()+i,color)){
-					//next.add(new Point((int) point.getX()+i, (int) point.getY()));
-					return false;
-				}
-			}
-			else{
-				if(! compare((int) point.getX() + i , (int) point.getY(),color)){
-					//next.add(new Point((int) point.getX(), (int) point.getY()+i));
-					return false;
-				}
-			}
+	private boolean goodLineHorizontal(ColorOfPixel color, Point depart, int distance){
+		for(int i = 0; i <= distance; i++){
+			if( ! compare((int) depart.getX(), (int) depart.getY()+i, image)) return false;
 		}
-		changeBoolean(point,distance, horizontal);
+		changeBoolean(depart, distance, true);
+		return true;
+	}
+
+	private boolean goodLineVertical(ColorOfPixel color, Point depart, int distance){
+		for(int i = 0; i <= distance; i++){
+			if( ! compare((int) depart.getX()+i, (int) depart.getY(), image)) return false;
+		}
+		changeBoolean(depart, distance, false);
 		return true;
 	}
 

@@ -129,6 +129,7 @@ public class CreateImage {
 	}
 	@Override
 	public String toString() {
+		if(indent != 0) resultat = resultat + "End;";
 		return resultat;
 	}
 

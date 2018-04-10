@@ -166,12 +166,12 @@ public class CreateImage {
 	}
 
 	public static void main(String[] args){
-		if(args.length >= 1){
+		if(args.length >= 2){
 			CreateImage image = new CreateImage(args[0]);
 			image.createText();
 			String res = image.toString();
 			try{
-				File ff=new File("resultat");
+				File ff=new File("test/"+args[1]);
 				ff.createNewFile();
 				FileWriter ffw=new FileWriter(ff);
 				ffw.write(res);  // écrire une ligne dans le fichier resultat.txt
@@ -179,7 +179,8 @@ public class CreateImage {
 			} catch (Exception e) {System.out.println("problème dans l'écriture dans le fichier");}
 		}
 		else {
-			System.out.println("Rentrer un chemin vers une image svp.");
+			if(args.length < 1)	System.out.println("Rentrer un chemin vers une image svp.");
+			else System.out.println("Rentrer le nom du fichier que vous voulez créer.");
 			System.exit(-1);
 		}
 	}

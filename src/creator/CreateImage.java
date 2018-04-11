@@ -70,7 +70,7 @@ public class CreateImage {
 				if (vertical) transY++;
 			}
 		}
-		ajoutResultat("FillRect("+(int) first.getX()+ "," +(int) first.getY()+","+transX+","+transY+","+color.toString()+");" + "\n");
+		ajoutResultat("FillRect("+(int) first.getY()+ "," +(int) first.getX()+","+transY+","+transX+","+color.toString()+");" + "\n");
 		return true;
 	}
 

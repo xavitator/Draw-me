@@ -18,7 +18,12 @@ public class Token {
      * Constructeur *
      ****************/
     
-    /** Constructeur par défaut */
+    /** 
+     * Constructeur par défaut
+     * @param  sym    Symbole du Token
+     * @param  line   ligne où se situe l'élément
+     * @param  column colonne où se situe l'élément
+     */
     public Token(Sym sym, int line, int column){
         this.sym = sym;
         this.line = line;
@@ -31,17 +36,26 @@ public class Token {
      * Getters *
      ***********/
 
-    /** Récupération du symbole */
+    /**
+     * Récupération du symbole
+     * @return Symbole du Token
+     */
     public Sym symbol() {
         return this.sym;
     }
 
-    /** Renvoie la line */
+    /**
+     * Renvoie la line du Token
+     * @return entier correspondant à la ligne
+     */
     public int line() {
         return this.line;
     }
 
-    /** Renvoie la colonne */
+    /** 
+     * Renvoie la colonne
+     * @return entier correspondant à la colonne
+     */
     public int column() {
         return this.column;
     }

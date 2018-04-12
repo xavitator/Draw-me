@@ -16,7 +16,13 @@ public class BooleanToken extends Token {
      * Constructeur *
      ****************/
 
-    /** Constructeur par défaut */
+    /** 
+     * Constructeur par défaut
+     * @param  sym    Symbole du Token
+     * @param  line   ligne où se situe l'élément
+     * @param  column colonne où se situe l'élément
+     * @param  value  correspondant au string d'un boolean
+     */
     public BooleanToken (Sym sym, int line, int column, String value) {
         super(sym, line, column);
         this.value = value.matches("[Tt]rue");
@@ -28,7 +34,10 @@ public class BooleanToken extends Token {
      * Getter *
      **********/
 
-    /** Renvoie la valeur du token */
+    /** 
+     * Renvoie la valeur du token
+     * @return String correspondant à la couleur du Token
+     */
     public boolean getValue() {
         return this.value;
     }

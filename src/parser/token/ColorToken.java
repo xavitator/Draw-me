@@ -19,7 +19,13 @@ public class ColorToken extends Token {
      * Constructeur *
      ****************/
 
-    /** Constructeur par défaut */
+    /** 
+     * Constructeur par défaut
+     * @param  sym    Symbole du Token
+     * @param  line   ligne où se situe l'élément
+     * @param  column colonne où se situe l'élément
+     * @param  hex    format en hexadécimal d'une color
+     */
     public ColorToken(Sym sym, int line, int column, String hex){
         super(sym, line, column);
         this.value = Color.decode(hex);
@@ -31,7 +37,10 @@ public class ColorToken extends Token {
      * Getter *
      **********/
 
-    /** Renvoie la valeur du token */
+    /** 
+     * Renvoie la valeur du token
+     * @return String correspondant à la couleur du Token
+     */
     public Color getValue() {
         return this.value;
     }

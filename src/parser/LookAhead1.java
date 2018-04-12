@@ -24,7 +24,11 @@ public class LookAhead1{
      * Constructeur *
      ***************/
 
-    /** Constructeur par défaut */
+    /**
+     * Constructeur par défaut
+     * @param  l         lexer du fichier qu'on lit
+     * @throws Exception exception s'il n'existe pas d'élément dans le fichier lu
+     */
     public LookAhead1(Lexer l) throws Exception {
         this.lex = l;
         this.current = lex.yylex();
@@ -65,7 +69,11 @@ public class LookAhead1{
      * Getters *
      ***********/
 
-    /** Renvoie le int du token */
+    /**
+     * Renvoie le int du token
+     * @return int du Token
+     * @throws Exception     le Token courant n'est pas en format d'entier
+     */
     public int getIntValue() throws Exception {
         if (current instanceof IntToken){
             return ((IntToken)current).getValue();
@@ -74,7 +82,11 @@ public class LookAhead1{
         }
     }
 
-    /** Renvoie la color du tokne */
+    /**
+     * Renvoie la color du tokne
+     * @return couleur du Token
+     * @throws Exception     le Token courant n'est pas sous format de Color
+     */
     public Color getColorValue() throws Exception {
         if (current instanceof ColorToken) {
             return ((ColorToken)current).getValue();
@@ -83,7 +95,11 @@ public class LookAhead1{
         }
     }
 
-    /** Renvoie la chaine de caractères du token */
+    /**
+     * Renvoie la chaine de caractères du token
+     * @return String du Token
+     * @throws Exception     le Token courant n'est pas sous format d'un String
+     */
     public String getStringValue() throws Exception {
         if (current instanceof StringToken) {
             return ((StringToken)current).getValue();
@@ -92,7 +108,11 @@ public class LookAhead1{
         }
     }
 
-    /** Renvoie la valeur boolean du token */
+    /**
+     * Renvoie la valeur boolean du token
+     * @return Boolean du Token
+     * @throws Exception     le Token courant n'est pas sous format d'un boolean
+     */
     public boolean getBooleanValue() throws Exception {
         if (current instanceof BooleanToken) {
             return ((BooleanToken)current).getValue();
@@ -100,9 +120,14 @@ public class LookAhead1{
         throw new ParserException("\n Try to access to a boolean value", current.line(), current.column());
     }
     
-    /** Retourne la ligne du token */
+    /**
+     * Retourne la ligne du token
+     */
     public int line(){ return current.line();}
-    /** Retourne la colonne du token */
+    
+    /**
+     * Retourne la colonne du token
+     */
     public int column(){return current.column();}
 
 

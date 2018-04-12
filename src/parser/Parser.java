@@ -57,7 +57,10 @@ public class Parser{
      * Constructeur *
      ****************/
 
-    /** Constructeur par défaut */
+    /**
+     * Constructeur par défaut
+     * @param  r           LookAhead1 pour voir un élément après pour une grammaire LL(1)
+     */
     public Parser(LookAhead1 r) throws IOException {
         reader = r;
     }
@@ -74,7 +77,7 @@ public class Parser{
 
     /**
      * Instruction 
-     * @return l'ast.AST représentant l'instruction
+     * @return l'AST représentant l'instruction
      */
     public AST instruction() throws Exception {
         int line = reader.line();
@@ -173,6 +176,7 @@ public class Parser{
             }
         else if (reader.check(Sym.IF))
             {
+                /* On fait la structure du If */
                 reader.eat(Sym.IF);
                 Expression exp = this.non_term_exp();
                 reader.eat(Sym.THEN);
@@ -202,8 +206,8 @@ public class Parser{
 
     /**
      * Axiome et partie suite d'instruction de la grammaire 
-     * @param current l'ast.AST représentant la file d'exécution
-     * @return l'ast.AST courant
+     * @param current l'AST représentant la file d'exécution
+     * @return l'AST courant
      */
     public AST suite_instruction (AST current) throws Exception {
         if(reader.check(Sym.END) || reader.check(Sym.EOF)){
@@ -258,6 +262,12 @@ public class Parser{
         throw new ParserException("Le symbole n'est pas reconnu !", line,column);
     }
 
+    /**
+     * Suite d'une expression
+     * @param  beg       Première partie de l'expression
+     * @return           Expression contruite
+     * @throws Exception On ne peut pas construire l'expression
+     */
     public Expression non_term_expSuite(Expression beg) throws Exception {
         int line = reader.line();
         int column = reader.column();

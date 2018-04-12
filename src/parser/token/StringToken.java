@@ -16,7 +16,13 @@ public class StringToken extends Token {
      * Constructeur *
      ****************/
 
-    /** Constructeur par défaut */
+    /** 
+     * Constructeur par défaut
+     * @param  sym    Symbole du Token
+     * @param  line   ligne où se situe l'élément
+     * @param  column colonne où se situe l'élément
+     * @param  value  valeur du Token
+     */
     public StringToken (Sym sym, int line, int column, String value) {
         super(sym, line, column);
         this.value = value;
@@ -28,7 +34,10 @@ public class StringToken extends Token {
      * Getter *
      **********/
 
-    /** Renvoie la valeur du token */
+    /** 
+     * Renvoie la valeur du token
+     * @return String correspondant au Token
+     */
     public String getValue() {
         return this.value;
     }

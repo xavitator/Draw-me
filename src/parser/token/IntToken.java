@@ -16,7 +16,13 @@ public class IntToken extends Token {
      * Constructeur *
      ***************/
 
-    /** Constructeur par défaut */
+    /** 
+     * Constructeur par défaut
+     * @param  sym    Symbole du Token
+     * @param  line   ligne où se situe l'élément
+     * @param  column colonne où se situe l'élément
+     * @param  value  valeur du Token correspondant à un int
+     */
     public IntToken(Sym sym, int line, int column, String value) {
         super(sym,line,column);
         this.value = Integer.parseInt(value);
@@ -29,7 +35,10 @@ public class IntToken extends Token {
      * Getter *
      *********/
 
-    /** Renvoie la valeur du token */
+    /** 
+     * Renvoie la valeur du token
+     * @return String correspondant au Token
+     */
     public int getValue() {
         return this.value;
     }

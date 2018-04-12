@@ -13,7 +13,7 @@ import java.lang.Exception;
 public class While extends AST {
 
     Expression condition;
-    AST instruction;
+    // AST instruction;
 
   /**
    * Constructeur de l'AST de boucle 
@@ -25,7 +25,8 @@ public class While extends AST {
   public While(int line, int column,Expression condition, AST instruction) {
     super(line,column);
     this.condition = condition;
-    this.instruction = instruction;
+   // this.instruction = instruction;
+    super.addNext(instruction);
   }
   	
     /** on vérifie le type de la condition et de l'AST instruction */
@@ -34,7 +35,7 @@ public class While extends AST {
         condition.verifyType(env);
         Type type = condition.getType();
         if(type != Type.BOOLEAN && type != Type.INT) throw new ParserException("Il y a un problème de typage.",line,column);
-        instruction.verifyAll(env);
+        super.verifyAll(env);
     }
 
     /** fonction d'exécution de l'objet While */
@@ -49,7 +50,7 @@ public class While extends AST {
         if(debugMode()) {debug(val,cond);} //debug
 
         if(cond){
-          instruction.exec(g2d,val);
+          super.exec(g2d,val);
           this.exec(g2d,val);
         }
     }

@@ -62,5 +62,14 @@ public class AST {
         return false; // Pour la phase de débug !
     }
 
+    /** Retourne la line */
+    public int line() {
+        return this.line;
+    }
+
+    /** Retourne la colonne */
+    public int column() {
+        return this.column;
+    }
     
 }

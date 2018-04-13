@@ -6,19 +6,43 @@ import parser.Parser;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Stack;
 
+
+/**
+ * Classe de gestion des variables d'environnement
+ * @author DURAND - MARAIS
+ */
 public class ValueEnv {
+
     private LinkedList<HashMap<String,Expression>> variables;
     private LinkedList<HashMap<String,Expression>> constantes;
+    private HashMap<String,Proc> proc;
+    private Stack<LinkedList<String>> callStack;
     private int taille;
     
+
+    /** Constructeur par défaut */
     public ValueEnv() {
-        variables = new LinkedList<>();
-        constantes = new LinkedList<>();
-        taille = 0;
+        variables = new LinkedList<>(); // Liste de variables
+        constantes = new LinkedList<>(); // Liste de constantes
+        proc = new HashMap<String,Proc>(); // Ensemble des fonctions
+        callStack = new Stack<>(); // Pile d'arguments
+        taille = 0; // Taille des listes
     }
-    
-	// getType() --> il faut penser à faire un setType(env) de l'expression avant de getType()
+
+
+/**************************
+ * Méthodes modifications *
+ **************************/
+
+	/**
+     * Renvoie le type de la constante / variable
+     * @param nom le nom de la variable / constante
+     * @param line le numéro de la line
+     * @param colonne le numéro de la colonne
+     * @return
+     */
 	public Type getType(String nom, int line, int colonne) throws Exception{
             for (int i = taille-1 ; i >= 0 ; i--) {
                 Expression resAltern = variables.get(i).get(nom);
@@ -29,30 +53,40 @@ public class ValueEnv {
             throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,colonne);
 	}
 
-	// contains(nom) 				boolean pour savoir si le nom existe
+	/**
+     * Vérifie si la liste contient les variables / constantes
+     * @param nom le nom de la variable / constante
+     * @return true si une d'elles contient
+     */
 	public boolean contains(String nom){
             for (int i=taille-1 ; i>=0 ; i--) {
-                //System.out.println(i);
-                /*Expression res = variables.get(i).get(nom);
-                res = constantes.get(i).get(nom); 
-                if (res != null) { return true; }*/
                 if(variables.get(i).containsKey(nom) || constantes.get(i).containsKey(nom)) return true;
             }
             return false;
 	}
 
-	// get(nom) 					recuperer l'expression associée à 'nom'  
-	public Expression get(String nom, int line, int colonne) throws Exception{
+	/**
+     * Retourne l'expression lié à la variable 
+     * @param nom le nom de la variable
+     * @param line la line d'erreur
+     * @param column la colonne d'erreur
+     * @return l'expression 
+     */ 
+	public Expression get(String nom, int line, int column) throws Exception{
             for (int i = taille-1 ; i >= 0 ; i--) {
                 Expression res = variables.get(i).get(nom);
                 if (res != null) { return res; }
                 res = constantes.get(i).get(nom);
                 if (res != null) { return res; }
             }
-            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,colonne);
+            throw new ParserException("L'identificateur "+nom+" n'existe pas, il n'a pas été déclaré",line,column);
 	}
 
-	// set(nom, exp1) 				change la valeur de 'nom' si possible (type et constante)  
+    /**
+     * Change la valeur d'une variable
+     * @param nom le nom de la variable
+     * @param exp l'expression à changer dans la map
+     */
 	public void set(String nom, Expression exp) throws Exception{
             for(int i = taille -1; i >= 0 ; i--) {
                 Expression res = variables.get(i).get(nom);
@@ -67,32 +101,109 @@ public class ValueEnv {
                 
 	}
 
-	// put(nom, exp, isConstante) 	ajoute <nom, exp> dans l'une des deux linkedlist
-	public void put(String nom, Expression exp, boolean isConstante) throws Exception{
-            if(!variables.getLast().containsKey(nom) && !constantes.getLast().containsKey(nom)) {
-                if(isConstante){
-                    constantes.getLast().put(nom,exp.getExpression(this));
-                }
-                else { variables.getLast().put(nom,exp.getExpression(this)); }
-            } else {
-                throw new ParserException("L'identificateur " + nom + " a déjà été initialisé", exp.getLine(), exp.getColumn());
-            }
-        }
 
-	// add() 			ajoute le hasmap dans les deux linkedlist
+    /**
+     * Ajouter une nouvelle variable à l'environnement
+     * @param nom le nom de la variable à ajouter
+     * @param exp le nom de l'expression à changer 
+     * @param isConstante s'il s'agit d'une constante ou non
+     */
+	public void put(String nom, Expression exp, boolean isConstante) throws Exception{
+        if(!variables.getLast().containsKey(nom) && !constantes.getLast().containsKey(nom) 
+            && !callStack.peek().contains(nom)) {
+             if(isConstante){
+                 constantes.getLast().put(nom,exp.getExpression(this));
+             }
+             else { variables.getLast().put(nom,exp.getExpression(this)); }
+        } else {
+            throw new ParserException("L'identificateur " + nom + " a déjà été initialisé", exp.getLine(), exp.getColumn());
+        }
+    }
+
+    /**
+     * ajouter la procédure à la liste des procédures
+     * @param toAdd la procédure à déclarer
+     */
+    public void addProc (Proc toAdd) throws Exception {
+        if (proc.containsKey(toAdd.getName())) {
+            throw new Exception ("La méthode " + toAdd.getName() + " a déjà été déclarée");
+        } 
+            proc.put(toAdd.getName(), toAdd);
+    }
+
+
+    /** 
+     * Renvoie la procédure dont le nom est spécifié.
+     * Remplit la stack d'argument et les variables
+     * @param name le nom de la procédure
+     * @param args la liste d'arguments disponibles
+     * @return l'Ast 
+     */
+    public AST call (String name, LinkedList<Expression> args) throws Exception {
+        Proc procedure = proc.get(name);
+        if (procedure == null) {
+            throw new Exception("La procédure " + name + " n'a pas été déclarée avant son appel.");
+        }
+        LinkedList<String> nameArgs = procedure.getArgs();
+        if (nameArgs.size() != args.size()) {
+            throw new ParserException ("Les arguments ne correspondent pas", procedure.line(), procedure.column());
+        } else {
+            this.add();
+            this.addStack(new LinkedList<String>());
+            for (int i = 0 ; i < nameArgs.size() ; i++) {
+                this.put(nameArgs.get(i),args.get(i),false);
+            }
+            this.cleanStack();
+            this.addStack(nameArgs);
+        }
+        return procedure;
+    }
+
+
+
+
+/***************************
+ * Gestions Pile et listes *
+ ***************************/
+
+	/**
+     * Ajoute un cran au LinkedList
+     */
 	public void add(){
-            this.taille++;
             variables.add(new HashMap<String,Expression>());
             constantes.add(new HashMap<String,Expression>());
+            this.taille++;            
 	}
 
-	// pollLast() 					renvoie et supprime le dernier hasmap des deux listes
+	/**
+     * Supprime un cran des LinkedList
+     */
 	public void pollLast() throws Exception{
             variables.removeLast();
             constantes.removeLast();
             this.taille--;
 	}
 
+
+    /** 
+     * Remplit la stack
+     * @param args les noms des arguments à ajouter
+     */
+    public void addStack(LinkedList<String> args) {
+        callStack.push(args);
+    }
+
+    /**
+     * Vide la stack
+     */
+    public void cleanStack() throws Exception {
+        callStack.pop();
+    }
+
+
+
+
+    @Override
     public String toString(){
         String res = "";
         for (int i = 0; i < taille; i++) {

@@ -28,6 +28,7 @@ public class ValueEnv {
         constantes = new LinkedList<>(); // Liste de constantes
         proc = new HashMap<String,Proc>(); // Ensemble des fonctions
         callStack = new Stack<>(); // Pile d'arguments
+        callStack.push(new LinkedList<>());
         taille = 0; // Taille des listes
     }
 

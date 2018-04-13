@@ -69,6 +69,7 @@ class MyCanvas extends JComponent {
                 }
                 try {
                     ast.verifyAll(registre);
+                    registre = new ValueEnv();
                 }
                 catch(Exception e){
                     System.out.println("** Erreur de type **\n" + e.getMessage()+"\n");

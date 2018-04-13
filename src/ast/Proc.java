@@ -1,7 +1,7 @@
 package ast;
 
 import java.util.LinkedList;
-
+import java.awt.*;
 
 public class Proc extends AST{
 	
@@ -28,7 +28,7 @@ public class Proc extends AST{
 
 	/** On récupère le contenu de la procédure */
 	public LinkedList<AST> getContent(){
-		return super.next();
+		return super.next;
 	}
 
 	/** On regarde si la procédure a déjà été vérifier au niveau du typage */

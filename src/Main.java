@@ -69,8 +69,6 @@ class MyCanvas extends JComponent {
                 }
                 try {
                     ast.verifyAll(registre);
-
-                    System.out.println("============================\n\n Vérification des types finie\n\n============================\n");
                 }
                 catch(Exception e){
                     System.out.println("** Erreur de type **\n" + e.getMessage()+"\n");

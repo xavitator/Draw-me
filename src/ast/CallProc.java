@@ -1,6 +1,8 @@
 package ast;
 
 import java.util.LinkedList;
+import expression.Expression;
+import java.awt.Graphics2D;
 
 /**
  * Classe de gestion de boucles

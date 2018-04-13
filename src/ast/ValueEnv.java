@@ -139,7 +139,7 @@ public class ValueEnv {
      * @param args la liste d'arguments disponibles
      * @return l'Ast 
      */
-    public AST call (String name, LinkedList<Expression> args) throws Exception {
+    public Proc call (String name, LinkedList<Expression> args) throws Exception {
         Proc procedure = proc.get(name);
         if (procedure == null) {
             throw new Exception("La procédure " + name + " n'a pas été déclarée avant son appel.");

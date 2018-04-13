@@ -18,10 +18,13 @@ import expression.ComparatorOrdre;
 import expression.Comparator; 
 import expression.Expression;
 import expression.Identificateur;
+import expression.Expression;
+
 
 import java.io.IOException;
 import java.lang.Exception;
 import java.awt.Color;
+import java.util.LinkedList;
 
 
 /**
@@ -36,11 +39,19 @@ import java.awt.Color;
  * 			| FillRect ( expr , expr , expr , expr , couleur )
  * 			| Const identificateur = expr 
  * 			| Var identificateur = expr
- * 			| identificateur = expression
+ * 			| identificateur identSuite
+ *          | Proc identificateur (liste) instruction
  *          | If expr Then instruction Autre
  *          | While condition Do instruction
+ * identSuite -> (args) | = expression
  * Autre → Else instruction
  * 			| 𝜀
+ * liste -> identificateur, liste 
+            | liste 
+            | 𝜀
+ * args -> expr, args 
+            | expr 
+            | 𝜀
  * expr → Nombre | identificateur | Boolean | ( expr exprSuite)
  * exprSuite -> operateur expr
  * Bool -> [Tt]rue | [Ff]alse
@@ -167,12 +178,24 @@ public class Parser{
             }
         else if(reader.check(Sym.IDENT))
             {
-                /* identificateur = exp */
+                /* inst -> ident indenSuite */
                 String name = reader.getStringValue();
                 reader.eat(Sym.IDENT);
-                reader.eat(Sym.ASSIGNATION);
-                Expression exp = this.non_term_exp();
-                return new Change(line, column, name, exp);
+                /* identificateur = exp */
+                if (reader.check(Sym.ASSIGNATION))
+                    {
+                        reader.eat(Sym.ASSIGNATION);
+                         Expression exp = this.non_term_exp();
+                        return new Change(line, column, name, exp);
+                    }
+                /* ident (args) */
+                else 
+                    {
+                        reader.eat(Sym.LPAR);
+                        LinkedList<Expression> args = this.args();
+                        return new CallProc(line,column, name, args);
+                    }    
+
             }
         else if (reader.check(Sym.IF))
             {
@@ -197,7 +220,19 @@ public class Parser{
             reader.eat(Sym.DO);
             AST inst = this.instruction();
             return new While(line,column,exp,inst);
-            }   
+            }  
+        else if (reader.check(Sym.PROC)) 
+            {
+                /* inst -> Proc ident (liste) inst */
+                reader.eat(Sym.PROC);
+                String name = reader.getStringValue();
+                reader.eat(Sym.IDENT);
+                reader.eat(Sym.LPAR);
+                LinkedList<String> args = this.liste();
+                reader.eat(Sym.RPAR);
+                AST content = this.instruction();
+                return new Proc(line, column, name, content, args);
+            }        
         else
             {
                 throw new ParserException("Motif non reconnu", reader.line(),reader.column());
@@ -323,5 +358,49 @@ public class Parser{
                  return new And(line,column,beg,this.non_term_exp());
             }
         throw new ParserException("Erreur de symbole",line,column);
+    }
+
+
+    /**
+     * Gestion de la liste d'arguments d'une fonction 
+     * @return la LinkedList d'argument
+     */
+    public LinkedList<String> liste() throws Exception {
+        if (reader.check(Sym.RPAR))
+            {
+                /* liste -> 𝜀 */
+                return new LinkedList<String>();
+            }
+        /* liste -> ident, liste | liste*/    
+        String val = reader.getStringValue();
+        reader.eat(Sym.IDENT);
+        if (reader.check(Sym.COMMA))
+            {
+                reader.eat(Sym.COMMA);
+            }
+        LinkedList<String> param = liste();
+        param.push(val);
+        return param;
+    }
+
+    /**
+     * Gestion de la liste du passage de paramètres
+     * @return la liste de paramètres
+     */
+    public LinkedList<Expression> args() throws Exception {
+        if (reader.check(Sym.RPAR))
+            {
+                /* args -> 𝜀 */
+                return new LinkedList<Expression>();
+            } 
+        Expression exp = this.non_term_exp();
+        /* args -> exp, args | exp */
+        if (reader.check(Sym.COMMA))
+            {
+                reader.eat(Sym.COMMA);
+            }    
+        LinkedList<Expression> res = args();   
+        res.push(exp);
+        return res;        
     }
 }

@@ -42,10 +42,14 @@ public class Proc extends AST{
 	}
 
 	/** Exécution de la procédure, mais cela ne fait rien car Proc correspond à la déclaration d'une procédure */
-	public void exec(Graphics2D g2d, ValueEnv env) throws Exception{}
+	public void exec(Graphics2D g2d, ValueEnv env) throws Exception{
+		env.addProc(this);
+	}
 
 	/** Vérification du typage de la procédure, mais cela ne fait rien car Proc correspond à la déclaration d'une procédure */
-	public void verifyAll(ValueEnv env) throws Exception{}
+	public void verifyAll(ValueEnv env) throws Exception{
+		env.addProc(this);
+	}
 
 
 	/** Debug */

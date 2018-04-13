@@ -69,6 +69,7 @@ blanc = [\n\ \t\r]
 "="             	   {return new Token(Sym.ASSIGNATION,yyline,yycolumn);}
 "Const"         	   {return new Token(Sym.CONST,yyline,yycolumn);}
 "Var"           	   {return new Token(Sym.VAR,yyline,yycolumn);}
+"Proc"				   {return new Token(Sym.PROC, yyline, yycolumn);} 
 {identificateur}	   {return new StringToken(Sym.IDENT,yyline,yycolumn, yytext());}
 {string}	           {return new StringToken(Sym.STRING,yyline,yycolumn,yytext().replace("\"",""));}
 {blanc}+|","  		   {}

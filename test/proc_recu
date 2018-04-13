@@ -1,7 +1,7 @@
-Proc rond(Var coinX, Var coinY, Var rayon)
+Proc rond(coinX, coinY, rayon)
 	Begin
 	DrawCircle(coinX, coinY, rayon);
-	If (rayon <= 200) Then rond(coinX, coinY, rayon +10);
+	If (rayon <= 200) Then rond(coinX, coinY, (rayon +10));
 	End;
 
 rond(200,200,0);

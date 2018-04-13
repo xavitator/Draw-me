@@ -130,6 +130,11 @@ public class LookAhead1{
      */
     public int column(){return current.column();}
 
+    /** Retourne le symbole du Token courant */
+    public Sym getSymbol(){
+        return current.symbol();
+    }
+
 
     /** Debug */
     public boolean debugMode() {

@@ -357,7 +357,7 @@ public class Parser{
                  reader.eat(Sym.AND);
                  return new And(line,column,beg,this.non_term_exp());
             }
-        throw new ParserException("Erreur de symbole",line,column);
+        throw new ParserException("Erreur de symbole, on se retrouve avec "+reader.getSymbol(),line,column);
     }
 
 
@@ -374,10 +374,6 @@ public class Parser{
         /* liste -> ident, liste | liste*/    
         String val = reader.getStringValue();
         reader.eat(Sym.IDENT);
-        if (reader.check(Sym.COMMA))
-            {
-                reader.eat(Sym.COMMA);
-            }
         LinkedList<String> param = liste();
         param.push(val);
         return param;
@@ -394,11 +390,7 @@ public class Parser{
                 return new LinkedList<Expression>();
             } 
         Expression exp = this.non_term_exp();
-        /* args -> exp, args | exp */
-        if (reader.check(Sym.COMMA))
-            {
-                reader.eat(Sym.COMMA);
-            }    
+        /* args -> exp, args | exp */   
         LinkedList<Expression> res = args();   
         res.push(exp);
         return res;        

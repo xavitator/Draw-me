@@ -193,6 +193,7 @@ public class Parser{
                     {
                         reader.eat(Sym.LPAR);
                         LinkedList<Expression> args = this.args();
+                        reader.eat(Sym.RPAR);
                         return new CallProc(line,column, name, args);
                     }    
 

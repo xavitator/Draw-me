@@ -37,14 +37,15 @@ public class CallProc extends AST{
 		for(Expression exp : args){
 			exp.setType(env);
 			exp.verifyType(env);
+			exp = exp.getExpression(env);
 		}
 		Proc fonction = env.call(name,args);
 		if(! fonction.isVerified()){
+			fonction.setVerified();
 			LinkedList<AST> bloc = fonction.next;
 			for(AST element : bloc){
 				element.verifyAll(env);
 			}
-			fonction.setVerified();
 		}
 		env.cleanStack();
 	}

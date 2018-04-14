@@ -3,11 +3,12 @@ package creator;
 import java.awt.image.BufferedImage;
 
 public class ColorOfPixel{
-    int red;
-    int green;
-    int blue;
-    int hascode;
+    private int red;
+    private int green;
+    private int blue;
+    private int hascode;
 
+    public static final int diffOfPixel = 8;
 
     public ColorOfPixel(int x, int y, BufferedImage image) {
         int color = image.getRGB(y,x);
@@ -15,9 +16,9 @@ public class ColorOfPixel{
         blue = color & 0xff;
         green = (color & 0xff00) >> 8;
         red = (color & 0xff0000) >> 16;
-        blue =(blue >= 2)? blue - 2 + blue%4 -1: blue;
-        red =(red >= 2)? red - 2 + red%4 -1: red;
-        green =(green >= 2)? green - 2 + green%4 -1: green;
+        blue =(blue >= (diffOfPixel/2))? blue + (diffOfPixel/2) - (blue + (diffOfPixel/2)) % diffOfPixel - 1 : 0;
+        red =(red >= (diffOfPixel/2))? red + (diffOfPixel/2) - (red + (diffOfPixel/2))%diffOfPixel -1: 0;
+        green =(green >= (diffOfPixel/2))? green + (diffOfPixel/2) - (green + (diffOfPixel/2))%diffOfPixel -1: 0;
     }
 
     @Override

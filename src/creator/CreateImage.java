@@ -127,30 +127,27 @@ public class CreateImage {
 			indent = 0;
 		}
 	}
+
+	public void createFile(){
+		this.createText();
+		String res = this.toString();
+		String nomFile = "resultat";
+		try{
+			File ff=new File("test/"+nomFile);
+			ff.createNewFile();
+			FileWriter ffw=new FileWriter(ff);
+			ffw.write(res);  // écrire une ligne dans le fichier
+			ffw.close(); // fermer le fichier à la fin des traitements
+		} 
+		catch (Exception e) {
+			System.out.println("problème dans l'écriture dans le fichier.");
+		}
+	}
+
 	@Override
 	public String toString() {
 		if(indent != 0) resultat = resultat + "End;";
 		return resultat;
-	}
-
-	public static void main(String[] args){
-		if(args.length >= 2){
-			CreateImage image = new CreateImage(args[0]);
-			image.createText();
-			String res = image.toString();
-			try{
-				File ff=new File("test/"+args[1]);
-				ff.createNewFile();
-				FileWriter ffw=new FileWriter(ff);
-				ffw.write(res);  // écrire une ligne dans le fichier resultat.txt
-				ffw.close(); // fermer le fichier à la fin des traitements
-			} catch (Exception e) {System.out.println("problème dans l'écriture dans le fichier");}
-		}
-		else {
-			if(args.length < 1)	System.out.println("Rentrer un chemin vers une image svp.");
-			else System.out.println("Rentrer le nom du fichier que vous voulez créer.");
-			System.exit(-1);
-		}
 	}
 	
 }

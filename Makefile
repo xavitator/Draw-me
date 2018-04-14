@@ -34,4 +34,8 @@ $(file):
 
 # Lancer la compilation
 run: $(file)
-	@java -cp bin Main test/$(file)
+	@java -cp bin Main test/$(file) 0
+
+creator: 
+	@echo -e "============================\n\n    Créateur     \n fichier> "$(file)"\n\n============================\n"
+	@java -cp bin Main $(file) 1

@@ -3,6 +3,7 @@ import ast.ValueEnv;
 import lexer.Lexer;
 import parser.LookAhead1;
 import parser.Parser;
+import creator.CreateImage;
 
 import java.io.*;
 import java.awt.*;
@@ -23,11 +24,22 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    initAndShow(args[0]);
-                }
-            });
+        if(args.length < 2){
+            System.out.println("Il manque des arguments.");
+        }
+        else{
+            if(args[1].equals("0")){
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        initAndShow(args[0]);
+                    }
+                });
+            }
+            else{
+                CreateImage image = new CreateImage(args[0]);
+                image.createFile();
+            }
+        }
     }
 }
 

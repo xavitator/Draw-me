@@ -6,10 +6,11 @@
 
 # Variables
 file = simple2 
-
+image = braddock.jpg
 # Show information
 all:
-	@echo -e "Pour dessiner votre fichier : make run file=\"<filename>\".\nCe fichier doit être dans le répertoire test.\nPar défaut le fichier testé est simple"
+	@echo -e "Pour dessiner votre fichier : make run file=\"<filename>\".\nCe fichier doit être dans le répertoire test.\nPar défaut le fichier testé est simple2.\n"
+	@echo -e "Pour contruire le dessin de votre image : make creator image=\"<filename>\".\nCe fichier doit être dans le répertoire img.\nLe dessin produit est placé dans le dossier test.\nPar défaut le fichier testé est braddock.jpg"
 
 # Create Lexer
 create_lexer:
@@ -37,5 +38,5 @@ run: $(file)
 	@java -cp bin Main test/$(file) 0
 
 creator: 
-	@echo -e "============================\n\n    Créateur     \n fichier> "$(file)"\n\n============================\n"
-	@java -cp bin Main $(file) 1
+	@echo -e "============================\n\n    Créateur     \n fichier> img/"$(image)"\n\n============================\n"
+	@java -cp bin Main img/$(image) 1

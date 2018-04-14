@@ -19,7 +19,7 @@ public class CreateImage {
 	private int width;
 	private int height;
 	private int nombreZone = 0;
-	public static final int maxLine = 3000000;
+	public static final int maxLine = 4000000;
 	
 	public CreateImage(String path){
 		try {

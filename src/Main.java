@@ -46,10 +46,31 @@ public class Main {
 @SuppressWarnings("serial")
 class MyCanvas extends JComponent {
 
-    String filename;
+    private AST ast;
 
-    public MyCanvas(String fname) {
-        filename = fname;
+    public MyCanvas(String filename) {
+        ast = null;
+        if(new AST(0,0).debugMode()) {System.out.println("\n=== Mode debug ===");}
+        ValueEnv registre = new ValueEnv();
+        try {
+            File input = new File(filename);
+            Reader reader = new FileReader(input);
+            Lexer lexer = new Lexer(reader);
+            LookAhead1 look = new LookAhead1(lexer);
+            Parser parser = new Parser(look);
+            ast = parser.progNonTerm(); // Axiome 
+
+        } catch (Exception e) {
+            System.out.println("** Erreur de compilation **\n" + e.getMessage()+"\n");
+            System.exit(-1);
+        }
+        try {
+            ast.verifyAll(registre);
+        }
+        catch(Exception e){
+            System.out.println("** Erreur de type **\n" + e.getMessage()+"\n");
+            System.exit(-1);
+        }
     }
 
     @Override
@@ -64,30 +85,8 @@ class MyCanvas extends JComponent {
                 // g2d.drawCircle, g2d.setColor, etc...
                 //
                 // Par exemple :
-                AST ast = null;
-                if(new AST(0,0).debugMode()) {System.out.println("\n=== Mode debug ===");}
-                ValueEnv registre = new ValueEnv();
-                try {
-                    File input = new File(filename);
-                    Reader reader = new FileReader(input);
-                    Lexer lexer = new Lexer(reader);
-                    LookAhead1 look = new LookAhead1(lexer);
-                    Parser parser = new Parser(look);
-                    ast = parser.progNonTerm(); // Axiome 
-
-                } catch (Exception e) {
-                    System.out.println("** Erreur de compilation **\n" + e.getMessage()+"\n");
-                    System.exit(-1);
-                }
-                try {
-                    ast.verifyAll(registre);
-                    registre = new ValueEnv();
-                }
-                catch(Exception e){
-                    System.out.println("** Erreur de type **\n" + e.getMessage()+"\n");
-                    System.exit(-1);
-                }
                 try{
+                    ValueEnv registre = new ValueEnv();
                     ast.exec(g2d,registre);
                     System.out.println("============================\n\nFin de l'exécution\n\n============================\n");
 

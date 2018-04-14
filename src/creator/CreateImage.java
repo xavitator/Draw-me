@@ -6,24 +6,34 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 public class CreateImage {
 	private BufferedImage image;
 	private boolean[][] visitedPixel;
-	private String resultat = "";
+	private LinkedList<Point> list = new LinkedList<>();
+	private FileWriter resultat;
+	private String nomFile = "";
 	private int indent = 0;
 	private int width;
 	private int height;
+	private int nombreZone = 0;
+	public static final int maxLine = 3000000;
 	
 	public CreateImage(String path){
 		try {
 			File file = new File(path);
-			System.out.println(file.getAbsolutePath());
+			String[] tab = file.getAbsolutePath().split("/");
+			nomFile = tab[tab.length-1].split("\\.")[0];
 			image = ImageIO.read(file);
 			height = image.getHeight();
 			width = image.getWidth();
 			visitedPixel = new boolean[height][width];
+			list.add(new Point());
+			File ff=new File("test/"+nomFile);
+			ff.createNewFile();
+			resultat = new FileWriter(ff);
 		}
 		catch (IOException e){
 			System.out.println("Le chemin de l'image n'existe pas.");
@@ -35,25 +45,46 @@ public class CreateImage {
 	public void createText(){
 		int i = 0;
 		boolean b = true;
-		while (i <= 500*200 && b){
-			System.out.println(i);
+		this.fillList();
+		while (i <= maxLine && b){
+			if(i != nombreZone){
+				System.out.println(nombreZone);
+				i = nombreZone;
+			}
 			b = fillPixels();
-			i++;
 		}
+
+		if(! b) System.out.println(numberOfNone());
+	}
+
+	private int numberOfNone(){
+		int res = 0;
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if(! visitedPixel[i][j]) res ++;
+			}
+		}
+		return res;
 	}
 
 	private Point getPoint(){
+		return list.pollFirst();
+	}
+
+	private void fillList(){
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				if(! visitedPixel[i][j]) return new Point(i,j);
+				list.add(new Point(i,j));
 			}
 		}
-		return null;
 	}
 
 	private boolean fillPixels(){
 		Point first = getPoint();
 		if(first == null) return false;
+		if(visitedPixel[(int) first.getX()][(int) first.getY()]) {
+			return true;
+		}
 		ColorOfPixel color = new ColorOfPixel((int) first.getX(), (int) first.getY(), image);
 		visitedPixel[(int) first.getX()][(int) first.getY()] = true;
 		boolean horizontal = true;
@@ -71,12 +102,15 @@ public class CreateImage {
 			}
 		}
 		ajoutResultat("FillRect("+(int) first.getY()+ "," +(int) first.getX()+","+transY+","+transX+","+color.toString()+");" + "\n");
+		nombreZone++;
 		return true;
 	}
 
 	private boolean goodLineHorizontal(ColorOfPixel color, Point depart, int distance){
 		for(int i = 0; i <= distance; i++){
-			if( ! compare((int) depart.getX(), (int) depart.getY()+i, color)) return false;
+			if( ! compare((int) depart.getX(), (int) depart.getY()+i, color)) {
+				return false;
+			}
 		}
 		changeBoolean(depart, distance, true);
 		return true;
@@ -84,7 +118,9 @@ public class CreateImage {
 
 	private boolean goodLineVertical(ColorOfPixel color, Point depart, int distance){
 		for(int i = 0; i <= distance; i++){
-			if( ! compare((int) depart.getX()+i, (int) depart.getY(), color)) return false;
+			if( ! compare((int) depart.getX()+i, (int) depart.getY(), color)) {
+				return false;
+			}
 		}
 		changeBoolean(depart, distance, false);
 		return true;
@@ -95,12 +131,16 @@ public class CreateImage {
 			if(horizontal) {
 				int x = (int) point.getX();
 				int y = (int) point.getY() + i;
-				if(inTableau(x,y))visitedPixel[x][y] = true;
+				if(inTableau(x,y)){
+					visitedPixel[x][y] = true;
+				}
 			}
 			else{
 				int x = (int) point.getX() + i;
 				int y = (int) point.getY();
-				if(inTableau(x,y))visitedPixel[x][y] = true;
+				if(inTableau(x,y)){
+					visitedPixel[x][y] = true;
+				}
 			}
 		}
 	}
@@ -110,7 +150,9 @@ public class CreateImage {
 			ColorOfPixel pixel1 = new ColorOfPixel(x,y,image);
 			return color.equals(pixel1);
 		}
-		else return false;
+		else{
+			return false;
+		}
 	}
 
 	private boolean inTableau(int x, int y){
@@ -118,36 +160,32 @@ public class CreateImage {
 	}
 
 	private void ajoutResultat (String ajout){
-		int max = 200;
-		if(indent == 0) resultat += "Begin";
-		resultat += ajout+"\n";
-		indent++;
-		if(indent == max){
-			resultat += "End;";
-			indent = 0;
+		try{
+			int max = 200;
+			if(indent == 0) resultat.write("Begin\n");
+			resultat.write("    "+ajout);
+			indent++;
+			if(indent == max){
+				resultat.write("End;\n");
+				indent = 0;
+			}
+		}
+		catch (Exception e) {
+			System.out.println("problème dans l'écriture dans le fichier.");
+			System.exit(-1);
 		}
 	}
 
 	public void createFile(){
 		this.createText();
-		String res = this.toString();
-		String nomFile = "resultat";
+		String res = (indent > 0)? "End;" : "";
 		try{
-			File ff=new File("test/"+nomFile);
-			ff.createNewFile();
-			FileWriter ffw=new FileWriter(ff);
-			ffw.write(res);  // écrire une ligne dans le fichier
-			ffw.close(); // fermer le fichier à la fin des traitements
+			resultat.write(res);  // écrire une ligne dans le fichier
+			resultat.close(); // fermer le fichier à la fin des traitements
 		} 
 		catch (Exception e) {
 			System.out.println("problème dans l'écriture dans le fichier.");
 		}
-	}
-
-	@Override
-	public String toString() {
-		if(indent != 0) resultat = resultat + "End;";
-		return resultat;
 	}
 	
 }

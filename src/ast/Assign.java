@@ -33,7 +33,6 @@ public class Assign extends AST {
         exp1.setType(env);
         exp1.verifyType(env);
         env.put(nom,exp1, isConstante);
-        //System.out.println(env.contains(nom));
     }
 
     @Override
@@ -47,11 +46,8 @@ public class Assign extends AST {
 
     /** Debug */
     public void debug(ValueEnv val) throws Exception {
-        String value = "";
-        System.out.println("exp =>" + exp1);
-        // if(exp1.getType() == Type.BOOLEAN) value = String.valueOf(exp1.evalBool(val));
-        //else value = String.valueOf(exp1.evalInt(val));
-        System.out.println("Assignation => Nom: " + nom + " Valeur:"+value);
+        System.out.println("Assignation => Nom: " + nom );        
+        System.out.println("\texp =>" + exp1);
     }
 	
 }

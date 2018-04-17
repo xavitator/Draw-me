@@ -5,6 +5,7 @@ import parser.Sym;
 import parser.token.*;
 import java.util.HashMap;
 
+// Liste de symboles uniques
 class Keys extends HashMap<String, Sym> {
 	public Keys(){
 		super();
@@ -25,6 +26,7 @@ class Keys extends HashMap<String, Sym> {
 	}
 }
 
+// Gestion d'exceptions du lexer
 class LexerException extends Exception{
 	public LexerException(int line, int column, String caract){
   		super("Le caractere "+caract.replace("\\","\\\\")+" a la ligne "+line+" et a la colonne "+column+" n'est pas reconnu par la grammaire.");
@@ -51,15 +53,18 @@ class LexerException extends Exception{
 
 %}
 
+
 %yylexthrow{
   //Exception qu’on va créer nous meme pour l’analyse lexicale
   Exception, LexerException
 %yylexthrow}
 
+
+
 //definition des differentes variables
 
-commentaire = ("/*"[^]"*/") | ("//"[^\n\r]*)
 
+commentaire = ("/*"[^]"*/") | ("//"[^\n\r]*)
 hex = [0-9A-F]
 nombre = [0-9]+ 
 couleur = "#"{hex}{hex}{hex}{hex}{hex}{hex}
@@ -67,30 +72,39 @@ ordre = ">" | "<" | "<=" | ">="
 equal = "==" | "!="
 identificateur = [a-z][a-zA-Z_]*
 keyWord = [A-Z][a-zA-Z]*
-string = "\""[^\"]+[^\\]"\""
 blanc = [\n\ \t\r]
 
 %%
-{commentaire}              {}
-{couleur}  		   {return new ColorToken(Sym.COULEUR,yyline + 1,yycolumn +1 ,yytext());}
-{nombre}  		   {return new IntToken(Sym.INT,yyline + 1,yycolumn +1 ,yytext());}
-"+"                        {return new Token(Sym.PLUS,yyline + 1,yycolumn +1 );}
-"-"                        {return new Token(Sym.MINUS,yyline + 1,yycolumn +1 );}
-"*"                        {return new Token(Sym.TIMES,yyline + 1,yycolumn +1 );}
-"/"                        {return new Token(Sym.PLUS,yyline + 1,yycolumn +1 );}
-"&&"                       {return new Token(Sym.AND,yyline + 1,yycolumn +1 );}
-"||"                       {return new Token(Sym.OR,yyline + 1,yycolumn +1 );}
-{ordre}         	   {return new StringToken(Sym.COMPARATOR,yyline + 1,yycolumn +1 , yytext());}
-{equal}         	   {return new StringToken(Sym.EQ,yyline + 1,yycolumn +1 , yytext());}
-";"                	   {return new Token(Sym.POINTVIRGULE,yyline + 1,yycolumn +1 );}
-[Tt]"rue"     		   {return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext());}
-[Ff]"alse"    		   {return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext());}
-{keyWord}			{return this.identKeyWord(yyline, yycolumn, yytext());}
-"("             	   {return new Token(Sym.LPAR,yyline + 1,yycolumn +1 );}
-")"             	   {return new Token(Sym.RPAR,yyline + 1,yycolumn +1 );}
-"="             	   {return new Token(Sym.ASSIGNATION,yyline + 1,yycolumn +1 );}
-{identificateur}	   {return new StringToken(Sym.IDENT,yyline + 1,yycolumn +1 , yytext());}
-{string}	           {return new StringToken(Sym.STRING,yyline + 1,yycolumn +1 ,yytext().replace("\"",""));}
-{blanc}+|","  		   {}
-<<EOF>>                    {return new Token(Sym.EOF,yyline + 1,yycolumn +1 );}
-[^]                        {throw new LexerException(yyline + 1,yycolumn +1 , yytext());}
+// Valeurs
+{couleur}  		   			 { return new ColorToken(Sym.COULEUR,yyline + 1,yycolumn +1 ,yytext()) ;}
+{nombre}  		   			 { return new IntToken(Sym.INT,yyline + 1,yycolumn +1 ,yytext()) ;}
+[Tt]"rue"     		     { return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext()) ;}
+[Ff]"alse"    		     { return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext()) ;}
+
+// Opérations
+"+"                    { return new Token(Sym.PLUS,yyline + 1,yycolumn +1 ) ;}
+"-"                    { return new Token(Sym.MINUS,yyline + 1,yycolumn +1 ) ;}
+"*"                    { return new Token(Sym.TIMES,yyline + 1,yycolumn +1 ) ;}
+"/"                    { return new Token(Sym.PLUS,yyline + 1,yycolumn +1 ) ;}
+"&&"                   { return new Token(Sym.AND,yyline + 1,yycolumn +1 ) ;}
+"||"                   { return new Token(Sym.OR,yyline + 1,yycolumn +1 ) ;}
+{ordre}         	     { return new StringToken(Sym.COMPARATOR,yyline + 1,yycolumn +1 , yytext()) ;}
+{equal}         	     { return new StringToken(Sym.EQ,yyline + 1,yycolumn +1 , yytext()) ;}
+
+// Mots-clés
+{keyWord}		 	         { return this.identKeyWord(yyline, yycolumn, yytext()) ;}
+"="             	     { return new Token(Sym.ASSIGNATION,yyline + 1,yycolumn +1 ) ;}
+{identificateur}	     { return new StringToken(Sym.IDENT,yyline + 1,yycolumn +1 , yytext()) ;}
+
+// Délimiteurs
+"("             	     { return new Token(Sym.LPAR,yyline + 1,yycolumn +1 ) ;}
+")"             	     { return new Token(Sym.RPAR,yyline + 1,yycolumn +1 ) ;}
+";"                	   { return new Token(Sym.POINTVIRGULE,yyline + 1,yycolumn +1 ) ;}
+<<EOF>>                { return new Token(Sym.EOF,yyline + 1,yycolumn +1 ) ;}
+
+// Ignorés
+{commentaire}          {}
+{blanc}+|","  		     {}
+
+// Erreurs
+[^]                    { throw new LexerException(yyline + 1,yycolumn +1 , yytext()) ;}

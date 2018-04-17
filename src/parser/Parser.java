@@ -1,8 +1,4 @@
 package parser;
-/**
- * Classe qui se charge de parser les fichiers
- * @author DURAND-MARAIS
- */
 
 import ast.*;
 import exception.ParserException;
@@ -28,30 +24,30 @@ import java.util.LinkedList;
 
 
 /**
- * Gammaire :
+ * Gammaire étendue :
  * 
  * programme → blocInstruction
  * blocInstruction → Instruction ; blocInstruction | 𝜀
  * instruction → Begin blocInstruction End 
- * 			| DrawCircle ( expr , expr , expr , couleur )
- * 			| FillCircle ( expr , expr , expr , couleur)
- * 			| DrawRect ( expr , expr , expr , expr , couleur )
- * 			| FillRect ( expr , expr , expr , expr , couleur )
- * 			| Const identificateur = expr 
- * 			| Var identificateur = expr
- * 			| identificateur identSuite
- *          | Proc identificateur (liste) instruction
- *          | If expr Then instruction Autre
- *          | While condition Do instruction
+ * 			   | DrawCircle ( expr , expr , expr , couleur )
+ * 			   | FillCircle ( expr , expr , expr , couleur)
+ * 			   | DrawRect ( expr , expr , expr , expr , couleur )
+ * 			   | FillRect ( expr , expr , expr , expr , couleur )
+ * 			   | Const identificateur = expr 
+ * 			   | Var identificateur = expr
+ * 			   | identificateur identSuite
+ *             | Proc identificateur (liste) instruction
+ *             | If expr Then instruction Autre
+ *             | While condition Do instruction
  * identSuite -> (args) | = expression
  * Autre → Else instruction
- * 			| 𝜀
+ * 		 | 𝜀
  * liste -> identificateur, liste 
-            | liste 
-            | 𝜀
+         | liste 
+         | 𝜀
  * args -> expr, args 
-            | expr 
-            | 𝜀
+        | expr 
+        | 𝜀
  * expr → Nombre | identificateur | Boolean | ( expr exprSuite)
  * exprSuite -> operateur expr
  * Bool -> [Tt]rue | [Ff]alse
@@ -60,6 +56,14 @@ import java.util.LinkedList;
  * ordre → > | < | <= | >= |
  * eq -> == | !=
  */
+
+
+
+/**
+ * Classe qui se charge de parser les fichiers
+ * @author DURAND-MARAIS
+ */
+ 
 public class Parser{
 
     protected LookAhead1 reader;
@@ -70,7 +74,7 @@ public class Parser{
 
     /**
      * Constructeur par défaut
-     * @param  r           LookAhead1 pour voir un élément après pour une grammaire LL(1)
+     * @param  r  LookAhead1 pour voir un élément après pour une grammaire LL(1)
      */
     public Parser(LookAhead1 r) throws IOException {
         reader = r;
@@ -80,6 +84,7 @@ public class Parser{
      * programme -> suite_instruction
      */
     public AST progNonTerm() throws Exception {
+        
         // Création de l'ast.AST d'origine
         AST tmp =  suite_instruction(new AST(reader.line(),reader.column()));
         reader.eat(Sym.EOF);
@@ -93,6 +98,7 @@ public class Parser{
     public AST instruction() throws Exception {
         int line = reader.line();
         int column = reader.column();
+
         if (reader.check(Sym.BEGIN))
             {
                 /* instruction -> Begin suite_instruction End*/
@@ -104,7 +110,7 @@ public class Parser{
             }
         else if (reader.check(Sym.DRAWCIRCLE))
             {
-                /* instruction -> ast.DrawCircle ( exp, exp, couleur) */
+                /* instruction -> DrawCircle ( exp, exp, couleur) */
                 reader.eat(Sym.DRAWCIRCLE);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -117,7 +123,7 @@ public class Parser{
             }
         else if (reader.check(Sym.DRAWRECT))
             {
-                /* instruction -> ast.DrawRect(exp,exp,exp,couleur) */
+                /* instruction -> DrawRect(exp,exp,exp,couleur) */
                 reader.eat(Sym.DRAWRECT);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -131,7 +137,7 @@ public class Parser{
             }
         else if (reader.check(Sym.FILLCIRCLE))
             {
-                /* instruction -> ast.FillCircle(exp,exp,exp)*/
+                /* instruction -> FillCircle(exp,exp,exp)*/
                 reader.eat(Sym.FILLCIRCLE);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -144,7 +150,7 @@ public class Parser{
             }
         else if (reader.check(Sym.FILLRECT))
             {
-                /* instruction -> ast.FillRect (exp,exp,exp,exp, couleur) */
+                /* instruction -> FillRect (exp,exp,exp,exp, couleur) */
                 reader.eat(Sym.FILLRECT);
                 reader.eat(Sym.LPAR);
                 Expression x = this.non_term_exp();
@@ -168,7 +174,7 @@ public class Parser{
             }
         else if (reader.check(Sym.VAR))
             {
-                /* Var identificateur = exp */
+                /* instruction -> Var identificateur = exp */
                 reader.eat(Sym.VAR);
                 String name = reader.getStringValue();
                 reader.eat(Sym.IDENT);
@@ -178,19 +184,20 @@ public class Parser{
             }
         else if(reader.check(Sym.IDENT))
             {
-                /* inst -> ident indenSuite */
+                /* instruction -> identificateur indenSuite */
                 String name = reader.getStringValue();
                 reader.eat(Sym.IDENT);
-                /* identificateur = exp */
+               
                 if (reader.check(Sym.ASSIGNATION))
                     {
+                         /* identSuite-> = exp */
                         reader.eat(Sym.ASSIGNATION);
                          Expression exp = this.non_term_exp();
                         return new Change(line, column, name, exp);
                     }
-                /* ident (args) */
                 else 
                     {
+                        /* identSuite -> (args) */
                         reader.eat(Sym.LPAR);
                         LinkedList<Expression> args = this.args();
                         reader.eat(Sym.RPAR);
@@ -200,7 +207,7 @@ public class Parser{
             }
         else if (reader.check(Sym.IF))
             {
-                /* On fait la structure du If */
+                /* If expr Then instruction Autre */
                 reader.eat(Sym.IF);
                 Expression exp = this.non_term_exp();
                 reader.eat(Sym.THEN);
@@ -208,6 +215,7 @@ public class Parser{
                 AST elseAST = new AST(line,column);
                 if (reader.check(Sym.ELSE))
                     {
+                        /* Autre -> Else instruction */
                         reader.eat(Sym.ELSE);
                         elseAST = instruction();
                     }
@@ -215,7 +223,7 @@ public class Parser{
             }
         else if (reader.check(Sym.WHILE)) 
             {
-            /* inst -> while exp do inst */
+            /* instruction -> while exp do inst */
             reader.eat(Sym.WHILE);
             Expression exp = this.non_term_exp();
             reader.eat(Sym.DO);
@@ -224,7 +232,7 @@ public class Parser{
             }  
         else if (reader.check(Sym.PROC)) 
             {
-                /* inst -> Proc ident (liste) inst */
+                /* instruction -> Proc identificateur (liste) instruction */
                 reader.eat(Sym.PROC);
                 String name = reader.getStringValue();
                 reader.eat(Sym.IDENT);
@@ -236,21 +244,22 @@ public class Parser{
             }        
         else
             {
+                /* Erreur de parsing d'instructions */
                 throw new ParserException("Motif non reconnu", reader.line(),reader.column());
             }
     }
 
     /**
-     * Axiome et partie suite d'instruction de la grammaire 
+     * Suite d'instruction de la grammaire 
      * @param current l'AST représentant la file d'exécution
      * @return l'AST courant
      */
     public AST suite_instruction (AST current) throws Exception {
         if(reader.check(Sym.END) || reader.check(Sym.EOF)){
-            /* suite_instruction -> Epsilon*/
+            /* suite_instruction -> 𝜀 */
             return current;
         } else {
-            /* suite_instruction -> instruction ; suite_instruction*/
+            /* suite_instruction -> instruction ; suite_instruction */
             current.addNext(this.instruction());
             reader.eat(Sym.POINTVIRGULE);
             return this.suite_instruction(current);
@@ -259,36 +268,38 @@ public class Parser{
 
 
     /**
-     * Partie des expressions de la grammaire 
+     * Partie prefixe des expressions de la grammaire 
      * @return l'expression de la grammaire 
+     * @throws ParserException quand on ne peut pas construire
      */
     public Expression non_term_exp() throws Exception {
         int line = reader.line();
         int column = reader.column();
 
-         /* exp -> nombre */
+         
         if (reader.check(Sym.INT))
             {
+                /* exp -> nombre */
                 int value = reader.getIntValue();
                 reader.eat(Sym.INT);
                 return new Int(line,column,value);
             }
-        /* exp -> identificateur */
         else if (reader.check(Sym.IDENT))
             {
+                /* exp -> identificateur */
                 String ident = reader.getStringValue();
                 reader.eat(Sym.IDENT);
                 return new Identificateur(line, column,ident);
             }
-        /* exp -> bool */
         else if (reader.check(Sym.BOOLEAN)){
+             /* exp -> boolean */
             boolean val = reader.getBooleanValue();
             reader.eat(Sym.BOOLEAN);
             return new Bool(line,column,val);
         }
-        /* exp -> ( exp expSuit ) */
         else if (reader.check(Sym.LPAR))
             {
+                /* exp -> ( exp expSuit ) */
                 reader.eat(Sym.LPAR);
                 Expression left = non_term_exp();
                 Expression res = this.non_term_expSuite(left);
@@ -300,64 +311,66 @@ public class Parser{
 
     /**
      * Suite d'une expression
-     * @param  beg       Première partie de l'expression
-     * @return           Expression contruite
-     * @throws Exception On ne peut pas construire l'expression
+     * @param  beg Première partie de l'expression
+     * @return Expression contruite
+     * @throws ParserException On ne peut pas construire l'expression
      */
     public Expression non_term_expSuite(Expression beg) throws Exception {
         int line = reader.line();
         int column = reader.column();
 
-        /* exprSuite -> + expr*/
         if (reader.check(Sym.PLUS))
             {
+                /* exprSuite -> + expr */
                 reader.eat(Sym.PLUS);
                 return new Sum(line,column,beg,this.non_term_exp());
             }
-          /* exprSuite -> - expr*/
         else if (reader.check(Sym.MINUS))
             {
+                /* exprSuite -> - expr */
                 reader.eat(Sym.MINUS);
                 return new Diff(line,column,beg,this.non_term_exp());
             }
-          /* exprSuite -> * expr */
         else if (reader.check(Sym.TIMES))
             {
-                 reader.eat(Sym.TIMES);
-                 return new Prod(line,column,beg,this.non_term_exp());
+                /* exprSuite -> * expr */ 
+                reader.eat(Sym.TIMES);
+                return new Prod(line,column,beg,this.non_term_exp());
             }
-        /* exprSuite -> / expr*/
         else if (reader.check(Sym.DIV))
             {
+                /* exprSuite -> / expr */
                 reader.eat(Sym.DIV);
                 return new Div(line,column,beg,this.non_term_exp());
             }
-        /* exprSuite -> < | > | <= | >= expr*/
         else if (reader.check(Sym.COMPARATOR))
             {
+                /* exprSuite -> < | > | <= | >= expr */
                 String symbol = reader.getStringValue();
                 reader.eat(Sym.COMPARATOR);
                 return new ComparatorOrdre(line,column,beg,this.non_term_exp(),symbol);
             }
-        /* exprSuite -> ==|!= expr*/
         else if (reader.check(Sym.EQ))
             {
+                /* exprSuite -> == | != expr */
                 String symbol = reader.getStringValue();
                 reader.eat(Sym.EQ);
                 return new Comparator(line,column,beg,this.non_term_exp(),symbol);
             }
-        /* exprSuite -> || expr*/
         else if (reader.check(Sym.OR))
             {
-                 reader.eat(Sym.OR);
-                 return new Or(line,column,beg,this.non_term_exp());
+                /* exprSuite -> || expr */
+                reader.eat(Sym.OR);
+                return new Or(line,column,beg,this.non_term_exp());
             }
-        /* exprSuite -> && expr*/
         else if (reader.check(Sym.AND))
             {
-                 reader.eat(Sym.AND);
-                 return new And(line,column,beg,this.non_term_exp());
+                /* exprSuite -> && expr */
+                reader.eat(Sym.AND);
+                return new And(line,column,beg,this.non_term_exp());
             }
+
+        /* Erreur de lecture */    
         throw new ParserException("Erreur de symbole, on se retrouve avec "+reader.getSymbol(),line,column);
     }
 
@@ -365,6 +378,7 @@ public class Parser{
     /**
      * Gestion de la liste d'arguments d'une fonction 
      * @return la LinkedList d'argument
+     * @throws ParserException quand on ne peut pas lire le symbole
      */
     public LinkedList<String> liste() throws Exception {
         if (reader.check(Sym.RPAR))
@@ -372,7 +386,7 @@ public class Parser{
                 /* liste -> 𝜀 */
                 return new LinkedList<String>();
             }
-        /* liste -> ident, liste | liste*/    
+        /* liste -> ident, liste | liste */    
         String val = reader.getStringValue();
         reader.eat(Sym.IDENT);
         LinkedList<String> param = liste();
@@ -383,6 +397,7 @@ public class Parser{
     /**
      * Gestion de la liste du passage de paramètres
      * @return la liste de paramètres
+     * @throws ParserException quand on ne peut pas lire 
      */
     public LinkedList<Expression> args() throws Exception {
         if (reader.check(Sym.RPAR))

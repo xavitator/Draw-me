@@ -10,8 +10,16 @@ import java.awt.*;
 import javax.swing.*;
 import java.lang.Exception;
 
+
+/**
+ * Classe Principale
+ * @author DURAND - MARAIS
+ */
 public class Main {
 
+    /** 
+     * Méthode d'affichage 
+     */
     private static void initAndShow(String filename) {
         JFrame frame = new JFrame("ADS4");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,6 +31,7 @@ public class Main {
         frame.setVisible(true);
     }
 
+    /** Main */
     public static void main(String[] args) {
         if(args.length < 2){
             System.out.println("Il manque des arguments.");
@@ -38,6 +47,7 @@ public class Main {
             else{
                 CreateImage image = new CreateImage(args[0]);
                 image.createFile();
+                System.out.println("\nInstruction pour image créée dans test/");
             }
         }
     }
@@ -50,7 +60,7 @@ class MyCanvas extends JComponent {
 
     public MyCanvas(String filename) {
         ast = null;
-        if(new AST(0,0).debugMode()) {System.out.println("\n=== Mode debug ===");}
+        if(new AST(0,0).debugMode()) {System.out.println("\n=> Mode debug On");}
         ValueEnv registre = new ValueEnv();
         try {
             File input = new File(filename);
@@ -58,14 +68,18 @@ class MyCanvas extends JComponent {
             Lexer lexer = new Lexer(reader);
             LookAhead1 look = new LookAhead1(lexer);
             Parser parser = new Parser(look);
+            System.out.println("\n= Début parsing =");
             ast = parser.progNonTerm(); // Axiome 
+            System.out.println("\n= Fin parsing =");
 
         } catch (Exception e) {
             System.out.println("** Erreur de compilation **\n" + e.getMessage()+"\n");
             System.exit(-1);
         }
         try {
+            System.out.println("\n= Début vérification des types =");
             ast.verifyAll(registre);
+            System.out.println("\n= Fin vérification des types =");
         }
         catch(Exception e){
             System.out.println("** Erreur de type **\n" + e.getMessage()+"\n");
@@ -79,18 +93,11 @@ class MyCanvas extends JComponent {
             {
                 Graphics2D g2d = (Graphics2D)g;
 
-                // A compléter.
-                // Appelez ici votre analyseur et interpréteur, en leur fournissant
-                // l'objet g2d de type Graphics2D. Ils pourront ainsi appeler les fonctions
-                // g2d.drawCircle, g2d.setColor, etc...
-                //
-                // Par exemple :
                 try{
                     ValueEnv registre = new ValueEnv();
+                    System.out.println("\n= Début de l'exécution =");
                     ast.exec(g2d,registre);
-                    System.out.println("============================\n\nFin de l'exécution\n\n============================\n");
-
-                    System.out.println("Fin de l'exécution");
+                    System.out.println("\n= Fin de l'exécution =");
                 } catch (Exception e) {
                     System.out.println("** Erreur d'exécution **\n" + e.getMessage()+"\n");
                     System.exit(-1);

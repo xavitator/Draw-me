@@ -1,5 +1,9 @@
 package parser;
 
+/**
+ * Enumération de l'ensemble des symboles utiles au Parser
+ * @author DURAND - MARAIS
+ */
 public enum Sym{
     EOF, POINTVIRGULE, BEGIN, END, LPAR, RPAR,
     COULEUR, INT, CONST, VAR, BOOLEAN, STRING, IDENT,

@@ -13,7 +13,6 @@ import java.lang.Exception;
 public class While extends AST {
 
     Expression condition;
-    // AST instruction;
 
   /**
    * Constructeur de l'AST de boucle 
@@ -25,7 +24,6 @@ public class While extends AST {
   public While(int line, int column,Expression condition, AST instruction) {
     super(line,column);
     this.condition = condition;
-   // this.instruction = instruction;
     super.addNext(instruction);
   }
   	

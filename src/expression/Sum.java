@@ -27,6 +27,9 @@ public class Sum extends Expression{
         this.exp2 = exp2;
     }  
 
+    /**
+     * On crée une nouvelle expression 'Sum' avec le getExpression des deux expressions en attribut
+     */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new Sum(line,column,exp1.getExpression(env), exp2.getExpression(env));
     } 
@@ -53,6 +56,7 @@ public class Sum extends Expression{
         }
     }
 
+    /** on renvoie la somme entre les deux expressions en argument, on s'attend à renvoyer un int */
     public int evalInt(ValueEnv env) throws Exception{
         return exp1.evalInt(env) + exp2.evalInt(env);
     }

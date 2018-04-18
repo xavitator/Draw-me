@@ -27,6 +27,9 @@ public class Diff extends Expression{
         this.exp2 = exp2;
     }   
 
+    /**
+     * On crée une nouvelle expression 'Diff' avec le getExpression des deux expressions en attribut
+     */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new Diff(line,column,exp1.getExpression(env), exp2.getExpression(env));
     }
@@ -53,6 +56,7 @@ public class Diff extends Expression{
         }
     }
 
+    /** On évalue la différence des deux expressions en attribut, on s'attend à avoir un int */
     public int evalInt(ValueEnv env) throws Exception{
         return exp1.evalInt(env) - exp2.evalInt(env);
     }

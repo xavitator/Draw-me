@@ -31,6 +31,7 @@ public class Comparator extends Expression{
         this.comparator = comparator;
     }   
 
+    /** On renvoie la même expression en ayant comme attribut le 'getExpression' des attributs de 'this' */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new Comparator(line,column,exp1.getExpression(env), exp2.getExpression(env), comparator);
     }
@@ -58,6 +59,7 @@ public class Comparator extends Expression{
         }
     }
 
+    /** On évalue l'expression selon le comparateur '==' ou '!=', on s'attend à renvoyer un boolean */
     public boolean evalBool(ValueEnv env) throws Exception{
         boolean isInt = exp1.getType() != Type.INT;
         switch(comparator){

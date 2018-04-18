@@ -17,10 +17,14 @@ public class Identificateur extends Expression{
         this.nom = value;
     }
 
+    /** On récupère l'expression correspondante à l'identificateur dans l'environnement de valeur.
+     *  On renvoie une erreur si l'identificateur n'existe pas.
+     */
     public Expression getExpression(ValueEnv env) throws Exception{
         return env.get(nom,line,column).getExpression(env);
     }
 
+    /** On change le type de l'expression en fonction de son expression dans l'environnement de valeur 'env' */
     public void setType(ValueEnv env) throws Exception{
         super.type = env.getType(nom, line, column);
     }
@@ -33,10 +37,12 @@ public class Identificateur extends Expression{
         }
     }
 
+    /** on évalue l'identificateur en fonction le l'environnement de valeur, on s'attend à renvoyer un int */
     public int evalInt(ValueEnv env) throws Exception{
         return env.get(nom, line, column).evalInt(env);
     }
 
+    /** on évalue l'identificateur en fonction le l'environnement de valeur, on s'attend à renvoyer un boolean */
     public boolean evalBool(ValueEnv env) throws Exception{
         return env.get(nom, line, column).evalBool(env);
     }

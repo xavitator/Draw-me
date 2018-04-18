@@ -27,6 +27,9 @@ public class And extends Expression{
         this.exp2 = exp2;
     }   
 
+    /**
+     * On crée une nouvelle expression 'And' avec le get expression des deux expressions en attribut
+     */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new And(line,column,exp1.getExpression(env), exp2.getExpression(env));
     }
@@ -54,6 +57,7 @@ public class And extends Expression{
         }
     }
 
+    /** On évalue 'And', on s'attend à renvoyer un boolean. */
     public boolean evalBool(ValueEnv env) throws Exception{
         return exp1.evalBool(env) && exp2.evalBool(env);
     }

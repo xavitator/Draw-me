@@ -31,6 +31,7 @@ public class ComparatorOrdre extends Expression{
         this.comparator = comparator;
     }	
 
+    /** On renvoie la même expression en ayant comme attribut le 'getExpression' des attributs de 'this' */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new ComparatorOrdre(line,column,exp1.getExpression(env), exp2.getExpression(env),comparator);
     }
@@ -57,6 +58,7 @@ public class ComparatorOrdre extends Expression{
         }
     }
 
+    /** On évalue l'expression selon le comparateur '>', '>=', '<' ou '<=', on s'attend à renvoyer un boolean */
     public boolean evalBool(ValueEnv env) throws Exception{
         switch(comparator){
             case ">": return exp1.evalInt(env) > exp2.evalInt(env);

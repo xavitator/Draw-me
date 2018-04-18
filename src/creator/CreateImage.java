@@ -9,6 +9,12 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+/**
+ * Classe pour la création d'un fichier suivant la grammaire du projet
+ * pour dessiner l'image donnée en argument
+ * @author DURAND-MARAIS
+ */
+
 public class CreateImage {
 	private BufferedImage image;
 	private boolean[][] visitedPixel;
@@ -21,6 +27,10 @@ public class CreateImage {
 	private int nombreZone = 0;
 	public static final int maxLine = 4000000;
 	
+	/**
+	 * On crée un objet 'CreateImage' avec le chemin vers l'image que l'on veut dessiner
+	 * @param  path chemin de l'image qu'on veut dessiner
+	 */
 	public CreateImage(String path){
 		try {
 			File file = new File(path);
@@ -42,35 +52,21 @@ public class CreateImage {
 		}
 	}
 
+	/**
+	 * On crée, à partir de cette fonction, le fichier contenant le dessin de l'image donnée en argument.
+	 */
 	public void createText(){
 		int i = 0;
 		boolean b = true;
 		this.fillList();
 		while (i <= maxLine && b){
-			if(i != nombreZone){
-				System.out.println(nombreZone);
-				i = nombreZone;
-			}
 			b = fillPixels();
 		}
-
-		if(! b) System.out.println(numberOfNone());
 	}
 
-	private int numberOfNone(){
-		int res = 0;
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				if(! visitedPixel[i][j]) res ++;
-			}
-		}
-		return res;
-	}
-
-	private Point getPoint(){
-		return list.pollFirst();
-	}
-
+	/**
+	 * On remplit l'attribut 'list' avec tous les points de l'image
+	 */
 	private void fillList(){
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
@@ -79,8 +75,17 @@ public class CreateImage {
 		}
 	}
 
+	/**
+	 * On construit le plus grand rectangle possible en suivant l'algorithme suivant :
+	 * - on regarde si le point qu'on récupère est déjà dans un rectangle ou pas, si oui on passe au point suivant, sinon :
+	 * - on regarde s'il existe une ligne contenant les mêmes pixels
+	 * - on fait de même pour la colonne
+	 * - et on élargit notre rectangle de cette façon là
+	 * quand c'est terminé, on note dans le fichier le rectangle qu'on a obtenu
+	 * @return true si on a trouvé un rectangle, false s'il n'existe plus aucun nouveau rectangle dans l'image
+	 */
 	private boolean fillPixels(){
-		Point first = getPoint();
+		Point first = list.pollFirst();
 		if(first == null) return false;
 		if(visitedPixel[(int) first.getX()][(int) first.getY()]) {
 			return true;
@@ -106,6 +111,13 @@ public class CreateImage {
 		return true;
 	}
 
+	/**
+	 * On regarde si toutes les couleurs sur une même ligne horizontale sont égales (selon la méthode 'equals')
+	 * @param  color    couleur qu'on compare
+	 * @param  depart   point de départ de la ligne
+	 * @param  distance distance de la ligne
+	 * @return          true si toute la ligne est de la même couleur (et on note que la ligne est dans un rectangle), false sinon
+	 */
 	private boolean goodLineHorizontal(ColorOfPixel color, Point depart, int distance){
 		for(int i = 0; i <= distance; i++){
 			if( ! compare((int) depart.getX(), (int) depart.getY()+i, color)) {
@@ -116,6 +128,13 @@ public class CreateImage {
 		return true;
 	}
 
+	/**
+	 * On regarde si toutes les couleurs sur une même colonne verticale sont égales (selon la méthode 'equals')
+	 * @param  color    couleur qu'on compare
+	 * @param  depart   point de départ de la colonne
+	 * @param  distance distance de la colonne
+	 * @return          true si toute la colonne est de la même couleur (et on note que la colonne est dans un rectangle), false sinon
+	 */
 	private boolean goodLineVertical(ColorOfPixel color, Point depart, int distance){
 		for(int i = 0; i <= distance; i++){
 			if( ! compare((int) depart.getX()+i, (int) depart.getY(), color)) {
@@ -126,6 +145,15 @@ public class CreateImage {
 		return true;
 	}
 
+	/**
+	 * On note que les pixels appartenant à :
+	 * - la ligne si horizontal est à true
+	 * - la colonne sinon
+	 * commançant par le point de coordonnées 'point' et sur une distance de 'distance' sont dans un rectangle.
+	 * @param point      coordonnées du pixel
+	 * @param distance   taille de la ligne/colonne
+	 * @param horizontal boolean déterminant si on manipule une ligne ou une colonne
+	 */
 	private void changeBoolean(Point point, int distance, boolean horizontal){
 		for (int i = 0; i <= distance; i++) {
 			if(horizontal) {
@@ -145,6 +173,14 @@ public class CreateImage {
 		}
 	}
 
+	/**
+	 * On compare la couleur du pixel de coordonnées (x,y) selon un repère informatique et non mathématique avec
+	 * la couleur donnée en paramètre
+	 * @param  x     coordonnée en ordonnée du pixel
+	 * @param  y     coordonnée en abscisse du pixel
+	 * @param  color couleur de comparaison
+	 * @return       true si les deux éléments sont dans l'image et sont de même couleur, false sinon.
+	 */
 	private boolean compare(int x, int y, ColorOfPixel color){
 		if(inTableau(x,y)){
 			ColorOfPixel pixel1 = new ColorOfPixel(x,y,image);
@@ -155,10 +191,21 @@ public class CreateImage {
 		}
 	}
 
+	/**
+	 * On vérifie que les coordonnées (x,y) appartiennent à l'image
+	 * @param  x coordonnée en ordonnée du pixel
+	 * @param  y coordonnée en abscisse du pixel
+	 * @return   true si les deux coordonnées sont dans l'image, false sinon.
+	 */
 	private boolean inTableau(int x, int y){
 		return (y >= 0 && y < width && x < height && x >= 0);
 	}
 
+	/**
+	 * on ajoute le String en argument dans le fichier contenant le dessin de l'image
+	 * On ajoute des éléments 'Begin' et 'End' pour qu'il n'y ait pas de stackoverflow dans le parser
+	 * @param ajout instruction qu'on ajoute dans le fichier
+	 */
 	private void ajoutResultat (String ajout){
 		try{
 			int max = 200;
@@ -176,6 +223,10 @@ public class CreateImage {
 		}
 	}
 
+	/**
+	 * On vérifie que le nombre de 'Begin' et de 'End' correspondent bien, et on ferme le fichier dans
+	 * lequel on a écrit le dessin de l'image
+	 */
 	public void createFile(){
 		this.createText();
 		String res = (indent > 0)? "End;" : "";

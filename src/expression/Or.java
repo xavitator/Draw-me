@@ -27,6 +27,9 @@ public class Or extends Expression{
         this.exp2 = exp2;
     }   
 
+    /**
+     * On crée une nouvelle expression 'Or' avec le getExpression des deux expressions en attribut
+     */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new Or(line,column,exp1.getExpression(env), exp2.getExpression(env));
     }
@@ -53,6 +56,7 @@ public class Or extends Expression{
         }
     }
 
+    /** on évalue le 'ou' entre deux expressions (ou '||' en java), on s'attend à un boolean */
     public boolean evalBool(ValueEnv env) throws Exception{
         return exp1.evalBool(env) || exp2.evalBool(env);
     }

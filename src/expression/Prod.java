@@ -27,6 +27,9 @@ public class Prod extends Expression {
         this.exp2 = exp2;
     }   
 
+    /**
+     * On crée une nouvelle expression 'Prod' avec le getExpression des deux expressions en attribut
+     */
     public Expression getExpression(ValueEnv env) throws Exception{
         return new Prod(line,column,exp1.getExpression(env), exp2.getExpression(env));
     }
@@ -53,6 +56,7 @@ public class Prod extends Expression {
         }
     }
 
+    /** on évalue le produit entre les deux expressions, on s'attend à renvoyer un int */
     public int evalInt(ValueEnv env) throws Exception{
         return exp1.evalInt(env) * exp2.evalInt(env);
     }

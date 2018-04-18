@@ -5,7 +5,7 @@ import ast.ValueEnv;
 import exception.ParserException;
 
 /**
- * Classe pour une valeur
+ * Classe pour une valeur boolean
  * @author DURAND-MARAIS
  */
 public class Bool extends Expression{
@@ -17,10 +17,12 @@ public class Bool extends Expression{
         this.value = value;
     }
 
+    /** On change le type de l'expression pour dire que c'est un type Boolean */
     public void setType(ValueEnv env) throws Exception{
         this.type = Type.BOOLEAN;
     }
 
+    /** On renvoie l'expression associé au boolean */
     public Expression getExpression(ValueEnv env) throws Exception{
         return this;
     }
@@ -30,6 +32,7 @@ public class Bool extends Expression{
      */
     public void verifyType(ValueEnv env) throws Exception{}
 
+    /** On évalue 'Bool' pour renvoyer le boolean correspondant */
     public boolean evalBool(ValueEnv env) throws Exception{
         return value;
     }

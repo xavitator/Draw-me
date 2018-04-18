@@ -2,14 +2,26 @@ package creator;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Classe pour une couleur dans le créator
+ * @author DURAND-MARAIS
+ */
+
 public class ColorOfPixel{
     private int red;
     private int green;
     private int blue;
     private int hascode;
 
+    // entier d'approximation entre les différentes couleurs
     public static final int diffOfPixel = 8;
 
+    /**
+     * Constructeur d'un objet 'ColorOfPixel' correspondant à la couleur d'un pixel d'une image
+     * @param  x     coordonnée en ordonnée du pixel dont on veut la couleur
+     * @param  y     coordonnée en abscisse du pixel dont on veut la couleur
+     * @param  image image dont on veut la couleur des pixels
+     */
     public ColorOfPixel(int x, int y, BufferedImage image) {
         int color = image.getRGB(y,x);
         hascode = color;
@@ -21,6 +33,11 @@ public class ColorOfPixel{
         green =(green >= (diffOfPixel/2))? green + (diffOfPixel/2) - (green + (diffOfPixel/2))%diffOfPixel -1: 0;
     }
 
+    /**
+     * On redéfinie la fonction 'equals' entre deux objets 'ColorOfPixel'
+     * @param  obj qu'on veut comparer avec 'this'
+     * @return     true si la couleur de 'this' et de 'obj' est la même.
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof ColorOfPixel){
@@ -33,6 +50,10 @@ public class ColorOfPixel{
         else return super.equals(obj);
     }
 
+    /**
+     * On redéfinie la fonction 'hashCode' car on a redéfinie 'equals'
+     * @return le hashCode correspondant à la couleur véritable du pixel
+     */
     @Override
     public int hashCode() {
         return hascode;

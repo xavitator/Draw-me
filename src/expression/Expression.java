@@ -35,6 +35,14 @@ public abstract class Expression {
         return this.type;
     }
 
+    /**
+     * On récupère l'expression correspondant à l'expression, 
+     * c'est à dire que si on a un identificateur, on le remplace par son
+     * expression dans l'ensemble des valeurs 'env'
+     * @param  env       ensemble de valeurs
+     * @return           expression de this
+     * @throws Exception Il y a un soucis dans la récupération de l'expression
+     */
     public abstract Expression getExpression(ValueEnv env) throws Exception;
 
     /**
@@ -47,18 +55,38 @@ public abstract class Expression {
      */
     public abstract void verifyType(ValueEnv env) throws Exception;
 
+    /**
+     * On évalue l'expression pour récupérer un int
+     * @param  env       environnement de valeur
+     * @return           evalution de l'expression selon un int
+     * @throws Exception on ne peut évaluer en int
+     */
     public int evalInt(ValueEnv env) throws Exception{
         throw new Exception();
     }
 
+    /**
+     * On évalue l'expression pour récupérer un boolean
+     * @param  env       environnement de valeur
+     * @return           evalution de l'expression selon un boolean
+     * @throws Exception on ne peut évaluer en boolean
+     */
     public boolean evalBool(ValueEnv env) throws Exception{
         throw new Exception();
     }
 
+    /**
+     * On récupère la ligne correspondant à l'expression
+     * @return int de la ligne
+     */
     public int getLine() {
         return line;
     }
 
+    /**
+     * On récupère la colonne correspondant à l'expression
+     * @return int de la colonne
+     */
     public int getColumn() {
         return column;
     }

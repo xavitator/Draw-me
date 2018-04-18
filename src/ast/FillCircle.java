@@ -16,14 +16,13 @@ public class FillCircle extends AST {
     Color color;
 	
     /**
-     * on construit un ast.AST correspondant à la fonction fillOval
+     * on construit un AST correspondant à la fonction fillOval
      * @param  line   ligne de l'expression dans le fichier
      * @param  column colonne de l'expression dans le fichier
-     * @param  exp1   premier argument de la fonction en int
-     * @param  exp2   deuxième argument de la fonction en int
-     * @param  exp3   troisème argument de la fonction en int
-     * @param  color  quatrième argument de la fonction en color
-     * @return        
+     * @param  exp1   premier argument de la fonction
+     * @param  exp2   deuxième argument de la fonction
+     * @param  exp3   troisème argument de la fonction
+     * @param  color  couleur
      */
     public FillCircle(int line, int column, Expression exp1, Expression exp2, Expression exp3, Color color){
         super(line, column);
@@ -33,7 +32,7 @@ public class FillCircle extends AST {
         this.color = color;
     }
 
-    /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
+    @Override
     public void verifyAll(ValueEnv env) throws Exception{
         exp1.setType(env);
         exp2.setType(env);
@@ -46,7 +45,7 @@ public class FillCircle extends AST {
         if(exp1.getType() != Type.INT || exp2.getType() != Type.INT || exp3.getType() != Type.INT) throw new ParserException("Il y a un problème.", line, column);
     }
 
-    /** fonction d'exécution de fillOval */
+    @Override
     public void exec(Graphics2D g2d, ValueEnv val) throws Exception{
         int x = exp1.evalInt(val);
         int y = exp2.evalInt(val);

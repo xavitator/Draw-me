@@ -4,6 +4,7 @@ import java.awt.*;
 import java.lang.Exception;
 import exception.ParserException;
 import expression.Expression;
+
 /**
  * Classe correspondant à la fonction fillRect de Graphics
  * @author DURAND-MARAIS
@@ -16,15 +17,14 @@ public class FillRect extends AST {
     Color color;
 	
     /**
-     * on construit un ast.AST correspondant à la fonction fillRect
+     * on construit un AST correspondant à la fonction fillRect
      * @param  line   ligne de l'expression dans le fichier
      * @param  column colonne de l'expression dans le fichier
-     * @param  exp1   premier argument de la fonction en int
-     * @param  exp2   deuxième argument de la fonction en int
-     * @param  exp3   troisème argument de la fonction en int
-     * @param  exp4	  quatrième argument de la fonction en int
-     * @param  color  cinquième argument de la fonction en color
-     * @return        
+     * @param  exp1   premier argument de la fonction
+     * @param  exp2   deuxième argument de la fonction
+     * @param  exp3   troisème argument de la fonction
+     * @param  exp4	  quatrième argument de la fonction
+     * @param  color  couleur
      */
     public FillRect(int line, int column, Expression exp1, Expression exp2, Expression exp3, Expression exp4, Color color){
         super(line, column);
@@ -35,7 +35,7 @@ public class FillRect extends AST {
         this.color = color;
     }
 
-    /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
+    @Override
     public void verifyAll(ValueEnv env) throws Exception{
         exp1.setType(env);
         exp2.setType(env);
@@ -52,7 +52,7 @@ public class FillRect extends AST {
             throw new ParserException("Il y a un problème de typage", line, column);
     }
 
-    /** fonction d'exécution de fillRect */
+    @Override
     public void exec(Graphics2D g2d, ValueEnv val) throws Exception {
         int x = exp1.evalInt(val);
         int y = exp2.evalInt(val);

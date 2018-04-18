@@ -7,7 +7,7 @@ import exception.ParserException;
 import expression.Expression;
 
 /**
- * Classe des Expressions
+ * Classe des AST permettant de déclarer une variable/constante
  * @author DURAND-MARAIS
  */
 public class Assign extends AST {
@@ -29,6 +29,7 @@ public class Assign extends AST {
         this.exp1 = exp1;
     }
 
+    @Override   
     public void verifyAll(ValueEnv env)throws Exception{
         exp1.setType(env);
         exp1.verifyType(env);
@@ -37,11 +38,8 @@ public class Assign extends AST {
 
     @Override
     public void exec(Graphics2D g2d,ValueEnv val) throws Exception {
-        //on exécute l'assignation
         if(debugMode()) { debug(val); }
-        // on ajoute dans 'val' le nom, puis l'expression et enfin si c'est une constante
-        // l'exception de si elle existe est géré dans ValueEnv
-        val.put(nom,exp1, isConstante);
+        val.put(nom,exp1, isConstante); // On ajoute dans l'environnement la valeur
     }
 
     /** Debug */

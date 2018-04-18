@@ -22,12 +22,11 @@ public class DrawRect extends AST {
      * on construit un ast.AST correspondant à la fonction drawRect
      * @param  line   ligne de l'expression dans le fichier
      * @param  column colonne de l'expression dans le fichier
-     * @param  exp1   premier argument de la fonction en int
-     * @param  exp2   deuxième argument de la fonction en int
-     * @param  exp3   troisème argument de la fonction en int
-     * @param  exp4	  quatrième argument de la fonction en int
-     * @param  color  cinquième argument de la fonction en color
-     * @return        
+     * @param  exp1   premier argument de la fonction
+     * @param  exp2   deuxième argument de la fonction
+     * @param  exp3   troisème argument de la fonction
+     * @param  exp4	  quatrième argument de la fonction
+     * @param  color  couleur
      */
     public DrawRect(int line, int column, Expression exp1, Expression exp2, Expression exp3, Expression exp4, Color color){
         super(line, column);
@@ -38,7 +37,7 @@ public class DrawRect extends AST {
         this.color = color;
     }
 	
-    /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
+    @Override
     public void verifyAll(ValueEnv env) throws Exception{
         exp1.setType(env);
         exp2.setType(env);

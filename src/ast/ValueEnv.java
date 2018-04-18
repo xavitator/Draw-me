@@ -42,7 +42,7 @@ public class ValueEnv {
      * @param nom le nom de la variable / constante
      * @param line le numéro de la line
      * @param colonne le numéro de la colonne
-     * @return
+     * @return le type de la fonction
      */
 	public Type getType(String nom, int line, int colonne) throws Exception{
             for (int i = taille-1 ; i >= 0 ; i--) {
@@ -67,11 +67,12 @@ public class ValueEnv {
 	}
 
 	/**
-     * Retourne l'expression lié à la variable 
+     * Retourne l'expression liée à la variable 
      * @param nom le nom de la variable
-     * @param line la line d'erreur
+     * @param line la ligne d'erreur
      * @param column la colonne d'erreur
-     * @return l'expression 
+     * @return l'expression dans la pile
+     * @throws Exception absence d'existence
      */ 
 	public Expression get(String nom, int line, int column) throws Exception{
             for (int i = taille-1 ; i >= 0 ; i--) {
@@ -87,6 +88,7 @@ public class ValueEnv {
      * Change la valeur d'une variable
      * @param nom le nom de la variable
      * @param exp l'expression à changer dans la map
+     * @throws Exception mauvais type ou valeur
      */
 	public void set(String nom, Expression exp) throws Exception{
             for(int i = taille -1; i >= 0 ; i--) {
@@ -108,6 +110,7 @@ public class ValueEnv {
      * @param nom le nom de la variable à ajouter
      * @param exp le nom de l'expression à changer 
      * @param isConstante s'il s'agit d'une constante ou non
+     * @throws Exception existe déjà
      */
 	public void put(String nom, Expression exp, boolean isConstante) throws Exception{
         if(!variables.getLast().containsKey(nom) && !constantes.getLast().containsKey(nom) 
@@ -122,7 +125,7 @@ public class ValueEnv {
     }
 
     /**
-     * ajouter la procédure à la liste des procédures
+     * ajoute la procédure à la liste des procédures
      * @param toAdd la procédure à déclarer
      */
     public void addProc (Proc toAdd) throws Exception {

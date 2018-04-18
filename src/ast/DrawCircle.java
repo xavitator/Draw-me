@@ -10,8 +10,6 @@ import java.lang.Exception;
  * Classe correspondant à la fonction drawOval de Graphics
  * @author DURAND-MARAIS
  */
-
-
 public class DrawCircle extends AST {
     Expression exp1;
     Expression exp2;
@@ -19,14 +17,13 @@ public class DrawCircle extends AST {
     Color color;
 	
     /**
-     * on construit un ast.AST correspondant à la fonction drawOval
+     * on construit un AST correspondant à la fonction drawOval
      * @param  line   ligne de l'expression dans le fichier
      * @param  column colonne de l'expression dans le fichier
-     * @param  exp1   premier argument de la fonction en int
-     * @param  exp2   deuxième argument de la fonction en int
-     * @param  exp3   troisème argument de la fonction en int
-     * @param  color  quatrième argument de la fonction en color
-     * @return        
+     * @param  exp1   premier argument de la fonction
+     * @param  exp2   deuxième argument de la fonction
+     * @param  exp3   troisème argument de la fonction
+     * @param  color  couleur
      */
     public DrawCircle(int line, int column, Expression exp1, Expression exp2, Expression exp3, Color color){
         super(line, column);
@@ -36,7 +33,7 @@ public class DrawCircle extends AST {
         this.color = color;
     }
 	
-    /** on vérifie le type de chacun des arguments pour qu'ils correspondent à ce qui est attendu */
+    @Override
     public void verifyAll(ValueEnv env) throws Exception{
         exp1.setType(env);
         exp2.setType(env);

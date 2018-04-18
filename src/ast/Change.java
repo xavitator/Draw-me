@@ -7,7 +7,7 @@ import java.lang.Exception;
 import java.awt.*;
 
 /**
- * Classe des Expressions
+ * Classe de changement de variables
  * @author DURAND-MARAIS
  */
 public class Change extends AST {
@@ -44,7 +44,6 @@ public class Change extends AST {
 
     @Override
     public void exec(Graphics2D g2d,ValueEnv val) throws Exception {
-        //on exécute l'assignation
         if(debugMode()) { debug(val); }
         // on set la valeur de 'nom' si elle n'est pas une constante
         val.set(nom,exp1);

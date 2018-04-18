@@ -7,7 +7,7 @@ import java.awt.*;
 import java.lang.Exception;
 
 /**
- * Classe des Expressions
+ * Classe de gestion des conditions
  * @author DURAND-MARAIS
  */
 
@@ -17,7 +17,7 @@ public class Condition extends AST {
     AST inst2;
 
     /**
-     * constructeur d'un ast.AST correspondant à un If
+     * constructeur d'un AST correspondant à un If
      * @param  line      ligne de l'expression dans le fichier
      * @param  column    colonne de l'expression dans le fichier
      * @param  condition condition du If
@@ -31,7 +31,7 @@ public class Condition extends AST {
         this.inst2 = inst2;
     }
 	
-    /** on vérifie le type de la condition et de chacun des ast.AST suivants */
+    @Override
     public void verifyAll(ValueEnv env) throws Exception{
         condition.setType(env);
         condition.verifyType(env);
@@ -41,7 +41,7 @@ public class Condition extends AST {
         inst2.verifyAll(env);
     }
 
-    /** fonction d'exécution de l'objet Condition */
+    @Override
     public void exec(Graphics2D g2d, ValueEnv val) throws Exception { // A revoir simplement prend en paramètre deux instructions !
         boolean cond = false;
         if(condition.getType() == Type.BOOLEAN){
@@ -52,8 +52,8 @@ public class Condition extends AST {
         }
         if(debugMode()) {debug(val,cond);} //debug
 
-        if(cond) inst1.exec(g2d,val);
-        else inst2.exec(g2d,val);
+        if(cond) { inst1.exec(g2d,val); }
+        else { inst2.exec(g2d,val); }
     }
 
     /** Debug */

@@ -27,7 +27,7 @@ public class While extends AST {
     super.addNext(instruction);
   }
   	
-    /** on vérifie le type de la condition et de l'AST instruction */
+    @Override
     public void verifyAll(ValueEnv env) throws Exception{
         condition.setType(env);
         condition.verifyType(env);
@@ -36,7 +36,7 @@ public class While extends AST {
         super.verifyAll(env);
     }
 
-    /** fonction d'exécution de l'objet While */
+    @Override
     public void exec(Graphics2D g2d, ValueEnv val) throws Exception { // A revoir simplement prend en paramètre deux instructions !
         boolean cond = false;
         if(condition.getType() == Type.BOOLEAN){

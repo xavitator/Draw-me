@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.lang.Exception;
 
 /**
- * Classe de gestion des arbres de syntaxe abrstraite
+ * Classe de gestion des arbres de syntaxe abstraite
  * @author DURAND-MARAIS
  */
 public class AST {
@@ -18,14 +18,22 @@ public class AST {
      * Constructeur *
      ****************/
     
-    /** Constructeur par défaut*/
+    /**
+     * Constructeur 
+     * @param line ligne du token
+     * @param column colonne du token
+     */
     public AST(int line, int column){
     	this.line = line;
     	this.column = column;
     	next = new LinkedList<>();
     }
 
-    /** on vérifie le type de chacun des ast.AST suivants */
+    /** 
+     * on vérifie le type de chacun des AST suivants 
+     * @param env l'ensemble des variables, constantes et fonctions 
+     * @throws Exception erreur de l'exécution 
+     */
     public void verifyAll(ValueEnv env) throws Exception{
         env.add();
     	for (AST suivant : next) {
@@ -35,21 +43,22 @@ public class AST {
     }
 
     /** 
-     * fonction d'exécution des ast.AST suivants
-     * @param g2d élément de gestion du graphique
+     * fonction d'exécution des AST suivants
+     * @param g2d élément de gestion du graphique (paintComponent)
      * @param val registre de variables
+     * @throws Exception erreur de l'exécution
      */
     public void exec(Graphics2D g2d,ValueEnv val) throws Exception {
         val.add();
         for (AST suivant : next) {
             suivant.exec(g2d,val);
         }
-        val.pollLast();
+        val.pollLast(); // Enlève la dernière couche de  variables
     }
 
     /**
-     * On ajoute un ast.AST dans les suivants
-     * @param suivant l'ast.AST qu'on rajoute dans les suivants de this
+     * On ajoute un AST dans les suivants
+     * @param suivant AST qu'on rajoute dans les suivants de this
      * @return true si l'opération d'ajout s'est bien passée, false sinon
      */
     public boolean addNext(AST suivant){

@@ -5,7 +5,7 @@ import expression.Expression;
 import java.awt.Graphics2D;
 
 /**
- * Classe de gestion de boucles
+ * Classe de gestion des appels de procédures
  * @author DURAND-MARAIS
  */
 public class CallProc extends AST{
@@ -15,7 +15,7 @@ public class CallProc extends AST{
 	
 	/**
 	 * Constructeur d'un appel de procédure
-	 * @param  line   line de l'appel de la procédure
+	 * @param  line   ligne de l'appel de la procédure
 	 * @param  column colonne de l'appel de la procédure
 	 * @param  name   nom de la procédure
 	 * @param  args   arguments de l'appel à la procédure
@@ -29,7 +29,7 @@ public class CallProc extends AST{
 	/**
 	 * On vérifie le typage dans la procédure appelée
 	 * (s'il y a plusieurs appels avec des arguments différents, la vérification
-	 * du bon typage des arguments pendant les autres appels sera vérifié lors de l'exécution)
+	 * du bon typage des arguments pendant les autres appels sera vérifiée lors de l'exécution)
 	 * @param  env       environnement de valeurs et de fonctions
 	 * @throws Exception Erreur de typage
 	 */
@@ -52,7 +52,7 @@ public class CallProc extends AST{
 
 	/**
 	 * Exécution de la procédure
-	 * @param  g2d       Element graphique pour l'exécution
+	 * @param  g2d       Élément graphique pour l'exécution
 	 * @param  env       environnement de valeurs et de fonctions
 	 * @throws Exception Erreur d'exécution
 	 */

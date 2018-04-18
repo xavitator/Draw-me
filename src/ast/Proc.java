@@ -3,12 +3,24 @@ package ast;
 import java.util.LinkedList;
 import java.awt.*;
 
+/**
+ * Classe de création des procédures
+ * @author DURAND-MARAIS
+ */
 public class Proc extends AST{
 	
 	private LinkedList<String> args;
 	private String name;
 	private boolean isVerified = false;
 
+	/**
+	 * Constructeur
+	 * @param line ligne du token
+	 * @param column colonne du token
+	 * @param name nom de la fonction
+	 * @param content le contenu de la fonction
+	 * @param args la liste des arguments de la fonction
+	 */
 	public Proc(int line, int column, String name, AST content, LinkedList<String> args){
 		super(line,column);
 		super.addNext(content);
@@ -16,7 +28,7 @@ public class Proc extends AST{
 		this.args = args;
 	}
 
-	/** On récupère le nom des argments de la procédure */
+	/** On récupère le nom des arguments de la procédure */
 	public LinkedList<String> getArgs(){
 		return this.args;
 	}
@@ -31,22 +43,22 @@ public class Proc extends AST{
 		return super.next;
 	}
 
-	/** On regarde si la procédure a déjà été vérifier au niveau du typage */
+	/** On regarde si la procédure a déjà été vérifiée au niveau du typage */
 	public boolean isVerified(){
 		return this.isVerified;
 	}
 
-	/** On change le boolean pour dire que le typage de la procédure a été vérifier */
+	/** On change le boolean pour dire que le typage de la procédure a été vérifiée */
 	public void setVerified(){
 		this.isVerified = true;
 	}
 
-	/** Exécution de la procédure, mais cela ne fait rien car Proc correspond à la déclaration d'une procédure */
+	@Override
 	public void exec(Graphics2D g2d, ValueEnv env) throws Exception{
 		env.addProc(this);
 	}
 
-	/** Vérification du typage de la procédure, mais cela ne fait rien car Proc correspond à la déclaration d'une procédure */
+	@Override
 	public void verifyAll(ValueEnv env) throws Exception{
 		env.addProc(this);
 	}

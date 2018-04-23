@@ -64,7 +64,7 @@ class LexerException extends Exception{
 //definition des differentes variables
 
 
-commentaire = ("/*"[^]"*/") | ("//"[^\n\r]*)
+commentaire = ("/*"[^]*"*/") | ("//"[^\n\r]*)
 hex = [0-9A-F]
 nombre = [0-9]+ 
 couleur = "#"{hex}{hex}{hex}{hex}{hex}{hex}

@@ -1,6 +1,9 @@
+/* Test de
+commentaire sur plusieurs lignes */
+
 Var x = 100;
 While (x >= 0) Do
-Begin
+Begin // Commentaire de ligne
 x = (x-20);
 DrawCircle(200,200,x,#FF0000);
 End;

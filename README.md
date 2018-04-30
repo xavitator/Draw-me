@@ -20,7 +20,7 @@
 ## Étape pour compiler
 
   ### Information importante
-  > Afin de pouvoir lancer les commandes du projet, vous devez avoir le programme *make* d'installé.
+  > Afin de pouvoir lancer les commandes du projet, vous devez avoir le programme *make* d'installé. Votre terminal doit être en **UTF8** pour interpréter les couleurs du make. Sinon cela affichera des symboles comme \033[0m.
 
 
   ### Compilation 

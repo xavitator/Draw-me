@@ -35,11 +35,11 @@ public class AST {
      * @throws Exception erreur de l'exécution 
      */
     public void verifyAll(ValueEnv env) throws Exception{
-        env.add();
+      env.add();
     	for (AST suivant : next) {
             suivant.verifyAll(env);
     	}
-        env.pollLast();
+      env.pollLast();
     }
 
     /** 

@@ -37,12 +37,17 @@ public class Condition extends AST {
         condition.verifyType(env);
         Type type = condition.getType();
         if(type != Type.BOOLEAN && type != Type.INT) throw new ParserException("Il y a un problème de typage.",line,column);
+        env.add();
         inst1.verifyAll(env);
+        env.pollLast();
+        env.add();
         inst2.verifyAll(env);
+        env.pollLast();
     }
 
     @Override
     public void exec(Graphics2D g2d, ValueEnv val) throws Exception { // A revoir simplement prend en paramètre deux instructions !
+        val.add();
         boolean cond = false;
         if(condition.getType() == Type.BOOLEAN){
             cond = condition.evalBool(val);
@@ -54,6 +59,7 @@ public class Condition extends AST {
 
         if(cond) { inst1.exec(g2d,val); }
         else { inst2.exec(g2d,val); }
+        val.pollLast();
     }
 
     /** Debug */

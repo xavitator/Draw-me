@@ -2,6 +2,10 @@
 commentaire sur plusieurs lignes */
 
 Var x = 100;
+Var y = True;
+If y Then
+  x = 400 ;
+
 While (x >= 0) Do
 Begin // Commentaire de ligne
 x = (x-20);

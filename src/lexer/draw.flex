@@ -23,7 +23,7 @@ class Keys extends HashMap<String, Sym> {
 		this.put("Const",Sym.CONST);
 		this.put("Var",Sym.VAR);
 		this.put("Proc",Sym.PROC);
-	}
+  }
 }
 
 // Gestion d'exceptions du lexer
@@ -78,8 +78,8 @@ blanc = [\n\ \t\r]
 // Valeurs
 {couleur}  		   			 { return new ColorToken(Sym.COULEUR,yyline + 1,yycolumn +1 ,yytext()) ;}
 {nombre}  		   			 { return new IntToken(Sym.INT,yyline + 1,yycolumn +1 ,yytext()) ;}
-[Tt]"rue"     		     { return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext()) ;}
-[Ff]"alse"    		     { return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext()) ;}
+"True"        		     { return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext()) ;}
+"False"        		     { return new BooleanToken(Sym.BOOLEAN,yyline + 1,yycolumn +1 ,yytext()) ;}
 
 // Opérations
 "+"                    { return new Token(Sym.PLUS,yyline + 1,yycolumn +1 ) ;}

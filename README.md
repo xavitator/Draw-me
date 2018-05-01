@@ -13,26 +13,27 @@
 ## Extensions libres :
   * Implémentation de la boucle While exp Do inst.
   * Conditionnelle utilisable sans Else et utilisation possible du Else If (If inst Else If inst Else inst;).
-  * Utilisation possible du type bool (True et False) et int pour les variables et les constantes. Le typage est statique. Il est déterminé en fonction du contexte (inférence de type). Une variable x de type int ne peut pas recevoir un bool plus tard dans le programme. Dans Var x = 12, si on veut modifier la valeur de x, il faut forcement que ce soit un int. x = True déclenchera une erreur. Il n'est pas possible de pré déclarer une fonction comme en Java. ```Var x;``` lance une erreur de l'interpréteur. 
+  * Utilisation possible du type bool (True et False) et int pour les variables et les constantes. Le typage est statique. Il est déterminé en fonction du contexte (inférence de type). Une variable x de type int ne peut pas recevoir un bool plus tard dans le programme. Dans Var x = 12, si on veut modifier la valeur de x, il faut forcement que ce soit un int. x = True déclenchera une erreur. Il n'est pas possible de pré déclarer une variable comme en Java. ```Var x;``` lance une erreur de l'interpréteur. 
   * Implémentation de procédures avec le mot clef Proc. Elles n'ont pas de type de retour : il s'agit juste de factoriser le code. Les arguments utilisent un typage dynamique. On peut la déclarer avec "Proc nom (args) instruction;". On peut utiliser Begin et End pour faire des blocs d'instructions. Il est possible d'utiliser la récursion. Cependant elle n'est pas optimisée.
   * Un programme **creator** permettant de transformer une photo du dossier img en code de notre langage dans le dossier test. 
 
-## Étape pour compiler
+## Étapes pour compiler
 
-  ### Information importante
+  ### Informations importantes
   > Afin de pouvoir lancer les commandes du projet, vous devez avoir le programme *make* d'installé. Votre terminal doit supporter les séquences d'échappement **ANSI** pour interpréter les couleurs du make. Sinon cela affichera des symboles comme \033[0m.
 
 
   ### Compilation 
   
   Pour compiler le projet, il faut utiliser la commande :
-  ```
+  ```sh
     make compile
   ```
 
   ### Exécution code
+  
   Pour lancer l'exécution de l'interpréteur sur un fichier, il faut lancer la commande :
-  ```
+  ```sh
     make run file=<filename> 
   ```
 
@@ -64,4 +65,4 @@
   ```
 
 ## Note
-  L'ensemble des fichiers de tests fournis pour le projet se trouve dans le dossier test. Nous avons rajouter certains fichiers afin de test les fonctionnalités nouvelles. Il est tout à fait possible de rajouter un nouveau fichier dans ce dossier et de le tester. Pour avoir un rappel des actions possibles vous pouvez utiliser ```make```.
+  L'ensemble des fichiers de tests fournis pour le projet se trouve dans le dossier test. Nous avons rajouter certains fichiers afin de tester les nouvelles fonctionnalités. Il est tout à fait possible de rajouter un nouveau fichier dans ce dossier et de le tester. Pour avoir un rappel des actions possibles vous pouvez utiliser ```make```.

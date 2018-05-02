@@ -9,6 +9,7 @@ file = simple2
 image = braddock.jpg
 # Show information
 all:
+	@echo -e "Il faut d'abord compiler avec =>  make compile\n"
 	@echo -e "Pour dessiner votre fichier : \033[1;32mmake run file=\"<filename>\"\033[0m.\nCe fichier doit être dans le répertoire \033[1;33mtest/\033[0m.\nPar défaut le fichier testé est simple2.\n"
 	@echo -e "Pour contruire le dessin de votre image : \033[1;32mmake creator image=\"<filename>\"\033[0m.\nCe fichier doit être dans le répertoire \033[1;33mimg/\033[0m.\nLe dessin produit est placé dans le dossier test.\nPar défaut le fichier testé est braddock.jpg"
 

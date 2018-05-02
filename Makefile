@@ -17,7 +17,6 @@ all:
 create_lexer:
 	@echo -e "[\033[1;34mEn cours\033[0m] Création du Lexer"
 	@jflex src/lexer/draw.flex 1> /dev/null
-	@rm src/lexer/Lexer.java~
 	@echo -e "[\033[1;32mOK\033[0m] Lexer créé"
 
 
